@@ -1,24 +1,26 @@
 # Introduction to Internet Security
 
-Information technology encompasses everything to do with computers and the infrastructure -
+Information Technology (IT) encompasses everything to do with computers and their infrastructure -
 
-- Desktops, Laptops
-- Web Servers, File Servers (FTP), Database Servers
+It can include:
+
+- Desktops, Laptops, Tablets, Phones.
+- Web Servers, File Servers (FTP), Database Servers.
 - Routers, Switches, Hubs and other pieces of hardware.
 
-Anything that is essentially a computer is IT.
+In other words, anything that can basically function as a computer or be part of a computer is considered as IT.
 
-## What is Internet Security
+## What is Internet Security?
 
-There are several subclasses of security that make up Internet security.
+There are several subclasses of security that make up Internet security (IS).
 
 **Information Security** - The process of keeping information private, unaltered and available.
 
-**Computer Security** - The process of keeping IT devices (phones, computers) free of malicious code.
+**Computer Security** - The process of keeping IT devices (phones, computers and other hardware) free of malicious code and secure.
 
-**Network Security** - The the process of keeping communications between IT devices private, unaltered and between authorised parties.
+**Network Security** - The process of keeping communications between IT devices private, unaltered and between authorised parties.
 
-The meaning of "unaltered" would be that the data is not changed from one end to the other, or not intercepted and changed by a third party.
+The meaning of "unaltered" is that what is sent is what is received without being changed in between people with mallicious intent.
 
 ## CIA (Confidentiality, Integrity and Availability)
 
@@ -26,33 +28,33 @@ Does not mean **Central Intelligence Agency**, but instead is a term that comes 
 
 ### Confidentiality
 
-- Ensures that only the intented parties have access to the information.
-- Technologies - Authorise, encrypt, access control, authenticate and restrict physical access.
+The information being sent is only visible to those that are authorised to have access to it. **Evesdropping** is considered a type of threat that can erode confidentiality in information, since if someone else hears about it, how secure if your data?
 
-Evesdropping is a type of threat that can erode confidentiality.
+Technologies that can assist in keeping information confidential are - **authorisation**, **encryption** and **access control** 
 
 ### Integrity
 
-- Ensures that the information does not change and changes are immediately detected.
-- Technologies - Data Backup, checksum, hashing, correction code.
+Ensures that the information does not change between sender and receiver. If it is changed it should be immediately detected.
+
+Technologies that can assist in keeping the integrity of data are - **data backup**, **hashing**, **checksum** and **correction code**
 
 Unauthorised alternation of data is a type of threat that can erode the integrity of a system.
 
 ### Availability
 
-- Ensure that information is available to read/write to those who are authorised to do so without failure.
-- Technologies - UPS, redundant network connections, data recovery, disaster planning.
+Ensure that information is available to read/write to only those who are authorised to do so. This means to set the correct read/write access priveledges on files/folders on a system to prevent unauthorised modification.
 
-Fail Open Authentication - It is the situation when user authentication fails but you are still allowed access to sections of a web application. These systems have allowed hackers to bypass certain authentication systems and crash the website.
+Technologies that can assist in keeping the availability of information are - **UPS**, **data recovery**, **disaster planning**.
 
-DOS (Denial of Service) attacks is a type of threat that can prevent information being available.
+"Fail Open Authentication" - is a situation when user authentication fails but the user is still allowed access to sections of a web application. Systems designed with fail=open authentication have allowd hackers to bypass authentication systems and enact DOS attacks on a website to crash it.
 
 ## Trust (Assurance)
 
-Is the ability for a system to trust that the information and behaviour is correct.
+Is the ability for a system or individual using a system to trust the information it receives and the behaviour of the system is correct.
 
-Technologies that build trust - Certificates, SSL and other authentication systems.
-Technologies that erode trust - Spoofing, spam, phishing.
+Technologies that can build trust are - **certificates**, **SSL** and other type sof authentication systems.
+
+Spoofing, spam and phishing are types of threats that can erode trust in a system.
 
 ## Repudiation (Authenticity)
 
@@ -92,33 +94,45 @@ A good security solution should follow these rules -
 
 The following sections takes a quick peek at what can be done to ensure a system is secure. There is no magic bullet when it comes to security, but implementing all of the listed features in the list below can ensure that the system is sufficiently secure.
 
-The idea will be protect all levels of a IT system from the data -> application -> OS -> network so if one breaks, the system is still somewhat secure.
+The idea will be protect all levels of a IT system from the **data -> application -> OS -> network** so if one breaks, the system is still somewhat secure.
 
-###Probability Risk Analysis is the process of evaluating the risk that a target will come under attack. The probability is determined based on historical data of other similar attacks against the target
+##Probability Risk Analysis
 
-**Risk Factor = Probability of Risk * Probability of Severity** for the target, and then allocate a budget to protect against it. 
+Is the process of evaluating the risk that a target will come under attack. This is calculated based on historical data on similar types of attacks against the target.
 
-This calculation is generally not too helpful because attackers will use the same calculations and target the least probable targets as they will have the least budget set aside to protect against an attack.
+The sum is - 
+
+**Risk Factor = Probability of Risk * Probability of Severity** for the target
+
+Once the risk factor is calculated, an organisation will alloate a budget to protect against the possible attack.
+
+Whilst useful to evaluate the chance of attack, it is not particular helpful since attackers may have access to the same data and target systems that rate low on the risk factor as they will have less budget assigned to protect against an attack.
 
 ###Perimiter Security
 
-The process of adding a firewall to a network to prevent attackers from breaching the network. It generally does not work because once something passes the firewall then the whole system is vulnerable, in addition to many people in organisations that do not follow the process.
+Is the process of adding a firewall or IDS (Intrustion Detection System) to a network to prevent attackers from coming in. This tactical generally will not work because the whole system becomes vulnerable the moment the attackers breach the permiter. 
+
+In addition, there are organisations where to gain access to other parts of the internal network, the firewall must be disabled. This will raise the chances of the permiter being breached.
 
 ###Security Policy
 
-The process of educating users of what they can and cannot do in a system. It reduces the changes of the network being comprimised if people are educated against it.
+A security policy is generally implemented in many organisations. It is essentially the process of educating users of what they can and cannot do on a system. By educating the users, it reduces the chances of the network being breached due to rookie mistakes.
 
 ###Access Control
 
-Enforcing security by only allowing access to certain parts of the system. This involves setting read/write access on accounts and things like that. Only allowing adminstrator access to install or update software, so general users do not have universal access.
+Enforcing security by only allowing access to certain parts of the system. This involves setting read/write access on accounts, super user accounts, administrator accounts.
+
+Only allowing general users to use the system instead of modifying its contents can prevent malware from being installed.
 
 ###Reactive Security/Black Listing
 
-Is the process of adding rules, blocking ports and black listing known threats of websites. This is useful in most cases but sometimes does not work because 0-day attacks with new threats will not be known ahead of time and therefore not added to a blacklist.
+Is the process of adding rules, port blocking and black listing known threats to prevent users from accessing them. Torrent ports, pornographic websites are considered things that will be black listed. 
+
+This is useful in most cases but does not prevent 0-day attacks as new threats will not be known ahead of time and cannot be added to a blacklist.
 
 ###Proactive Security/White Listing
 
-Implementing rules that by default will block all unknown things/software until it has been authorised by the administrator. Authorised software or ports are added to a white list so that only things coming in that are on that list are allowed through.
+Essentially the opposite of the above. Rules will be implemented to allow access to certain websites and ports whilst blocking everything else. Additional sites will only be added to the white list when it has been investigated and approved by an administrator.
 
 This sometimes runs into problems with management in a business as it can impact the overall running of a company.
 

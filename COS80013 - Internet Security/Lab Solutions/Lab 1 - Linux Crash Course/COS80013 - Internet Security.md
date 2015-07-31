@@ -309,4 +309,4 @@ host/ domain name: IP you will get it to redirect to:
 
 3. Discuss the relevance of these topics and actions in terms of Internet security. i.e. How do the things in this lab contribute to your understanding of Internet security and the IT industry overall?
 
-4. Why do you need to understand (and use) Linux commands? This report is worth 1% towards your unit assessment. 
+4. Why do you need to understand (and use) Linux commands?

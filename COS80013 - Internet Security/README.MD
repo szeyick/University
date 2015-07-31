@@ -58,6 +58,10 @@ Physical threats comprise people within an organisation that will do harm to a s
 
 **Social engineering** is a term that involves tricking people into breaking corporate procedures to provide information.
 
+- **Fail Open Authorisation**
+
+Is a situation when user authentication fails but the user is still allowed access to sections of a web application. Systems designed with fail=open authentication have allowd hackers to bypass authentication systems and enact DOS attacks on a website to crash it.
+
 - **Hacker**
 
 An expert computer user who is prepared to bypass the normal UI to customise, enhance, test and investigate software and hardware.

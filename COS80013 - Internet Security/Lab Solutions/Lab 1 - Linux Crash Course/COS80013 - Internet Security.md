@@ -281,48 +281,32 @@ where <PID> is the PID of the process you want to kill**
 ##4. NETWORKING without DNS (try at home)
 
 Instructions for testing your HOSTS file:
-1. You will need to have the DNS client service running in Windows, and
-administrator access (to \windows\system32).
-2. If you want to use HOSTS to map a public site, you may have to bypass your ISP's
-proxy which may cache DNS replies. Change your browser settings to "no proxy" or
-"direct connection" or something similar. If it is a site on your ISP's domain or your
-own domain, the proxy server will not be used.
-3. Open a console window (START Run cmd) and ping a domain you want to create
-a hosts entry for.
+1. You will need to have the DNS client service running in Windows, and administrator access (to \windows\system32).
+
+2. If you want to use HOSTS to map a public site, you may have to bypass your ISP's proxy which may cache DNS replies. Change your browser settings to "no proxy" or "direct connection" or something similar. If it is a site on your ISP's domain or your own domain, the proxy server will not be used.
+
+3. Open a console window (START Run cmd) and ping a domain you want to create a hosts entry for.
+
 4. Note the IP address.
+
 5. Open C:/Windows/system32/drivers/etc/HOSTS in a text editor
-6. Scroll down to the bottom of the file and type in the IP address followed by the
-fully qualified domain name (e.g. host.domain.com), or the short version you want to
+
+6. Scroll down to the bottom of the file and type in the IP address followed by the fully qualified domain name (e.g. host.domain.com), or the short version you want to
 use.
-7. Save the file
-the process that
-is still running
-look for this 
-Name: ______________________________________ Student ID:______________
-COS80013 Lab 1 (week 1) Page 9
+
+7. Save the file the process that is still running look for this 
+
 8. Refresh the local DNS service cache: ipconfig -flushdns
-9. Open a browser and type in the domain name or the short version
-and see if it takes you there. You should be redirected to the IP address you added to
-the HOSTS file.
-Try pinging a blocked site to get its IP address.
-Add it to your hosts file to see if you can bypass the blocked list.
-To use your HOSTS file to block domains, add the loopback address 127.0.0.1
-followed by the domain name to your
-HOSTS file.
-If it doesn't work, you
-probably have Windows
-8. I'm sorry.
-host/ domain name:
-IP you will get it to redirect to:
-Report (COS80013)
- Write a one-page report on this lab covering the following:
+
+9. Open a browser and type in the domain name or the short version and see if it takes you there. You should be redirected to the IP address you added to the HOSTS file. Try pinging a blocked site to get its IP address.  Add it to your hosts file to see if you can bypass the blocked list. To use your HOSTS file to block domains, add the loopback address 127.0.0.1 followed by the domain name to your HOSTS file. If it doesn't work, you probably have Windows 8. I'm sorry.
+
+host/ domain name: IP you will get it to redirect to:
+
+##Write a one-page report on this lab covering the following:
 1. Summarize the topics you explored and the activities you did during this lab.
-2. Classify (group) these topics and actions under appropriate headings. Do not
-just copy the headings used in the instructions.
-3. Discuss the relevance of these topics and actions in terms of Internet security.
-i.e. How do the things in this lab contribute to your understanding of Internet
-security and the IT industry overall?
-4. Why do you need to understand (and use) Linux commands?
-This report is worth 1% towards your unit assessment. 
-Name: ______________________________________ Student ID:______________
-COS80013 Lab 1 (week 1) Page 10
+
+2. Classify (group) these topics and actions under appropriate headings. Do not just copy the headings used in the instructions.
+
+3. Discuss the relevance of these topics and actions in terms of Internet security. i.e. How do the things in this lab contribute to your understanding of Internet security and the IT industry overall?
+
+4. Why do you need to understand (and use) Linux commands? This report is worth 1% towards your unit assessment. 

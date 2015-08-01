@@ -206,7 +206,7 @@ The following sections contain how to create, manipulate and modify a database.
 
 The statement to create a table (relation) in a RDBMS. The syntax is as follows -
 
-CREATE <table-name> (<column-name1> <data-type> [<max length>], <column-name2> <data-type> [<max length>] ..., PRIMARY KEY (<column-name>), FOREIGN KEY <column-name> REFERENCES (<table-name>));
+```CREATE <table-name> (<column-name1> <data-type> [<max length>], <column-name2> <data-type> [<max length>] ..., PRIMARY KEY (<column-name>), FOREIGN KEY <column-name> REFERENCES (<table-name>));```
 
 Where -
 
@@ -247,7 +247,7 @@ To insert into a table, we need to provide:
 
 The syntax is as follows -
 
-INSERT INTO <table-name> (<column-name1>, <column-name2>, ...) VALUES (<value1>, <value2> ...);
+```INSERT INTO <table-name> (<column-name1>, <column-name2>, ...) VALUES (<value1>, <value2> ...);```
 
 In our example we will have:
 
@@ -266,10 +266,12 @@ Using the select statement, we can extract and display the data in the database 
 
 The syntax is as follows -
 
+```
 SELECT <item>
 FROM <table name>
+```
 
-Where <item> defines the columns that you want to select, and <table name> is the name of the table.
+Where ```<item>``` defines the columns that you want to select, and ```<table name>``` is the name of the table.
 
 In our example we will have:
 
@@ -333,6 +335,6 @@ In Oracle or MySQL, 'smith' and 'SMITH' are not considered equal, whereas in Sql
 
 ### Table Access
 
-- DESCRIBE <table name> will return the list of columns and the defined attributes of the table.
-- DROP TABLE <table name> will delete the table from the database.
+- DESCRIBE ```<table name>``` will return the list of columns and the defined attributes of the table.
+- DROP TABLE ```<table name>``` will delete the table from the database.
 

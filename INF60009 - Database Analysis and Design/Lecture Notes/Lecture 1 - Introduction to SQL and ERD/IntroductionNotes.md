@@ -48,7 +48,7 @@ There are three main components of a E-R diagram. To describe an E-R diagram, we
 
 The entity defines the "thing" or the container for the data to sit in. Examples of an entity for a class database would be the **subject (unit)** and the **lecturer**.
 
-![alt text](https://github.com/szeyick/University/tree/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%201%20-%20Introduction%20to%20SQL%20and%20ERD/images/Entities.png "Entities")
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%201%20-%20Introduction%20to%20SQL%20and%20ERD/images/Entities.png "Entities")
 
 - **Attributes**
 
@@ -56,7 +56,7 @@ The attributes represent the "types" of data that sit within the entity. If we c
 
 To continue with the class example, the attributes would be the **subject code**, **title**, **credit points**, **lecturer name**.
 
-![alt text](https://github.com/szeyick/University/tree/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%201%20-%20Introduction%20to%20SQL%20and%20ERD/images/Attributes.png "Attributes")
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%201%20-%20Introduction%20to%20SQL%20and%20ERD/images/Attributes.png "Attributes")
 
 - **Relationships**
 
@@ -99,13 +99,13 @@ If we illustrate it on our subject - lecturer E-R diagram, we will have the foll
 
 If we begin each sentence with "One", it defines that a single entity will...
 
-![alt text](https://github.com/szeyick/University/tree/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%201%20-%20Introduction%20to%20SQL%20and%20ERD/images/One.png "One")
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%201%20-%20Introduction%20to%20SQL%20and%20ERD/images/One.png "One")
 
-![alt text](https://github.com/szeyick/University/tree/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%201%20-%20Introduction%20to%20SQL%20and%20ERD/images/Many.png "Many")
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%201%20-%20Introduction%20to%20SQL%20and%20ERD/images/Many.png "Many")
 
 Our completed ER-Diagram looks as follows -
 
-![alt text](https://github.com/szeyick/University/tree/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%201%20-%20Introduction%20to%20SQL%20and%20ERD/images/ER-Diagram.png "ER Diagram")
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%201%20-%20Introduction%20to%20SQL%20and%20ERD/images/ER-Diagram.png "ER Diagram")
 
 ## Entities
 

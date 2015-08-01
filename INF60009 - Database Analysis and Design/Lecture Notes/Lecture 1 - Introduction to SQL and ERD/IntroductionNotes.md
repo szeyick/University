@@ -1,31 +1,5 @@
 ## Introduction 
 
-**Key Terms**
-
-- Databases
-
-Stores the business data.
-
-- Database Management Systems (DBMS)
-
-The software packages that manage databases.
-
-- Structured Query Language (SQL)
-
-The **language that is used by a DBMS
-
-- Entity Relationship Modelling and Diagrams
-
-The diagrams that model the **relationships** of real life entities.
-
-- Relational Data Modelling and Normalisation
-
-Data storage **design rules* for current day databases.
-
-- Data Warehousing
-
-An alternative **design** of a database that will be suited for **data mining** and **business intelligence** requirements
-
 ### Database Overview
 
 A database is used to store **related data** about a number of different things (entities) that an organisation may find **intersting**. This can be things such as **student information**, **subject data**, **unit enrollment** and **unit results**.

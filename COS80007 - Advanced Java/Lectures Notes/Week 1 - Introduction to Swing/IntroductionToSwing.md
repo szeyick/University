@@ -75,3 +75,25 @@ public class CenteredFrameTest {
 ```
 
 The things to take notice of here is that our **CenteredFrame** extends JFrame rather than the AWT frame.
+
+
+## Rough Lecture Notes
+
+: means instance, _ underlining is the class (UML notation).
+
+JComponents define particular areas on the window (screen), rather than going through the native OS code. It works in a way to directly interact with the computers graphics card to paint onto the screen. It is painted in pixel by pixel.
+
+The top level windows have peers because they can exist as independent components on a OS desktop.
+
+All JComponents are containers, which themselves are composites.
+
+The Content pane is part of the JLayeredPane, they will be painted in the order they are added, so the last content pane added to the JLayeredPane will be drawn last.
+
+Frame.add(component), by default adds the component to the content pane without having to retrieve the content pane to add the component.
+
+Default behaviour for flow layout is to centre components onto the second line if it overflows.
+
+JComponent is the top level class that knows about peers.
+Component is the AWT component that talks to the operating system.
+
+

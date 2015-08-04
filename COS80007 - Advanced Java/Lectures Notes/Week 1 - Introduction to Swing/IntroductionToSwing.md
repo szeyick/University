@@ -96,4 +96,14 @@ Default behaviour for flow layout is to centre components onto the second line i
 JComponent is the top level class that knows about peers.
 Component is the AWT component that talks to the operating system.
 
+The layout manager will ask the Container class for its children and checks their preferred sizes to lay out the components correct within the dimensions of the container.
 
+LayboutManager2 allows for overloaded add methods to add components to particular places in a layout, this second argument is usually the contraint.
+
+In BorderLayout, whatever is assigned to the Center will be added last, which means that it takes whatever space is left after setting components to N,E,W,S directions. The components in each will take the preferred heights.
+
+getActionCommand() returns the actionCommand of the button, which by default is its button text.
+
+Anonymous inner classes - creating a class without actually writing out the definition "public class ....", you simply just write new MouseMotionalAdapter() which then provides the interface methods that you override. It allows you to create anonymous inner classes of both concrete and interface classes.
+
+JLabel is transparent by default.

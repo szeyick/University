@@ -88,7 +88,7 @@ The things to take notice of here is that our **CenteredFrame** extends JFrame r
 
 A JFrame is comprised of many different layers as illustrated below -
 
-**Insert Layer Image**
+![alt text](https://github.com/szeyick/University/blob/master/COS80007%20-%20Advanced%20Java/Lectures%20Notes/Week%201%20-%20Introduction%20to%20Swing/images/JFrame.GIF "JFrames")
 
 Components (panels, buttons, etc) are added to the content pane rather than directly to the JFrame, JApplet or JRootPane. In other words, we do not add it to the top level component, we add **into** it.
 
@@ -209,6 +209,8 @@ component.add(c, "North"); // Add a component c to a particular quadrant of the 
 ### Event Handling
 
 Event handling is automatically managed by the Java API. Components can fire **actionPerformed** events to interested parties as long as they have been added as a action listener to the component through the **addActionListener** method. It follows the **publish-subscribe** pattern.
+
+![alt text](https://github.com/szeyick/University/blob/master/COS80007%20-%20Advanced%20Java/Lectures%20Notes/Week%201%20-%20Introduction%20to%20Swing/images/EventListeners.jpg "JFrames")
 
 Subclasses of AWTEvent may have access to -
 

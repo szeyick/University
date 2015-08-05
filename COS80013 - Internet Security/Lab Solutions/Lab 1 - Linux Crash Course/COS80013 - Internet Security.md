@@ -28,7 +28,7 @@ Telnet will send passwords across as text, whereas SSH will encrypt it meaning t
 
 **(d) What version of CentOS is Mercury running?**
 
-CentOS-6 Enterprise Linux
+CentOS-6 Enterprise Linux - release 6.6
 
 **(e) What is the URL of Mercury?**
 
@@ -149,7 +149,7 @@ whoami
 
 Who is logged in at the moment?**
 
-I am currently logged in.
+I am currently logged in. The **who** comand will display all the people currently logged in.
 
 **Try this command
 finger jnewbigin
@@ -157,6 +157,8 @@ finger jnewbigin
 What can you find out about this user?**
 
 It gives me their name, login, the shell they're using, home directory and when they've been logged on.
+
+It belongs to John Newbigin, using bash shell and they have been online since 11:26 5/8.
 
 ## 2. RedHat 7.3 Linux VM:
 

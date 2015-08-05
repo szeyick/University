@@ -36,8 +36,6 @@ For the BoxLayout we have helper methods:
 - Box.createVerticalStrut(15); // Constant Vertical spacing of 15 pixels
 - Box.Filler(minSize, prefSize, maxSize);
 
-**Add Image**
-
 ### GridBagLayout
 
 It extends GridLayout to also use constraints. The grid is comprised of equal rectangular pieces (like a brick wall) and places a component in each of those pieces.
@@ -57,37 +55,74 @@ gbc.insets = new Insets(2,2,2,2);
 
 The **insets** constraint will add exterior padding around a component. If you use negative values, it will force the component to be sized larger than the cell it is in.
 
-#### Alignment to a GridBag
+#### GridBagConstraint Properties
 
+- **Grid Bag Constraints**
+ 
 ```
-// Place a component in column 0,0 (top left)
-gbc.gridx = 0;
-gbc.gridy = 0;
-
-// Increase a components width and heigh by 10 pixels (5 on each side). It adds **interior** padding, increasing the preferred size of a component.
-
-gbc.ipadx = 5;
-gbc.ipady = 5;
-
 // When we add a component with the grid bag constraint, we can immediately re-use the gbc instance variable as the constraints are coped (cloned).
 
 container.add(new JButton("Another Button"), gbc);
 gbc.gridx = ...;
 
+```
+
+- **Setting component to a cell**
+
+![alt text](https://github.com/szeyick/University/blob/master/COS80007%20-%20Advanced%20Java/Lectures%20Notes/Week%201%20-%20Introduction%20to%20Swing/images/gridxgridy.png "Alignment")
+
+```
+// Place a component in column 0,0 (top left)
+gbc.gridx = 0;
+gbc.gridy = 0;
+```
+
+- **Setting Padding to a Component**
+
+![alt text](https://github.com/szeyick/University/blob/master/COS80007%20-%20Advanced%20Java/Lectures%20Notes/Week%201%20-%20Introduction%20to%20Swing/images/padding.png "Alignment")
+
+```
+// Increase a components width and heigh by 10 pixels (5 on each side). It adds **interior** padding, increasing the preferred size of a component.
+
+gbc.ipadx = 5;
+gbc.ipady = 5;
+```
+
+- **Setting weight to a component**
+
+![alt text](https://github.com/szeyick/University/blob/master/COS80007%20-%20Advanced%20Java/Lectures%20Notes/Week%201%20-%20Introduction%20to%20Swing/images/weight.png "Weight")
+```
 // Specify how much extra space a component can occupy in its cell. The weight values range from 0.0 -> 1.0, and specifies both vertical and horizontal space. The default value is 0.0.
 
 gbc.weightx = 1.0;
 gbc.weighty = 1.0;
+```
 
+- **Occupy More Than One Cell**
+
+![alt text](https://github.com/szeyick/University/blob/master/COS80007%20-%20Advanced%20Java/Lectures%20Notes/Week%201%20-%20Introduction%20to%20Swing/images/width.png "Width")
+```
 // We can also specify the number of cells a component can expand into, both horizontally and vertically. The below example will state that the component will occupy 2 columns and 1 row.
 
 gbc.gridwidth = 2;
 gbc.gridheight = 1;
+```
 
+- **Set Position Within A Cell**
+
+![alt text](https://github.com/szeyick/University/blob/master/COS80007%20-%20Advanced%20Java/Lectures%20Notes/Week%201%20-%20Introduction%20to%20Swing/images/anchor.png "Anchor")
+
+```
 // We can also specify how a component is aligned within a cell, much like how a border layout works. There are 9 possible alignments, NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST, CENTER. The default is CENTER.
 
 gbc.anchor = SOUTHEAST;
+```
 
+- **Filling a Cell**
+ 
+
+![alt text](https://github.com/szeyick/University/blob/master/COS80007%20-%20Advanced%20Java/Lectures%20Notes/Week%201%20-%20Introduction%20to%20Swing/images/fill.png "Fill")
+```
 // We can also have a component fill out the entire cell, either NONE (default), HORIZONTAL, VERTICAL, BOTH, which will take out the remaining space in the cell.
 
 gbc.fill = BOTH;

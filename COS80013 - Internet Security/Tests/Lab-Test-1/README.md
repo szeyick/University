@@ -2,52 +2,47 @@
 
 - **What is a "honeypot"?**
 
-In computer terminology, a honeypot is a trap set to detect, deflect, or, in some manner, counteract attempts at unauthorized use of information systems. Generally, a honeypot consists of a computer, data, or a network site that appears to be part of a network, but is actually isolated and monitored, and which seems to contain information or a resource of value to attackers. This is similar to the police baiting a criminal and then conducting undercover surveillance.
+A honeypot is a term that is used to describe a deliberate trap that is set up to detect unauthorised attempts to access sensitive information. The trap is designed to attract attackers towards it by seemingly offering valuable information, but its location and/or contents are isolated and monitored.  
 
 - **What is "blackholing"?**
 
-Blackholing is essentially a security measure that can be put into place against known offenders. By blackholing certain IP addresses and domains, an ISP can reduce the amount of spam entering the system, reducing the load and making customers happy in the bargain. Blackholing does, of course, have the potential to be abused by ISPs, which could use it to block competing services or prevent legitimate activities. 
+Blackholing is a term that is used to describe the process of blocking IP addresses and domains to reduce the amount of potentially mallicious data from entering a system or network from those addresses and domains. Its intention is to block incoming data from known threats so as to not flood a networks traffic with spam.
 
 - **What is "air-gap security"?**
 
-An air gap is the maximum protection between a system and other device/system - apart from actually turning it off. Two disconnected systems or devices designate security levels as low side (unclassified) and high side (classified). To move data, it often must to be saved in some type of transportable medium. Moving data from low to high side is simple, whereas moving classified data from a high to low side security device requires a strict procedure prior to performing the transfer, due to the data's classified nature.
+Air-gap security is a term that is used to describe how disconnected systems communicate with one another. Data transfer between these systems is performed by using a transportable device (Flash Drive, CD, Portable HDD). In addition to data transport from one device to another, there is often a strict process that needs to be followed to ensure that data is transferred safely.
 
-The usual configuration of an air gap is a sneakernet, in which alternate storage, like flash drives or CDs, must be used to transfer data to and from the isolated device, rather than simply moving data across shared drives and networks.
-
-A system or device may require certain limitations, such as:
-
-    Totally banning local wireless communications
-    Preventing electromagnetic (EM) leakage by placing the system/device in a Faraday cage to block wireless transmissions
-
-Systems that implement air gap security include nuclear power plant controls, military networks and computerized medical equipment.
+It is a form of high level security designed to reduce the possible areas of vulnerability for attackers to gain access to a system and/or its data by literally creating an "air-gap" between systems.
 
 - **What is a "one-time pad"?**
 
+**Re-write**
 In cryptography, the one-time pad (OTP) is an encryption technique that cannot be cracked if used correctly. In this technique, a plaintext is paired with a random secret key (also referred to as a one-time pad). Then, each bit or character of the plaintext is encrypted by combining it with the corresponding bit or character from the pad using modular addition. If the key is truly random, is at least as long as the plaintext, is never reused in whole or in part, and is kept completely secret, then the resulting ciphertext will be impossible to decrypt or break.[
 
 - **What does "zero-day attack" mean?**
 
-Zero day or a day zero attack is the term used to describe the threat of an unknown security vulnerability in a computer software or application for which either the patch has not been released or the application developers were unaware of or did not have sufficient time to address.
-
-Since the vulnerability is not known in advance, the exploits often occur without the knowledge of the users. A zero day flaw is considered as an important component when designing an application to be efficient and secure.
+Zero-day attack is a term that describes a threat to a piece of software that exposes a vulnerability that is presently unknown. It is the time before the vulnerability is discovered, patched and addressed by the applications developers.
 
 - **What are "ARP and DNS cache poisoning"?**
 
-DNS cache poisoning is a process by which DNS server records are illegitimately modified to replace a website address with a different address. DNS cache poisoning is used by hackers and crackers to redirect visitors of a particular website to their defined/desired website.
+DNS cache poisoning is a term that describes the process of illegally modifying a DNS server's records to replace the existing IP addresses with a set of IP different addresses. The result of this is that visitors to a website that has had its records modified will be re-directed to the site which the hacker has defined.
 
-DNS cache poisoning is also known as DNS spoofing.
+ARP poisoning is a term that describes the process of illegally changing the MAC address (Media Access Control)  
 
-DNS cache poisoning works when the security controls of a DNS server are compromised and accessed by a hacker. The hacker replaces a website’s associated DNS records with a different website, one that may contain spam, malware and/or viruses. This is done by changing the associated domain name’s IP address to that of the malicious website. When the user accesses the target website from the corrupted DNS server, the hacker's website appears as opposed to the original website. 
-
+**Re-write**
 ARP poisoning is very effective against both wireless and wired local networks. By triggering an ARP poisoning attack, hackers can steal sensitive data from the targeted computers, eavesdrop by means of man-in-the-middle techniques, and cause a denial of service on the targeted computer. In addition, if the hacker modifies the MAC address of a computer that enables Internet connection to the network, access to Internet and external networks may be disabled.
 
 Address Resolution Protocol poisoning (ARP poisoning) is a form of attack in which an attacker changes the Media Access Control (MAC) address and attacks an Ethernet LAN by changing the target computer's ARP cache with a forged ARP request and reply packets. This modifies the layer -Ethernet MAC address into the hacker's known MAC address to monitor it. Because the ARP replies are forged, the target computer unintentionally sends the frames to the hacker's computer first instead of sending it to the original destination. As a result, both the user's data and privacy are compromised. An effective ARP poisoning attempt is undetectable to the user. 
 
 - **What is the purpose of the NSA PRISM program?**
 
-The PRISM program is a U.S. federal government surveillance program orchestrated by the National Security Agency (NSA).
+The NSA PRISM program is designed to collect data about individuals from their Internet communications (email, video chat, photos, online files). The data is provided by large internet companies such as Google, Facebook, Microsoft and Apple. 
 
-The PRISM program obtains a wide variety of data about individuals, including data from the assets of large tech companies, like Google, Microsoft, Facebook, Yahoo and Apple. Information captured by PRISM includes email, documentation, visual data and telecommunication logs. The program is controversial because of its potential use to target American citizens or individuals that reside in the United States. 
+Legally, the data retrieved must match approved search terms but could technically be able to monitor any particular citizen or groups of individuals. It is supposed to retrieve data from targeted individuals.
+
+"specifically authorizes intelligence agencies to monitor the phone, email, and other communications of U.S. citizens for up to a week without obtaining a warrant" when one of the parties is outside the U.S"
+
+ The program is controversial because of its potential use to target American citizens or individuals that reside in the United States. 
 
 - **In 2001 Bruce Schneier said "Complexity is the enemy of security". Explain what he meant.**
 

@@ -165,3 +165,14 @@ A trusted party is not always trusted since it can be compelled by another organ
 If security is too hard, then users will not find the system very useful. Such things as login in repetitively, password type restrictions and pass keys will make users not want to use the system.
 
 To get around this, shared logins (Single Sign On), Cloud storage and other shared services are implemented but they still have their own flaws also.
+
+### Rough Lecture Notes
+
+Computer security is more about the malware
+AAA - Assurance, Authenticity, Anonymity
+Encryption is rendering a message uninterpretable without the key.
+
+Mixing shuffles the characters in the message - "Hello" -> "olehl"
+Substitution completely changes the message - "Hello" -> "asdtd"
+
+Hashing is used to uniquely identifying a message without knowing what it is. It isn't used to mask the data in any way but more about ensuring that it hasn't been tampered with.

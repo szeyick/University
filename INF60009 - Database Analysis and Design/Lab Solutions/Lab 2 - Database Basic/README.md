@@ -18,6 +18,8 @@ A DBMS or database management system, is the means in which allows us to create 
 
 - **Convert the ERD to a Relational Schema**
 
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lab%20Solutions/Lab%202%20-%20Database%20Basic/images/Movie.png "Movie")
+
 A relational schema is the middlepoint of converting a ERD to a Relational Model. It is the means in which we define the statement that will allow us to structure the relational models columns and table.
 
 In the ERD, we have 4 components, 3 are attributes and an entity. They are as follows -
@@ -95,6 +97,8 @@ The <> symbol appears to mean, 'everything that is not'.
 
 - **Consider the ERD**
 
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lab%20Solutions/Lab%202%20-%20Database%20Basic/images/TaskEmployee.png "Movie")
+
 **Specify the relationship between Task and Employee by reading Left to Right.**
 
 One Task is assigned to One Employee.
@@ -117,6 +121,8 @@ This will result in our 2 relational schemas for the Task and Employee entity to
 **Employee(EmpId, EmpName, Gender)**
 
 **Read the relationships Left to Right and Right to Left specified by the following ERD**
+
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lab%20Solutions/Lab%202%20-%20Database%20Basic/images/StaffDept.png "Movie")
 
 **One STAFF is assigned to One DEPT**
 **One DEPT can be assigned to Many STAFF**
@@ -263,6 +269,8 @@ SELECT * FROM MOVIE WHERE IMDB_SCORE <= 5.0 ORDER BY RELYEAR ASC;
 ## Creating Scripts
 
 **Create a table that represents the ER Diagram**
+
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lab%20Solutions/Lab%202%20-%20Database%20Basic/images/Car.png "Movie")
 
 DROP TABLE CAR;
 CREATE TABLE CAR (

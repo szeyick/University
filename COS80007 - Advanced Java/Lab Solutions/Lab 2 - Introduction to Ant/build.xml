@@ -1,0 +1,54 @@
+<project name="VGJ" default="run" basedir=".">
+  <property name="classes" value="classes" />
+  <property name="target.dir" value="${basedir}" />
+  <property name="src.dir" value="${basedir}" />
+  <path id="project.class.path">
+     <pathelement location="."/>
+     <pathelement path="${java.class.path}/"/>
+     <pathelement path="${additional.path}"/>
+  </path>
+  <taskdef name="textpad" classname="TextPad" classpath="${basedir}"/>
+  
+  <fileset dir="./lib/">
+     <patternset id="classpath">
+     <include name="*.jar"/>
+     </patternset>
+  </fileset>
+  <target name="init" description="Initialise Timestamp">
+    <tstamp/>
+  </target>
+  <target name="load" description="Load Java Files">
+    <textpad message="Loading java files" dir="."/>
+  </target>
+  <target name="compile" depends="init" description="Compile Java">
+     <javac srcdir="." destdir="." debug="yes">
+       <classpath refid="project.class.path"/>
+     </javac>
+  </target>
+  <target name="run" depends="compile" description="Init, Compile and Run">
+     <java classname="EDU.auburn.VGJ.VGJ" fork="yes" dir=".">
+       <classpath refid="project.class.path"/>
+     </java>
+  </target>
+  <target name="jar" description="Create Jars">
+     <delete file="./VGJ.jar" />
+     <jar jarfile="./VGJ.jar" manifest="MANIFEST.MF"> 
+       <fileset dir=".">
+         <include name="**/*.class"/>
+         <include name="resources/**" />
+       </fileset>
+     </jar>
+  </target>
+  <target name="clean" description="Deletes the class files">
+    <delete>
+      <fileset dir="EDU" includes="**/*.class"/>
+    </delete>
+  </target>
+  <target name="javadocs" description="Generate JavaDoc API docs">
+	<delete dir="${target.dir}/docs" failonerror="false"/>
+	<mkdir dir="${target.dir}/docs"/>
+	<javadoc destdir="${target.dir}/docs/" classpathref="project.class.path">
+		<packageset dir="${src.dir}"/>	
+	</javadoc>
+  </target>
+</project>

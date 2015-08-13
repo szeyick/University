@@ -7,7 +7,9 @@
 - The wildcard % means '0 or more characters', where '%HELLO%' means 0 or more characters before and after HELLO. This needs to be in the format of WHERE <column name> LIKE '%HELLO%', where LIKE is the wildcard that goes with it.
 
 - The <> symbol appears to mean, 'everything that is not'.
-
+ 
+- The type **char** can be used, however the parser will fill in the gaps to fill up the defined number of characters.
+ 
 ### Theory Questions
 
 - **Describe the difference between a database and DBMS**
@@ -37,11 +39,11 @@ Therefore for the relational schema of the ERD we will have - **Movie (MovieId, 
 
 The SQL statement to create a table with column (attribute) names will follow the template of -
 
-**CREATE TABLE <tableName> (
-	<attributeName> <type>,
-	<attributeName> <type>,
-	<attributeName> <type>,
-	<foreignKey> <attributeName>
+**CREATE TABLE \<tableName\> (
+	\<attributeName\> \<type\>,
+	\<attributeName\> \<type\>,
+	\<attributeName\> \<type\>,
+	\<foreignKey\> \<attributeName\>
 );**
 
 If we plug in our relational schema into the statement template we will have - 
@@ -53,7 +55,8 @@ If we plug in our relational schema into the statement template we will have -
 	Primary Key (MovieId)
 );**
 
-**It should be noted that VARCHAR2 is used over VARCHAR as it allows for empty string to be defined as NULL.
+**It should be noted that VARCHAR2 is used over VARCHAR as it allows for empty string to be defined as NULL.**
+**The type number(n,m) will mean n numbers and m decimals**
 
 - **For each of the following statements, indicate if the statement is valid or invalid**
 

@@ -139,4 +139,70 @@ In the above example, we are using L as the alias for the lecturer table.
 
 ### Querying Multiple Tables
 
-Sometimes you want to get information from multiple tables.
+Sometimes you want to get information from multiple tables and connect them into one result table. For example, with our subject - lecturer table, we might want to get all the subject codes asnd the names of the lecturers that teach them. This would require accessing both the lecutrer and subject table.
+
+#### Incorrect Way
+
+There is an incorrect way to do this, we could do -
+
+```
+SELECT SubjectCode, LecName FROM Subject, Lecturer
+```
+
+This will get every row in the first table (Subject) and then every row in the second table (Lecturer) and outputted the result. This result table will essentially duplicate the data as it sums the rows from each table together to output the result, this is calle da **catesian product** and is usually a mistake.
+
+This problem occurs becaues the select states ignore all the constraints that have been implemented. The following SQL Select statement doesn't know the relationship between the tables other than the foreign and primary key relationship.
+
+The way to rectify this is to tell SQL directly how the tables are related with every select statement, this is where we use **joins**.
+
+### Inner Joins
+
+An inner join is the result set that contains only the data that satisfies the foreign key - primary key relationship.
+
+The syntax is as follows -
+
+```
+SELECT <column names>
+FROM   <table-name1>
+INNER JOIN <table-name2>
+ON <join-condition>
+```
+
+The join condition is usually in the format of
+
+```
+<foreign-key column-name> = <primary-key column name>
+```
+
+So to continue with the Lecturer - Subject example, say we had the following statement
+
+```
+SELECT S.SubjectCode, L.LecName
+FROM Subject S
+INNER JOIN Lecturer L
+ON S.LecId = L.LecId
+```
+
+This will mean that each row in the Subject entity will only be joined with a row from the Lecturer entity where the Foreign-Key in the Subject matches the Primary-Key in the Lecturer table.
+
+The result set will be filtered to only display a single copy of the retrieved data.
+
+We can also filter it further by using the WHERE clause
+
+```
+SELECT S.SubjectCode, L.LecName
+FROM Subject S
+INNER JOIN Lecturer L
+ON S.LecId = L.LecId
+WHERE L.Age < 35
+```
+
+It will essentially filter the result table even further.
+
+### Old Style Join
+
+An old style join is where you use the WHERE clause to determine which columns you want to join together. This is generally not the best thing to do.
+
+### Column Ambiguity
+
+Column ambiguity is where the primary key and foreign key in 2 tables have the same name. In this case we will need to attach aliases to the column name otherwise SQL will generate an error as it will have no idea which table it is to insert things or find things on.

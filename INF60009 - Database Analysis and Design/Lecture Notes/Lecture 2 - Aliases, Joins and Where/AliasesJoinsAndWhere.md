@@ -57,21 +57,13 @@ To illustrate this in the ERD, for each entity that we want to always exist, we 
 
 If we continue with the Subject - Lecturer relationship diagram
 
-** Add Diagram **
-
-```
-Subject->---Convened By---||-Lecturer
-```
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%202%20-%20Aliases%2C%20Joins%20and%20Where/images/mandatoryRelatinship.png "Not Null Constraints")
 
 The Lecturer entity contains the | so it means that a Subject **must** be convened by one Lecturer.
 
 Conversely, we define an entity to be **optional** or **possibly null** by drawing a circle O.
 
-** Add Diagram **
-
-```
-Subject ->---Convened By---O|-Lecturer
-```
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%202%20-%20Aliases%2C%20Joins%20and%20Where/images/optionalRelationship.png "Optional Constraints")
 
 The Lecturer this time contains the O so it means that a Subject **may (could be NULL)** be convened by one lecturer.
 
@@ -113,7 +105,6 @@ The statement above will output the following table
 By using the **AS** keyword, we create another output column named "TotalScore" that aggregates the score.
 
 We can also rename existing columns in the output set by doing something similar.
-
 
 ```
 SELECT Name "Player Name", Innings1Score, Innings2Score, Innings1Score+Innings2Score "TotalScore"
@@ -180,7 +171,7 @@ SELECT SubjectCode, LecName FROM Subject, Lecturer
 
 This will return the incorrect information as it will match every row in the first table with every row in the second table.
 
-** Add Image **
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/cartesianProduct.png "Incorrect Cartesian Product")
 
 This result set is called a **cartesian product** and is probably not what you want to return.
 
@@ -264,7 +255,7 @@ If we modify the Subject - Lecturer example, we will add another entity into the
 
 The resulting ERD we will have is 
 
-**Add Diagram Here**
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/ERDWithMultipleEntities.png "Multiple Entities")
 
 The new relationship here we follow the same naming convention -
 

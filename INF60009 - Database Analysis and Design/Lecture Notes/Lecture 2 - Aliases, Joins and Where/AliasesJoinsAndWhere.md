@@ -358,7 +358,6 @@ These functions are useful when you want to evaluate the data within the tables 
 
 This can be used rather than creating an greater than and less than statement
 
-
 ```
 WHERE age BETWEEN 30 and 40
 

@@ -171,7 +171,7 @@ SELECT SubjectCode, LecName FROM Subject, Lecturer
 
 This will return the incorrect information as it will match every row in the first table with every row in the second table.
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/cartesianProduct.png "Incorrect Cartesian Product")
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%202%20-%20Aliases%2C%20Joins%20and%20Where/images/cartesianProduct.png "Incorrect Cartesian Product")
 
 This result set is called a **cartesian product** and is probably not what you want to return.
 
@@ -255,7 +255,7 @@ If we modify the Subject - Lecturer example, we will add another entity into the
 
 The resulting ERD we will have is 
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/ERDWithMultipleEntities.png "Multiple Entities")
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%202%20-%20Aliases%2C%20Joins%20and%20Where/images/ERDWithMultipleEntities.png "Multiple Entities")
 
 The new relationship here we follow the same naming convention -
 
@@ -276,6 +276,7 @@ ForeignKey OfficeNo References OFFICE
 
 Subject (SubjectCode, Title, CreditPoints, LecId)
 Foreign Key LecId References LECTURER
+```
 
 ### Joining Queries From Multiple Tables
 
@@ -361,7 +362,8 @@ WHERE age >= 30 AND age <= 40
 
 This operator allows you to find partial matches for text values.
 
-For this operator we use the % to substitute 1 or more characters, and is never used with an '=' since you cannot partially match and absolute value.
+For this operator we use the % to substitute 1 or more characters, and is never used with an '=' 
+since you cannot partially match and absolute value.
 
 ```
 WHERE UPPER(name) LIKE 'J%'

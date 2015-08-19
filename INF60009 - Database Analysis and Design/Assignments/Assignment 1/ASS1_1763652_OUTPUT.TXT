@@ -1,0 +1,735 @@
+START OF OUTPUT SECTION
+
+Student ID: 1763652
+
+Student Name: Sze Yick
+
+Tutor Name: XXXXXXXXXXXXXX
+
+Tutorial Day: Thursday
+
+Tutorial Time: 7:30pm
+
+Tutorial Room: BA604
+
+--------------------------------------------------------------
+
+Task 1.1 ENGLISH SENTENCES DESCRIBING THE ERD
+
+--------------------------------------------------------------
+
+Task 1.2 DROP ALL TABLES
+
+OK. 0 rows
+
+OK. 0 rows
+
+OK. 0 rows
+
+OK. 0 rows
+
+OK. 0 rows
+
+OK. 0 rows
+
+--------------------------------------------------------------
+
+Task 1.3 CREATE STATE TABLE
+
+OK. 0 rows
+
+--------------------------------------------------------------
+
+Task 1.4 INSERT STATEMENTS TO POPULATE STATE TABLE WITH VALID DATA
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+--------------------------------------------------------------
+
+Task 1.5 STATE List Rows
+
+SELECT * FROM STATE ORDER BY population DESC
+STATECODE	STATENAME	POPULATION
+NSW	New South Wales	7440000
+VIC	Victoria	5790000
+QLD	Queensland	4680000
+WA	Western Australia	2500000
+SA	South Australia	1670000
+TAS	Tasmania	510000
+ACT	Australian Capital Territory	385000
+NT	Northern Territory	242000
+OK. 8 rows selected.
+
+--------------------------------------------------------------
+
+Task 1.6 PK Test
+
+INSERT INTO STATE (statecode, statename, population) VALUES ('NT', 'Northern Territory', 190000)
+*
+Error at line 1:
+ORA-00001: unique constraint (S1763652.SYS_C002509890) violated
+
+--------------------------------------------------------------
+
+Task 1.7 State Name Size Test
+
+INSERT INTO STATE (statecode, statename, population) VALUES ('SWA', 'South West Region of Western Australia', 418000)
+                                                                    *
+Error at line 1:
+ORA-12899: value too large for column "S1763652"."STATE"."STATENAME" (actual: 38, maximum: 30)
+
+--------------------------------------------------------------
+
+Task 1.8 POPULATION Size Test
+
+INSERT INTO STATE (statecode, statename, population) VALUES ('CI', 'Christmas Island', 123000000)
+                                                                                       *
+Error at line 1:
+ORA-01438: value larger than specified precision allowed for this column
+
+--------------------------------------------------------------
+
+Task 1.9 CREATE CITY TABLE
+
+OK. 0 rows
+
+--------------------------------------------------------------
+
+Task 1.10 POPULATE CITY TABLE
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+--------------------------------------------------------------
+
+Task 1.11 CITY List
+
+SELECT * FROM CITY ORDER BY cityid ASC
+CITYID	CITYNAME	STATECODE
+1	Longwarry	VIC
+2	Port Melbourne	VIC
+3	Ashfield	NSW
+4	Bayswater	WA
+5	Geelong	VIC
+6	Beaconsfield	VIC
+7	Port Adelaide	SA
+8	Beaconsfield	TAS
+9	Springfield	TAS
+10	Springfield	NSW
+11	Springfield	QLD
+12	Marmong Point	NSW
+13	Beachport	SA
+14	Point Grey	NT
+15	Blacktown	NSW
+16	Fielding	QLD
+17	Airlie Beach	QLD
+18	Longreach	QLD
+OK. 18 rows selected.
+
+--------------------------------------------------------------
+
+Task 1.12 CITY and STATE LIST with INNER JOIN
+
+SELECT C.cityid, C.cityname, S.statename, S.population FROM CITY C INNER JOIN STATE S ON C.statecode = S.statecode ORDER BY C.cityid ASC
+CITYID	CITYNAME	STATENAME	POPULATION
+1	Longwarry	Victoria	5790000
+2	Port Melbourne	Victoria	5790000
+3	Ashfield	New South Wales	7440000
+4	Bayswater	Western Australia	2500000
+5	Geelong	Victoria	5790000
+6	Beaconsfield	Victoria	5790000
+7	Port Adelaide	South Australia	1670000
+8	Beaconsfield	Tasmania	510000
+9	Springfield	Tasmania	510000
+10	Springfield	New South Wales	7440000
+11	Springfield	Queensland	4680000
+12	Marmong Point	New South Wales	7440000
+13	Beachport	South Australia	1670000
+14	Point Grey	Northern Territory	242000
+15	Blacktown	New South Wales	7440000
+16	Fielding	Queensland	4680000
+17	Airlie Beach	Queensland	4680000
+18	Longreach	Queensland	4680000
+OK. 18 rows selected.
+
+--------------------------------------------------------------
+
+Task 1.13 FK Test (Must Fail)
+
+INSERT INTO CITY (cityid, cityname, statecode) VALUES (20, 'Bendigo', 'TED')
+*
+Error at line 1:
+ORA-02291: integrity constraint (S1763652.SYS_C002509893) violated - parent key not found
+
+--------------------------------------------------------------
+
+Task 1.14 NULL FK Test (Must Fail)
+
+INSERT INTO CITY (cityid, cityname, statecode) VALUES (21, 'Newcastle', NULL)
+                                                                        *
+Error at line 1:
+ORA-01400: cannot insert NULL into ("S1763652"."CITY"."STATECODE")
+
+--------------------------------------------------------------
+
+Task 1.15 CREATE WAREHOUSE TABLE
+
+OK. 0 rows
+
+--------------------------------------------------------------
+
+Task 1.16 POPULATE WAREHOUSE TABLE
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+prompt Task 2.0 Warehouse List
+
+SELECT * FROM WAREHOUSE ORDER BY whid ASC
+WHID	SECURITY_LEVEL	QUARANTINE_FACILITIES	MAX_PALLETS	FREEZER_FACILITIES	COST_PER_PALLET	MANAGER_NAME	CITYID
+50	1	Y	4160	Y	46.3	Vicki	1
+52	5	N	8260	N	12.5	Frankie	2
+54	1	Y	19430	Y	26.45	Jeff	1
+56	5	 	1490	Y	17.1	Abed	3
+58	2	Y	16750	N	30.3	Craig	8
+60	1	 	3290	N	26.2	Rachel	10
+62	3	N	3610	N	22.9	Shirley	14
+64	5	Y	6660	N	14.35	Leonard	15
+66	4	Y	13160	Y	16.7	Troy	3
+68	2	Y	2760	N	32.9	Ian	16
+70	3	N	4300	Y	15	Pavel	3
+72	4	 	5200	N	18	Michelle	8
+74	3	N	8100	Y	21	Alessasndra	1
+OK. 13 rows selected.
+
+--------------------------------------------------------------
+
+Task 2.1 Query 1
+
+SELECT * FROM CITY WHERE cityname LIKE 'B%' OR cityname LIKE'P%' ORDER BY cityname ASC
+CITYID	CITYNAME	STATECODE
+4	Bayswater	WA
+13	Beachport	SA
+6	Beaconsfield	VIC
+8	Beaconsfield	TAS
+15	Blacktown	NSW
+14	Point Grey	NT
+7	Port Adelaide	SA
+2	Port Melbourne	VIC
+OK. 8 rows selected.
+
+--------------------------------------------------------------
+
+Task 2.2 Query 2
+
+SELECT * FROM CITY WHERE (cityname LIKE 'B%' OR cityname LIKE'P%') AND statecode = 'VIC' ORDER BY cityname ASC
+CITYID	CITYNAME	STATECODE
+6	Beaconsfield	VIC
+2	Port Melbourne	VIC
+OK. 2 rows selected.
+
+--------------------------------------------------------------
+
+Task 2.3 Query 3
+
+SELECT whid, max_pallets, security_level FROM WAREHOUSE WHERE (max_pallets < 3000 OR max_pallets > 10000) AND (security_level = 1 OR security_level = 5)
+WHID	MAX_PALLETS	SECURITY_LEVEL
+54	19430	1
+56	1490	5
+OK. 2 rows selected.
+
+--------------------------------------------------------------
+
+Task 2.4 Query 4
+
+SELECT whid, cost_per_pallet, security_level, freezer_facilities FROM WAREHOUSE ORDER BY whid ASC
+WHID	COST_PER_PALLET	SECURITY_LEVEL	FREEZER_FACILITIES
+50	46.3	1	Y
+52	12.5	5	N
+54	26.45	1	Y
+56	17.1	5	Y
+58	30.3	2	N
+60	26.2	1	N
+62	22.9	3	N
+64	14.35	5	N
+66	16.7	4	Y
+68	32.9	2	N
+70	15	3	Y
+72	18	4	N
+74	21	3	Y
+OK. 13 rows selected.
+
+--------------------------------------------------------------
+
+Task 2.5 Query 5
+
+SELECT * FROM WAREHOUSE WHERE freezer_facilities = 'Y' AND ((security_level = 3 AND quarantine_facilities = 'N') OR (security_level = 5 AND quarantine_facilities = 'Y'))
+WHID	SECURITY_LEVEL	QUARANTINE_FACILITIES	MAX_PALLETS	FREEZER_FACILITIES	COST_PER_PALLET	MANAGER_NAME	CITYID
+70	3	N	4300	Y	15	Pavel	3
+74	3	N	8100	Y	21	Alessasndra	1
+OK. 2 rows selected.
+
+--------------------------------------------------------------
+
+Task 2.6 Query 6
+
+SELECT * FROM WAREHOUSE WHERE quarantine_facilities IS NULL ORDER BY whid ASC
+WHID	SECURITY_LEVEL	QUARANTINE_FACILITIES	MAX_PALLETS	FREEZER_FACILITIES	COST_PER_PALLET	MANAGER_NAME	CITYID
+56	5	 	1490	Y	17.1	Abed	3
+60	1	 	3290	N	26.2	Rachel	10
+72	4	 	5200	N	18	Michelle	8
+OK. 3 rows selected.
+
+--------------------------------------------------------------
+
+Task 2.7 Query 7
+
+SELECT * FROM CITY WHERE UPPER(cityname) LIKE '%BEACH%' OR UPPER(cityname) LIKE '%FIELD%' OR UPPER(cityname) LIKE '%LONG%' OR UPPER(cityname) LIKE '%POINT%' OR UPPER(cityname) LIKE 'BEACH%' OR UPPER(cityname) LIKE 'FIELD%' OR UPPER(cityname) LIKE 'LONG%' OR UPPER(cityname) LIKE 'POINT%' OR UPPER(cityname) LIKE '%BEACH' OR UPPER(cityname) LIKE '%FIELD' OR UPPER(cityname) LIKE '%LONG' OR UPPER(cityname) LIKE '%POINT' ORDER BY cityname ASC
+CITYID	CITYNAME	STATECODE
+17	Airlie Beach	QLD
+3	Ashfield	NSW
+13	Beachport	SA
+6	Beaconsfield	VIC
+8	Beaconsfield	TAS
+16	Fielding	QLD
+5	Geelong	VIC
+18	Longreach	QLD
+1	Longwarry	VIC
+12	Marmong Point	NSW
+14	Point Grey	NT
+11	Springfield	QLD
+9	Springfield	TAS
+10	Springfield	NSW
+OK. 14 rows selected.
+
+--------------------------------------------------------------
+
+Task 2.8 Query 8
+
+SELECT whid, max_pallets, cost_per_pallet, max_pallets*cost_per_pallet AS "maximum cost" FROM WAREHOUSE ORDER BY 4 DESC
+WHID	MAX_PALLETS	COST_PER_PALLET	maximum cost
+54	19430	26.45	513923.5
+58	16750	30.3	507525
+66	13160	16.7	219772
+50	4160	46.3	192608
+74	8100	21	170100
+52	8260	12.5	103250
+64	6660	14.35	95571
+72	5200	18	93600
+68	2760	32.9	90804
+60	3290	26.2	86198
+62	3610	22.9	82669
+70	4300	15	64500
+56	1490	17.1	25479
+OK. 13 rows selected.
+
+--------------------------------------------------------------
+
+Task 2.9 Query 9
+
+SELECT W.whid, W.max_pallets, W.max_pallets*W.cost_per_pallet AS "maximum cost", S.population, S.statename FROM WAREHOUSE W INNER JOIN CITY C ON W.cityid = C.cityid INNER JOIN STATE S ON C.statecode = S.statecode WHERE S.population > 3000000 AND W.max_pallets >= 2000 AND ((W.max_pallets * W.cost_per_pallet) < 150000) ORDER BY W.whid ASC
+WHID	MAX_PALLETS	maximum cost	POPULATION	STATENAME
+52	8260	103250	5790000	Victoria
+60	3290	86198	7440000	New South Wales
+64	6660	95571	7440000	New South Wales
+68	2760	90804	4680000	Queensland
+70	4300	64500	7440000	New South Wales
+OK. 5 rows selected.
+
+--------------------------------------------------------------
+
+Task 2.10 Query 10
+
+SELECT DISTINCT cityname FROM CITY ORDER BY cityname ASC
+CITYNAME
+Airlie Beach
+Ashfield
+Bayswater
+Beachport
+Beaconsfield
+Blacktown
+Fielding
+Geelong
+Longreach
+Longwarry
+Marmong Point
+Point Grey
+Port Adelaide
+Port Melbourne
+Springfield
+OK. 15 rows selected.
+
+--------------------------------------------------------------
+
+Task 3.1 Update 1
+
+OK. 1 rows
+
+--------------------------------------------------------------
+
+Task 3.2 Update 2
+
+OK. 3 rows
+
+--------------------------------------------------------------
+
+Task 3.3 Delete 1
+
+OK. 1 rows
+
+--------------------------------------------------------------
+
+Task 3.4 Delete 2 (Must Fail)
+
+DELETE FROM CITY
+*
+Error at line 1:
+ORA-02292: integrity constraint (S1763652.SYS_C002509896) violated - child record found
+
+--------------------------------------------------------------
+
+Task 3.5 Warehouse Query
+
+SELECT * FROM WAREHOUSE ORDER BY whid ASC
+WHID	SECURITY_LEVEL	QUARANTINE_FACILITIES	MAX_PALLETS	FREEZER_FACILITIES	COST_PER_PALLET	MANAGER_NAME	CITYID
+50	1	Y	4160	Y	46.3	Vicki	1
+52	5	N	8260	N	12.5	Frankie	2
+54	1	Y	20000	Y	26.45	Jeff	1
+56	5	 	1490	Y	17.1	Abed	3
+58	2	Y	16750	N	30.3	Craig	8
+60	1	 	3290	N	26.2	Rachel	10
+62	3	N	3610	N	24.89	Shirley	14
+64	5	Y	6660	N	14.35	Leonard	15
+66	4	Y	13160	Y	16.7	Troy	3
+68	2	Y	2760	N	32.9	Ian	16
+70	3	N	4300	Y	16.99	Pavel	3
+72	4	 	5200	N	18	Michelle	8
+74	3	N	8100	Y	22.99	Alessasndra	1
+OK. 13 rows selected.
+
+--------------------------------------------------------------
+
+Task 4.1 ENGLISH SENTENCES DESCRIBING THE ERD
+
+--------------------------------------------------------------
+
+Task 4.2 DROP ALL TABLES
+
+--------------------------------------------------------------
+
+Task 4.3 CREATE MANUFACTURER and STOCKITEM TABLES
+
+OK. 0 rows
+
+OK. 0 rows
+
+--------------------------------------------------------------
+
+Task 4.4 POPULATE MANUFACTURER TABLE
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+--------------------------------------------------------------
+
+Task 4.5 POPULATE STOCKITEM TABLE
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+--------------------------------------------------------------
+
+Task 4.6 FK Test 1 (Must Fail)
+
+INSERT INTO MANUFACTURER (manid, man_title, owner_name, cityid) VALUES (58, 'River Electrics', 'Pierce', 99)
+*
+Error at line 1:
+ORA-02291: integrity constraint (S1763652.SYS_C002509898) violated - parent key not found
+
+--------------------------------------------------------------
+
+Task 4.7 FK Test 2 (Must Fail)
+
+INSERT INTO STOCKITEM (stkid, stkname, selling_price, purchase_price, manid, whid) VALUES (91, 'Electric Fan', 15.5, 6.2, 99, 60)
+*
+Error at line 1:
+ORA-02291: integrity constraint (S1763652.SYS_C002509902) violated - parent key not found
+
+--------------------------------------------------------------
+
+Task 4.8 FK Test 3 (Must Fail)
+
+INSERT INTO STOCKITEM (stkid, stkname, selling_price, purchase_price, manid, whid) VALUES (92, 'Coffee Maker', 78, 22, 43, 99)
+*
+Error at line 1:
+ORA-02291: integrity constraint (S1763652.SYS_C002509903) violated - parent key not found
+
+--------------------------------------------------------------
+
+Task 5.1.1 Query 1
+
+SELECT * FROM STOCKITEM WHERE (selling_price > (purchase_price * 3)) OR (selling_price < (purchase_price * 2)) ORDER BY stkid ASC
+STKID	STKNAME	SELLING_PRICE	PURCHASE_PRICE	MANID	WHID
+78	Whisk Combo	11	2.75	41	56
+82	Solar Pump	5.6	1.68	44	58
+85	Refrigerator	40	22	42	50
+87	Sports Umbrella	35	7.25	45	62
+88	DVD player	32.5	18.5	41	58
+89	Garden Tools	18	5.9	46	50
+OK. 6 rows selected.
+
+--------------------------------------------------------------
+
+Task 5.1.2 Query 2
+
+SELECT * FROM STOCKITEM WHERE NOT selling_price IN (11, 18, 27.75, 38) ORDER BY stkid ASC
+STKID	STKNAME	SELLING_PRICE	PURCHASE_PRICE	MANID	WHID
+71	Electric Fan	15.5	6.2	42	50
+74	Drill Set	26	9.1	45	52
+82	Solar Pump	5.6	1.68	44	58
+85	Refrigerator	40	22	42	50
+86	Magnetic Desk Toy	29.99	14.2	43	68
+87	Sports Umbrella	35	7.25	45	62
+88	DVD player	32.5	18.5	41	58
+OK. 7 rows selected.
+
+--------------------------------------------------------------
+
+Task 5.1.3 Query 3
+
+SELECT S.stkid AS "STOCK ID", S.stkname AS "STOCK NAME", C.cityname AS "MANUFACTURER CITY" FROM STOCKITEM S INNER JOIN MANUFACTURER M ON S.manid = M.manid INNER JOIN CITY C ON M.cityid = C.cityid ORDER BY stkid ASC
+STOCK ID	STOCK NAME	MANUFACTURER CITY
+71	Electric Fan	Ashfield
+74	Drill Set	Port Melbourne
+77	Sun Lounge	Port Adelaide
+78	Whisk Combo	Port Melbourne
+82	Solar Pump	Fielding
+84	Storage Box	Ashfield
+85	Refrigerator	Ashfield
+86	Magnetic Desk Toy	Port Adelaide
+87	Sports Umbrella	Port Melbourne
+88	DVD player	Port Melbourne
+89	Garden Tools	Ashfield
+OK. 11 rows selected.
+
+--------------------------------------------------------------
+
+Task 5.1.4 Query 4
+
+SELECT S.stkid AS "STOCK ID", S.stkname AS "STOCK NAME", W.whid AS "WAREHOUSE ID", ST.statename AS "STATE NAME", ST.population AS "POPULATION" FROM STOCKITEM S INNER JOIN WAREHOUSE W ON S.whid = W.whid INNER JOIN CITY C ON W.cityid = C.cityid INNER JOIN STATE ST ON C.statecode = ST.statecode ORDER BY S.stkid ASC
+STOCK ID	STOCK NAME	WAREHOUSE ID	STATE NAME	POPULATION
+71	Electric Fan	50	Victoria	5790000
+74	Drill Set	52	Victoria	5790000
+77	Sun Lounge	56	New South Wales	7440000
+78	Whisk Combo	56	New South Wales	7440000
+82	Solar Pump	58	Tasmania	510000
+84	Storage Box	56	New South Wales	7440000
+85	Refrigerator	50	Victoria	5790000
+86	Magnetic Desk Toy	68	Queensland	4680000
+87	Sports Umbrella	62	Northern Territory	242000
+88	DVD player	58	Tasmania	510000
+89	Garden Tools	50	Victoria	5790000
+OK. 11 rows selected.
+
+--------------------------------------------------------------
+
+Task 5.2 Delete 1 (Must Fail)
+
+DELETE FROM CITY
+*
+Error at line 1:
+ORA-02292: integrity constraint (S1763652.SYS_C002509896) violated - child record found
+
+--------------------------------------------------------------
+
+Task 5.3 Delete 2 (Must Fail)
+
+DELETE FROM MANUFACTURER
+*
+Error at line 1:
+ORA-02292: integrity constraint (S1763652.SYS_C002509902) violated - child record found
+
+--------------------------------------------------------------
+
+Task 5.4 List City Table
+
+SELECT * FROM CITY ORDER BY cityid ASC
+CITYID	CITYNAME	STATECODE
+1	Longwarry	VIC
+2	Port Melbourne	VIC
+3	Ashfield	NSW
+4	Bayswater	WA
+5	Geelong	VIC
+6	Beaconsfield	VIC
+7	Port Adelaide	SA
+8	Beaconsfield	TAS
+9	Springfield	TAS
+10	Springfield	NSW
+11	Springfield	QLD
+12	Marmong Point	NSW
+14	Point Grey	NT
+15	Blacktown	NSW
+16	Fielding	QLD
+17	Airlie Beach	QLD
+18	Longreach	QLD
+OK. 17 rows selected.
+
+--------------------------------------------------------------
+
+Task 5.5 List Manufacturer Table
+
+SELECT * FROM MANUFACTURER ORDER BY manid ASC
+MANID	MAN_TITLE	OWNER_NAME	CITYID
+41	SJ Smith Goods	Jeff	2
+42	Rose Tyler Electrics	Britta	3
+43	Noble House	Troy	7
+44	The Pond	Annie	16
+45	Martha Jones Manufacturing	Shirley	2
+46	Rory Williams Development	Abed	3
+OK. 6 rows selected.
+
+--------------------------------------------------------------
+
+Task 6.1 Query 1
+
+SELECT S.stkid, S.stkname, W.whid, C.cityname, W.manager_name, M.man_title, M.owner_name FROM STOCKITEM S INNER JOIN WAREHOUSE W ON S.whid = W.whid INNER JOIN MANUFACTURER M ON S.manid = M.manid INNER JOIN CITY C ON W.cityid = C.cityid WHERE W.manager_name = M.owner_name ORDER BY S.stkid ASC
+STKID	STKNAME	WHID	CITYNAME	MANAGER_NAME	MAN_TITLE	OWNER_NAME
+84	Storage Box	56	Ashfield	Abed	Rory Williams Development	Abed
+87	Sports Umbrella	62	Point Grey	Shirley	Martha Jones Manufacturing	Shirley
+OK. 2 rows selected.
+
+--------------------------------------------------------------
+
+Task 6.2.0 DROP TABLE STATEMENT
+
+--------------------------------------------------------------
+
+Task 6.2.1 Create NEW Table statement
+
+OK. 0 rows
+
+--------------------------------------------------------------
+
+Task 6.2.3 Insert Data statements
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+OK. 1 rows
+
+--------------------------------------------------------------
+
+Task 6.2.4 Query 2
+
+SELECT SH.abn AS "ABN", SH.shop_name AS "Shop Name", SH.owner_name AS "Owners Name", SH.shop_type AS "Shop Type", SH.cityid AS "City ID", C.cityname AS "City Name", S.statename AS "State" FROM SHOP SH INNER JOIN CITY C ON SH.cityid = C.cityid INNER JOIN STATE S ON C.statecode = S.statecode WHERE S.statename = 'Victoria' ORDER BY SH.abn ASC
+ABN	Shop Name	Owners Name	Shop Type	City ID	City Name	State
+123	Toys R Us	John Smith	Toys	2	Port Melbourne	Victoria
+456	Howards Storage World	Regina Felangi	Homewares	6	Beaconsfield	Victoria
+OK. 2 rows selected.
+
+--------------------------------------------------------------
+
+END OF ASSIGNMENT

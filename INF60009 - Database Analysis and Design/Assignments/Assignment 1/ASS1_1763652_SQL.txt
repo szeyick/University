@@ -7,7 +7,7 @@
 prompt START OF OUTPUT SECTION
 prompt Student ID:    1763652
 prompt Student Name:  Sze Yick
-prompt Tutor Name:    XXXXXXXXXXXXXX
+prompt Tutor Name:    Huan Ngyuen
 prompt Tutorial Day:  Thursday
 prompt Tutorial Time: 7:30pm
 prompt Tutorial Room: BA604

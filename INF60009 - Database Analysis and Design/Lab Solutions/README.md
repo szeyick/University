@@ -61,5 +61,91 @@ INSERT INTO WORKER (WID, WORKERNAME) VALUES (2, 'Emma');
 INSERT INTO WORKER (WID, WORKERNAME) VALUES (3, 'Fred');
 
 INSERT INTO TASK (TASKID, TASKDESCRIPT, WID) VALUES ('W', 'Cleaning', 1);
-INSERT INTO TASK (TASKID, TASKDESCRIPT, WID) VALUES ('W', 'Cleaning', 1);
+INSERT INTO TASK (TASKID, TASKDESCRIPT, WID) VALUES ('X', 'Painting', 2);
+INSERT INTO TASK (TASKID, TASKDESCRIPT, WID) VALUES ('Y', 'Polishing', 1);
 ```
+
+**Write a single query that lists each task description and the workername who is to perform that task**
+
+```
+SELECT T.TASKDESCRIPT, W.WORKERNAME
+FROM TASK T
+INNER JOIN WORKER W
+WHERE T.WID = W.WID;
+```
+
+- Consider the simple ERD
+
+**Write the schema for the entity**
+
+LOCATION(AreaCode, Section, LocName) // Where AreaCode and Section are underlined
+
+**How many Primary Keys does this schema have?**
+
+1
+
+**What is the Primary Key of Location?**
+
+AreaCode or Section
+
+**Write the CREATE TABLE statement**
+
+```
+CREATE TABLE LOCATION (
+  AreaCode VARCHAR2(20),
+  Section VARCHR2(20),
+  LocName VARCHAR2(20),
+  Primary Key (AreaCode)
+);
+```
+
+- Consider this ERD
+
+**How many Primary Keys does EMPLOYEE have?**
+
+1
+
+**How many Foreign Keys does EMPLOYEE have?**
+
+1
+
+**Write the schema for the Location relation**
+
+LOCATION(AreaCode, Section, LocName)
+
+**Write the schema for the Employee relation**
+
+EMPLOYEE(empid, empname, AreaCode)
+
+**Write the CREATE TABLE statement for EMPLOYEE**
+
+```
+CREATE TABLE EMPLOYEE (
+  empid NUMBER(5)
+  empname VARCHAR2(20)
+  LocName VARCHAR2(20) 
+  Primary Key (empid),
+  Foreign Key (LocName) REFERENCES LOCATION
+);
+```
+
+**Write a query that lists all employee names and the location name that they belong to**
+
+```
+SELECT E.empname L.LocName 
+FROM EMPLOYEE E
+INNER JOIN LOCATION L
+WHERE E.LocName = L.LocName
+```
+
+- Why is Data Inconsistency Bad?
+
+It is bad because if it is really inconsistent then you do not know which data is the correct one. It reduces the customers confidence in your product.
+
+- How can Data Inconsistency be eliminated from a database?
+
+Split the table into 2, one for branch and one for worker. 
+
+- Are the values in the column BranchID an example of redundant data?
+
+Yes it is because the data is duplicated, each ID refers to the same branch which could be extracted out into its own table to allow for better lookup and reducing duplicate values.

@@ -144,8 +144,229 @@ It is bad because if it is really inconsistent then you do not know which data i
 
 - How can Data Inconsistency be eliminated from a database?
 
+|WID     | WNAME   | BRANCHID | BRANCHNAME | BRANCHSIZE| WGENDER | WSALARY|
+|:------:|:-------:|:--------:|:----------:|:---------:|:-------:|:------:|
+|1       | Dave    | R        | Richmond   | 15        | M       | 50000  |
+|2       | Sally   | H        | Hawthorn   | 10        | F       | 65000  |
+|4       | Karen   | R        | Richmond   | 15        | F       | 37000  |
+|8       | Kim     | H        | Hawthorn   | 10        | F       | 61000  |
+|11      |Chris    | R        | Richmond   | 15        | M       | 54000  |
+
 Split the table into 2, one for branch and one for worker. 
 
 - Are the values in the column BranchID an example of redundant data?
 
 Yes it is because the data is duplicated, each ID refers to the same branch which could be extracted out into its own table to allow for better lookup and reducing duplicate values.
+
+- Give an example of a situation that would cause an update anomaly?
+
+In the above example, the table will receive an update anomaly if you update any of the BranchID, BranchName and BranchSize columns for an individual row. For example, if you updated Karen's row, and changed the BranchName without changing the BranchID or BranchSize, you would have created an anomaly because when you look up details for the BranchID, the R would refer to something else instead rather than Richmond.
+
+- Convert this single table into two individual tables complete with Primary Key and Foreign Key so that data redundancy is eliminated.
+
+```
+CREATE TABLE EMPLOYEE (
+  WID NUMBER(3),
+  WNAME VARCHAR2(10),
+  WGENDER VARCHAR2(1),
+  WSALARY NUMBER(6),
+  BRANCHID VARCHAR2(1),
+  Primary Key (WID),
+  Foreign Key (BRANCHID) References BRANCH
+);
+
+CREATE TABLE BRANCH (
+  BRANCHID VARCHAR2(1),
+  BRANCHNAME VARCHAR2(10),
+  BRANCHSIZE NUMBER(2),
+  Primary Key (BRANCHID)
+);
+```
+
+The converted table will result in a MANY:ONE relationship from the EMPLOYEE (MANY) to BRANCH (ONE).
+
+- List the data values that would be in each row of the two tables.
+
+**Refer to the previous question**
+
+**Consider the ERD**
+
+Assume the ERD has been converted into a Relational Schema.
+
+- How many Foreign Keys does the COUNTRY relation have?
+
+The COUNTRY relation has no foreign keys because it is the parent. It is on the ONE side of the MANY:ONE relationship with the PRODUCT which means that it should have no foreign key relation.
+
+- How many Foreign Keys does the PRODUCT relation have?
+
+The product relation has 2 foreign keys since it is the child in the relationship containing the MANY side of the relation. It is perfectly acceptable for an entity to have 2 foreign keys in an ERD.
+
+- Write the CREATE TABLE statement for PRODUCT.
+
+```
+CREATE TABLE PRODUCT (
+  ProdId NUMBER(5),
+  ProdName VARCHAR2(30),
+  DesignedInCountryId NUMBER(5),
+  ManufacturedInCountryId NUMBER(5),
+  Primary Key (ProdId),
+  Foreign Key (DesignedInCountryId) REFERENCES COUNTRY,
+  Foreign Key (ManufacturedInCountryId) REFERENCES COUNTRY
+);
+```
+
+We can use multiple foreign keys to reference the same table, but the idea here would be that we need to change the attribute name since you can put duplicate attribute names in a table. This is perfectly fine as the **Foreign Key** reference that we write will define that the attribute refers to the primary key in another table.
+
+To extract it out and make it useful, we would need to use aliases to refer to the table twice rather than once. This sort of tricks SQL into thinking that we have 3 entities rather than 2. They will still refer to the same primary key however.
+
+- Assume that the following data has been inserted into the Country table.
+
+1 Australia
+2 New Zealand
+3 China
+
+Write insert statements -
+
+INSERT INTO PRODUCT (ProdId, ProdName, DesignedInCountryId, ManufacturedInCountryId) VALUES (111, 'Picture Frame', 'Australia', 'China');
+INSERT INTO PRODUCT (ProdId, ProdName, DesignedInCountryId, ManufacturedInCountryId) VALUES (222, 'Coffee Cup', 'New Zealand', 'China');
+INSERT INTO PRODUCT (ProdId, ProdName, DesignedInCountryId, ManufacturedInCountryId) VALUES (333, 'Door Mat', 'Australia', 'China');
+
+**Consider this department table**
+
+|Location      | DeptId     | Manager Name |
+|:------------:|:----------:|:------------:|
+|Melbourne     | 1          | Fred         |
+|Melbourne     | 2          | Dave         |
+|Sydney        | 1          | Sue          |
+|Sydney        | 2          | Emma         |
+
+- Who is the manager of department 1 in Melbourne?
+
+Fred
+
+- Who is the manager of department 1 in Sydney?
+
+Sue
+
+- How many primary keys does the Department Table have?
+
+If anything, it would be 1 since Manager Name is the only unique value in the table. However you could combine it with Location and DeptId to make a composite key.
+
+- How many columns does the primary key have?
+
+1
+
+- What is the primary key of the department table?
+
+It would be the Manager Name. 
+
+- Write the create table statement for Department
+
+```
+CREATE TABLE Department(
+  ManagerName VARCHAR2(20),
+  Location VARCHAR2(20),
+  DeptId NUMBER(2),
+  Primary Key (ManagerName)
+);
+```
+
+### Lab Questions
+
+- Implement the Worker / Task Problem 
+
+**Refer to the above**
+
+- Create an SQL Script
+
+```
+DROP TABLE employee;
+CREATE TABLE employee (
+Empid NUMBER PRIMARY KEY
+, empname VARCHAR(20)
+, fav_colour VARCHAR(20)
+, salary NUMBER
+, year_commenced NUMBER
+, bonus NUMBER
+);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus)
+VALUES (1, 'Sam', 'Red', 60000, 2004, 0);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus)
+VALUES (2, 'Ellen', 'Blue', 75000, 2015, 5000);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus)
+VALUES (3, 'Donna', 'Grey', 45000, 2013, 850);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus)
+VALUES (4, 'Sam', 'Red', 65000, 1997, 5000);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus)
+VALUES (5, 'Greg', 'Blue', 30000, 2015, 0);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus)
+VALUES (6, 'Sophie', 'Red', 88000, 2013, 2500);
+```
+
+- List all rows in the employee table
+
+SELECT * FROM employee;
+
+- List the empid, salary and bonus columns. Also display a total income column, this is calculated by adding salary and bonus.
+
+```
+SELECT Empid, salary, bonus, salary+bonus AS "Total Income" 
+FROM employee
+ORDER BY Empid ASC;
+```
+
+- Write a single update statement to set the bonus of employee 3 to zero.
+
+```
+UPDATE employee
+SET bonus = 0
+WHERE Empid = 3;
+```
+
+- Write a single update statement to set the salary of employee 1 to 70000.
+
+```
+UPDATE employee
+SET salary = 70000
+WHERE Empid = 1;
+```
+
+- Write a single update statement to set these values for employee 2: Salary:80000, Bonus:8550
+
+```
+UPDATE employee
+SET salary = 80000, bonus = 8500
+WHERE Empid = 2;
+```
+
+- List all of the rows in the mployee table to check your updates have worked
+
+```
+SELECT * FROM employee;
+```
+
+- Write a single update statement to increase every employees salary by 10%
+
+```
+UPDATE employee
+SET salary = (salary * 1.1)
+```
+
+- List all of the rows in the mployee table to check your updates have worked
+
+```
+SELECT * FROM employee;
+```
+
+- Write a single delete statement to remove employees who have favorite colour to Blue
+
+```
+DELETE FROM employee
+WHERE UPPER(fav_colour) = 'BLUE';
+```
+
+- List all of the rows in the mployee table to check your updates have worked
+
+```
+SELECT * FROM employee;
+```

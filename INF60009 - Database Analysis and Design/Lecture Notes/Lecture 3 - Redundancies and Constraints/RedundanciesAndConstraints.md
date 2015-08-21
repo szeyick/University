@@ -1,6 +1,6 @@
-## Lecture 3 Notes
+## Redundancies and Constraints
 
-This section contains rough notes on the lecture.
+This lecture mainly goes through how poor database design and data entry can make a database not useful.
 
 ### Data Anomalies and Data Redundancies
 
@@ -56,7 +56,7 @@ With our modified and improved ERD, we can construct a better relational schema.
 
 ```
 BRANCH(BranchCode, BranchArr, BranchPh)
-EMPLOYEE(EmpNo, Name, BranchCode, Age, Foreign Key (BranchCode) REFERENCES BRANCH)
+EMPLOYEE(EmpNo, Name, BranchCode, Age, Foreign Key (BranchCode) References BRANCH);
 ```
 
 ### Why Anomalies and Redundancies Occur
@@ -294,3 +294,5 @@ CREATE TABLE CAR (
 ```
 
 This works because the important thing here is the value and not the name of the attribute, so long as they are the same they will be considered as a match.
+
+If you want to refer to a table with different foreign keys, the idea here will be to use **Aliases** and treat them like 2 different tables.

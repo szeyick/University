@@ -4,7 +4,7 @@ Student ID: 1763652
 
 Student Name: Sze Yick
 
-Tutor Name: XXXXXXXXXXXXXX
+Tutor Name: Huan Ngyuen
 
 Tutorial Day: Thursday
 
@@ -81,7 +81,7 @@ Task 1.6 PK Test
 INSERT INTO STATE (statecode, statename, population) VALUES ('NT', 'Northern Territory', 190000)
 *
 Error at line 1:
-ORA-00001: unique constraint (S1763652.SYS_C002509890) violated
+ORA-00001: unique constraint (S1763652.SYS_C002512795) violated
 
 --------------------------------------------------------------
 
@@ -206,7 +206,7 @@ Task 1.13 FK Test (Must Fail)
 INSERT INTO CITY (cityid, cityname, statecode) VALUES (20, 'Bendigo', 'TED')
 *
 Error at line 1:
-ORA-02291: integrity constraint (S1763652.SYS_C002509893) violated - parent key not found
+ORA-02291: integrity constraint (S1763652.SYS_C002512798) violated - parent key not found
 
 --------------------------------------------------------------
 
@@ -276,12 +276,12 @@ OK. 13 rows selected.
 
 Task 2.1 Query 1
 
-SELECT * FROM CITY WHERE cityname LIKE 'B%' OR cityname LIKE'P%' ORDER BY cityname ASC
+SELECT * FROM CITY WHERE cityname LIKE 'B%' OR cityname LIKE'P%' ORDER BY cityname ASC, statecode ASC
 CITYID	CITYNAME	STATECODE
 4	Bayswater	WA
 13	Beachport	SA
-6	Beaconsfield	VIC
 8	Beaconsfield	TAS
+6	Beaconsfield	VIC
 15	Blacktown	NSW
 14	Point Grey	NT
 7	Port Adelaide	SA
@@ -397,7 +397,7 @@ OK. 13 rows selected.
 
 Task 2.9 Query 9
 
-SELECT W.whid, W.max_pallets, W.max_pallets*W.cost_per_pallet AS "maximum cost", S.population, S.statename FROM WAREHOUSE W INNER JOIN CITY C ON W.cityid = C.cityid INNER JOIN STATE S ON C.statecode = S.statecode WHERE S.population > 3000000 AND W.max_pallets >= 2000 AND ((W.max_pallets * W.cost_per_pallet) < 150000) ORDER BY W.whid ASC
+SELECT W.whid, W.max_pallets, W.max_pallets*W.cost_per_pallet AS "maximum cost", S.population, S.statename FROM WAREHOUSE W INNER JOIN CITY C ON W.cityid = C.cityid INNER JOIN STATE S ON C.statecode = S.statecode WHERE (S.population > 3000000) AND (W.max_pallets >= 2000) AND ((W.max_pallets * W.cost_per_pallet) < 150000) ORDER BY W.whid ASC
 WHID	MAX_PALLETS	maximum cost	POPULATION	STATENAME
 52	8260	103250	5790000	Victoria
 60	3290	86198	7440000	New South Wales
@@ -454,7 +454,7 @@ Task 3.4 Delete 2 (Must Fail)
 DELETE FROM CITY
 *
 Error at line 1:
-ORA-02292: integrity constraint (S1763652.SYS_C002509896) violated - child record found
+ORA-02292: integrity constraint (S1763652.SYS_C002512801) violated - child record found
 
 --------------------------------------------------------------
 
@@ -542,7 +542,7 @@ Task 4.6 FK Test 1 (Must Fail)
 INSERT INTO MANUFACTURER (manid, man_title, owner_name, cityid) VALUES (58, 'River Electrics', 'Pierce', 99)
 *
 Error at line 1:
-ORA-02291: integrity constraint (S1763652.SYS_C002509898) violated - parent key not found
+ORA-02291: integrity constraint (S1763652.SYS_C002512803) violated - parent key not found
 
 --------------------------------------------------------------
 
@@ -551,7 +551,7 @@ Task 4.7 FK Test 2 (Must Fail)
 INSERT INTO STOCKITEM (stkid, stkname, selling_price, purchase_price, manid, whid) VALUES (91, 'Electric Fan', 15.5, 6.2, 99, 60)
 *
 Error at line 1:
-ORA-02291: integrity constraint (S1763652.SYS_C002509902) violated - parent key not found
+ORA-02291: integrity constraint (S1763652.SYS_C002512807) violated - parent key not found
 
 --------------------------------------------------------------
 
@@ -560,7 +560,7 @@ Task 4.8 FK Test 3 (Must Fail)
 INSERT INTO STOCKITEM (stkid, stkname, selling_price, purchase_price, manid, whid) VALUES (92, 'Coffee Maker', 78, 22, 43, 99)
 *
 Error at line 1:
-ORA-02291: integrity constraint (S1763652.SYS_C002509903) violated - parent key not found
+ORA-02291: integrity constraint (S1763652.SYS_C002512808) violated - parent key not found
 
 --------------------------------------------------------------
 
@@ -636,7 +636,7 @@ Task 5.2 Delete 1 (Must Fail)
 DELETE FROM CITY
 *
 Error at line 1:
-ORA-02292: integrity constraint (S1763652.SYS_C002509896) violated - child record found
+ORA-02292: integrity constraint (S1763652.SYS_C002512801) violated - child record found
 
 --------------------------------------------------------------
 
@@ -645,7 +645,7 @@ Task 5.3 Delete 2 (Must Fail)
 DELETE FROM MANUFACTURER
 *
 Error at line 1:
-ORA-02292: integrity constraint (S1763652.SYS_C002509902) violated - child record found
+ORA-02292: integrity constraint (S1763652.SYS_C002512807) violated - child record found
 
 --------------------------------------------------------------
 

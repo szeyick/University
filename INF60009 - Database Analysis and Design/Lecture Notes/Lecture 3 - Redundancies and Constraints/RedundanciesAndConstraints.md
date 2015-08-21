@@ -14,19 +14,19 @@ Poorly designed schemas allow for **data redundancy**. This also means that ther
 
 ### Data Redundancy
 
-**INSERT TABLE**
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%203%20-%20Redundancies%20and%20Constraints/images/dataRedundancy.png "Data Redundancy")
 
 In the above table, we can see that the Kew branch has its detailed stored twice, where the EBranch, BranchAddr, BranchPh are details that are stored twice within the table. The fact that it is stored twice and is the same data makes the second address **redundant**.
 
 ### Insertion Anomaly
 
-**INSERT TABLE**
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%203%20-%20Redundancies%20and%20Constraints/images/insertionAnomaly.png "Insertion Anomaly")
 
 This occurs when **some data values cannot be inserted because the primary key value is not known**. So if we only know all the information regarding the table except for the primary key, then it causes an insertion anomaly as the row cannot be inserted on a NULL primary key. The way that the above table is designed does not allow a branch contact information to be inserted without knowing an employee number.
 
 ### Update Anomaly
 
-**INSERT TABLE**
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%203%20-%20Redundancies%20and%20Constraints/images/updateAnomaly.png "Update Anomaly")
 
 This occurs due to **data redundancy**. If we follow the above example, even though the Kew branch details are repeated, we can individually update a row, meaning we an change the **BranchPh** column which will make the same branch have different branch numbers. This will ensure that the data is **inconsistent**.
 
@@ -34,7 +34,7 @@ Having inconsistent data is one of the worst things you can have in a database.
 
 ### Deletion Anomaly
 
-**INSERT TABLE**
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%203%20-%20Redundancies%20and%20Constraints/images/deletionAnomaly.png "Deletion Anomaly")
 
 This occurs when deleting some data causes data about something else to be also deleted. If we continue with the above table, if we delete *Fred Brown** from the table, we inadventently delete the information regarding the Box Hill branch. This means that we cannot delete a employee without deleting the branch information.
 
@@ -48,7 +48,7 @@ To create a process, we can follow these steps
 
 If we continue with the employee and branch example, if we split the employee and branch into 2 separate entities we would have the following ERD.
 
-**Insert ERD Model HERE**
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%203%20-%20Redundancies%20and%20Constraints/images/betterERD.png "Better ERD Design")
 
 ### Better Relational Schema
 
@@ -252,7 +252,7 @@ It is possible to show different relationships between to entities.
 
 This is only possible when the both relations are a M:1 relationship and it is a fixed number of relations.
 
-** COPY IMAGE HERE**
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%203%20-%20Redundancies%20and%20Constraints/images/deletionAnomaly.png "Multiple Relationships Between Two Entities")
 
 In the instaces where there are multiple relations between entities, we need to treat them individually, meaning that we need to write both the relationships out. In our example above we get -
 

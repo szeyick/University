@@ -179,7 +179,8 @@ Is the architecture that most modern computers are built from, this style states
 
 A really simple description of a buffer overflow is shown below.
 
-** Insert Image **
+![alt text](https://github.com/szeyick/University/blob/master/COS80013%20-%20Internet%20Security/Lectures%20Notes/Lecture%203%20-%20OS%20Security/images/bufferOverflow.png "Buffer Overflow")
+
 
 Here, the attacker will input executable code into a text field. Using gets() which is unsafe, it allows the number of characters entered to exceed the size of the input array. By writing past the allocated size of characters, it means that the arguments and return addresses are also overwritten.
 

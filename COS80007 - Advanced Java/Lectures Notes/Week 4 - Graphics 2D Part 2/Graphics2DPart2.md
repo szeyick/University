@@ -54,3 +54,200 @@ For further customisation, you can use the **TextLayout** object to lay out the 
 
 The glyphs can be manipulated directly like other Graphics2D shapes.
 
+### Drawing Text
+
+There are two different methods for drawing text on a screen -
+
+```
+void drawString(String s, int x, int y);
+void drawString(String s, float x, float y);
+```
+
+The drawString methods draws the string starting at position (x,y), acting as the base line. A full example is as follows -
+
+```
+public void paint(Graphics g) {
+	
+	Graphics2D g2 = (Graphics2D) g;
+	Font font = new Font("Serif", Font.PLAIN, 96);
+	g2.setFont(font);
+	g2.drawString("Hello World", 40, 100);
+
+	Line2D baseline = new Line2D.Double(40, 100, 310, 100);
+	g2.draw(baseline);
+}
+```
+
+There are additional methods to draw Strings onto the screen using **AttributedStrings**
+
+```
+public void drawString(AttributedCharacterIterator iterator, int x, int y);
+```
+
+This renders the string in whatever has been set into the Graphics2D context. The iterator specifies a font for each character again starting at the position x,y. The iterator functions like any other iterator in Java, meaning that you can step through each character in the String object and customise it. 
+
+Example -
+
+```
+public void paint(Graphics g) {
+	
+	Graphics2D g2 = (Graphics2D) g;
+	String s = "Hello World";
+
+	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	Font serifFont = new Font("Serif", Font.PLAIN, 48);
+	Font sansSerifFont = new Font("Monospaced", Font.PLAIN, 48);
+
+	AttributedString as = new AttributedString(s);
+	as.addAttribute(TextAttribute.FONT, serifFont);
+	as.addAttribute(TextAttribute.FONT, sansSerifFont, 2, 5); // Change characters at index 2,3,4 to use alternative font
+
+	g2.drawString(as, 100, 200);
+}
+```
+
+### Font Family
+
+To access all the fonts that are available for use on the operating system use -
+
+```
+String [] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+```
+
+### Fonts
+
+Fonts in Java have 3 names -
+
+- **Family Name** - Several fonts can belong to the same family like bold or italic versions of a font.
+- **Font Name** - The direct access to the font name.
+- **Logical Name** - The name of the font retrieved through the **getName()** method, this is mapped to an actual font on a machine.
+
+### Text Layout
+
+This class is considered a more advanced version of the drawString() method as it allows you to perform more complex text display.
+
+```
+public void paint(Graphics g) {
+	
+	Graphics2D g2 = (Graphics2D) g;
+	String s = "Hello World";
+
+	Font font = new Font("Serif", Font.PLAIN, 32);
+	TextLayout textLayout = new TextLayout(s, font, g2.getFontRenderContext());
+
+	textLayout.draw(g2, 40, 80);
+}
+```
+
+The TextLayout allows you to draw on a different canvas rather than the normal Graphics2D. We can do fancy things with the layout including finding out the closest character to a mouse click that returns a TextHitInfo object.
+
+A **caret** denotes the current point where a character will be inserted.
+
+### Coordinate Transformation
+
+When drawing occurs, all the x,y coordinates are converted into pixel positions. There are 4 transformations that take place for a shape -
+
+- **Scale** - Increase or decrease the distance of all the points.
+- **Rotate** - Rotate all the points around a fixed center point.
+- **Translate** - Move all points by a fixed amount.
+- **Shear** - Leave one line fixed and slide the lines parallel to it by an amount.
+
+Mirroring a transformation involves scaling with negative values.
+
+This type of transformation is called **affine transformation**.
+
+### Scaling
+
+Scaling will change user coordinates (world coordinates) to device coordinates (pixels). By default there is a 1:1 scaling meaning that user coordinates are also pixels.
+
+```
+public abstract void scale(double sx, double sy);
+```
+
+The scale method in the Graphics2D class is equivelant to using **g2.transform(a)** where a is an AffineTransform object with the following values in its matrix -
+
+```
+[ sx 0  0 ]
+[ 0  sy 0 ]
+[ 0  0  1 ]
+```
+
+Where -
+
+- **sx** - The amount that the x coordinates have been multiplied by to scale.
+- **sy** - The amount that the y coordinates have been multiplied by to scale.
+
+### Images
+
+Images are represented as a rectangular array of coloured pixels. Java supports **GIF**, **PNG**, and **JPEG**. To read an image file we can use the ToolKit object
+
+```
+String name = "helloWorldImage.gif";
+Image image = ToolKit.getDefaultToolkit().getImage(image);
+
+g.drawImage(image, x, y, null);
+```
+
+The image object retrieved can be displayed with the **drawImage** method where x, y represent the top left corner where the image should begin. This method of retrieving an image will generate a seperate thread that will complete the image loading, which means that for large files, the image may not finish loading before it is redrawn. This leads to incremental rendering like on a really slow web page.
+
+The 4th parameter in the **drawImage** method references an **ImageObserver** object that listens to the progress of the image loading. It can be useful to create progress bars or when an image render is complete.
+
+If we only want to know when an image has completed loading we can use a **ImageTracker**.
+
+```
+Image image = ToolKit.getDefaultToolkit().getImage("HelloWorldImage.gif);
+MediaTracker track = new MediaTracker(this);
+tracker.addIMage(image, 0); // Where 0 is the ID for the image HelloWorldImage.gif
+
+try {
+	tracker.waitForID(0);
+}
+catch (InterruptedException e) {}
+```
+
+The above code will wait for the image to complete loading before proceeding.
+
+If you want to know the size of the image, you can use -
+
+```
+int imageWidth = image.getWidth(imageObserver);
+int imageHeight = image.getHeight(imageObserver);
+```
+
+The image observer is usually the current panel.
+
+### Other Image Loading
+
+You can use the **ImageIcon** class to load an image -
+
+```
+ImageIcon imageIcon = new ImageIcon("HelloWorldImage.gif");
+Image image = imageIcon.getImage();
+```
+
+This uses the MediaTracker class internally when loading the image.
+
+### Buffered Image
+
+This is a subclass if Image, and allows you to access the image data directly.
+
+BufferedImage functions much like TextLayout and Graphics2D where you draw on the BufferedImage class rather than the Graphics2D.
+
+```
+public void paintComponent(Graphics g) {
+	
+	super.paintComponent(g);
+	Dimension d = getSize();
+	BufferedImage bufferedImage = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
+
+	big = bi.createGraphics();
+	....
+	big.drawImage(image, x, y, null);
+
+	Graphics2D g2 = (Graphics2D) g;
+	g2.drawImage(bi, 0, 0, null);
+	big.dispose();
+}
+```
+
+The idea with the BufferedImage is that you draw everything you need to draw before you put it onto the Graphics2D.

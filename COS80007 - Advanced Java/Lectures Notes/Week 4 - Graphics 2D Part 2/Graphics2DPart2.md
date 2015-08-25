@@ -54,6 +54,7 @@ For further customisation, you can use the **TextLayout** object to lay out the 
 
 The glyphs can be manipulated directly like other Graphics2D shapes.
 
+<<<<<<< HEAD
 ### Drawing Text
 
 There are two different methods for drawing text on a screen -
@@ -155,6 +156,10 @@ When drawing occurs, all the x,y coordinates are converted into pixel positions.
 Mirroring a transformation involves scaling with negative values.
 
 This type of transformation is called **affine transformation**.
+
+The setToxxxx in the AffineTransform object tells the object to disregard everything currently in it and use the new values.
+
+The transform methods work as a stack, meaning the first ones declared are executed last.
 
 ### Scaling
 

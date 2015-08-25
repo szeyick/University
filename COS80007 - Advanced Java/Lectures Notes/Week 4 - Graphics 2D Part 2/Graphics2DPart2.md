@@ -54,3 +54,8 @@ For further customisation, you can use the **TextLayout** object to lay out the 
 
 The glyphs can be manipulated directly like other Graphics2D shapes.
 
+### Rough Notes
+
+The setToxxxx in the AffineTransform object tells the object to disregard everything currently in it.
+
+The transform methods work as a stack, meaning the first ones declared are executed last.

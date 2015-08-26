@@ -94,3 +94,69 @@ Should be named APS in the default package, packages should be named accordingly
 - Configuration Data
 
 Should be managed by a class aps.Config and read from a configuration file named APS.properties using the Properties class.
+
+### Configuration Parameters
+
+NF = Number of floors in the building, NF including floor court 0 <= 8.
+
+Bay Width = 2.2m
+Bay Length = 5.75m
+
+Shuttle Width = 0.5m or less.
+Shuttle Length = 5.75m - 0.2m
+Shuttle Speed = 0.13 m/s
+
+Diameter of Turntable = 5.75m
+Turntable Centre X = 3.4m - Must exceed the radius to give clearance. This controls the size of the turntable room, approx in the SE Corner. Boom gate installed in SE corner, cars enter moving NW, it also is the center of the exit bay.
+Turntable Center Y = ??
+
+Trolley Length = 5.75m - 1.0m
+Trolley Width (Prongs Extended) = x + 0.5m (0.25m each side).
+Trolley Height (Prongs Exended) = x + 0.1m
+Trolley Extension = 0.13 m/s
+Trolley Prongs = 0.13 m/s
+
+Y Coord = The aisle center line.
+X Coord = The centre of the lift, which is also the centre of the shuttle when **clamped** (1.6m). The lift is near the west wall that has X = 0.
+
+Exit Bay = 2m wider than normal bay = 4.2m  (2.2m + 2m)
+
+Floor 1 Height (Above Floor 0) = 2.58m
+Floor 2 - 8 Height = 2.48m
+
+Car Bays North of Aisle = 5
+Car Bays South of Aisle = ? 
+
+Center of Bay X North of Aisle = ??
+Center of Bay X South of Aisle = 2.46m
+
+Car Width = ?
+Car Length = ?
+Car Entry Speed = 1.4 m/s (kph) 
+Car Exit Speed = Car Entry Speed * 2
+
+Vertical Lift Speed = 0.1 m/s
+Lift Door Open = 3 seconds 
+
+Boom Gate Raise/Lower = 3 seconds
+
+Clamp Engage/Disengage = 0.5 seconds
+
+### Hints
+
+- Code 1 component at a time.
+- Set up a configuration class to test the variables (hen move them to properties later)
+- Each floor should be a subclass of JPanel (This should be used to draw the floor views)
+
+### Deliverables -
+
+- Ant Script (builda1.xml)
+- Report - Of what is done, bugs and limitations
+- Help Required
+- UML Class Diagram / Sequence Diagram
+- State Transition Model of Car and a UML Statechart
+
+### TODO
+
+- Draw out what the ground floor is supposed to look like.
+- Draw out all required objects.

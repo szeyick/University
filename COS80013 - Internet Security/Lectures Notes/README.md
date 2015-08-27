@@ -17,3 +17,7 @@ Trojan - software that you download that is usually free. Things that you cant r
 
 uPnp (Unified Plug and Play), whitelists a port on the router that allows people to connect to it through that port.
 
+
+
+
+

@@ -78,7 +78,7 @@ WHERE T.WID = W.WID;
 
 **Write the schema for the entity**
 
-LOCATION(AreaCode, Section, LocName) // Where AreaCode and Section are underlined
+LOCATION(AreaCode, Section) // Where AreaCode and Section are underlined
 
 **How many Primary Keys does this schema have?**
 
@@ -95,7 +95,7 @@ CREATE TABLE LOCATION (
   AreaCode VARCHAR2(20),
   Section VARCHR2(20),
   LocName VARCHAR2(20),
-  Primary Key (AreaCode)
+  Primary Key (AreaCode, Section)
 );
 ```
 
@@ -115,7 +115,8 @@ LOCATION(AreaCode, Section, LocName)
 
 **Write the schema for the Employee relation**
 
-EMPLOYEE(empid, empname, AreaCode)
+EMPLOYEE(empid, empname, areaCode, section)
+FK (areacode, section) references LOCATION
 
 **Write the CREATE TABLE statement for EMPLOYEE**
 
@@ -123,9 +124,10 @@ EMPLOYEE(empid, empname, AreaCode)
 CREATE TABLE EMPLOYEE (
   empid NUMBER(5)
   empname VARCHAR2(20)
-  LocName VARCHAR2(20) 
+  AreaCode NUMBER(4,0)
+  Section NUMBER(4,0)
   Primary Key (empid),
-  Foreign Key (LocName) REFERENCES LOCATION
+  Foreign Key (AreaCode, Section) REFERENCES LOCATION
 );
 ```
 
@@ -135,8 +137,11 @@ CREATE TABLE EMPLOYEE (
 SELECT E.empname L.LocName 
 FROM EMPLOYEE E
 INNER JOIN LOCATION L
-WHERE E.LocName = L.LocName
+WHERE E.AreaCode = L.AreaCode
+AND E.Section = L.Section
 ```
+
+**When we have a foreign key that references a composite primary key, we have to ensure that both the keys in the composite are matched using an AND.**
 
 - Why is Data Inconsistency Bad?
 

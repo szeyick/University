@@ -48,7 +48,7 @@ The **Thread()** object creates and controls a thread (start(), interrupt()). Th
 
 Threads can exist in 4 major states
 
-**INSERT IMAGE PAGE 16**
+![alt text](https://github.com/szeyick/University/blob/master/COS80007%20-%20Advanced%20Java/Lectures%20Notes/Week%205%20-%20Threads/images/threadCycle.png "Thread States")
 
 #### New
 

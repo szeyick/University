@@ -1,10 +1,7 @@
 
+import aps.floor.FloorPanel;
 import aps.timer.APSTimer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.Timer;
 
 /**
  * The {@link APS}
@@ -32,7 +29,7 @@ public class APS {
         frame.setName("Car Test");
         frame.setSize(400, 400);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel panel = new JPanel();
+        FloorPanel panel = new FloorPanel();
 
 	frame.getContentPane().add(panel);
 	frame.setVisible(true);

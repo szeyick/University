@@ -70,7 +70,7 @@ The check constraint is similar to using WHERE, with the exception that you cann
 
 ### Many to Many Relationships
 
-**Insert Image**
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%205%20-%20M-M%20Relationships%2C%20Unions%20and%20Outer%20Joins/images/ManyToMany.png "Many to many")
 
 The incorrect method of defining the above schema is shown below -
 
@@ -92,7 +92,7 @@ The reason that the above won't work is that a Student can only ever be enrolled
 
 The relational model **cannot** directly represent a many to many relationship. The solution is to convert the many to many relationship into **2 many to one relationships**
 
-**Insert Image**
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%205%20-%20M-M%20Relationships%2C%20Unions%20and%20Outer%20Joins/images/MultiManytoOne.png "Multi Many to One")
 
 ### Converting Many to Many
 
@@ -142,7 +142,7 @@ The disadvantages of this are -
 
 ### Multi Value Attributes
 
-**Insert Image**
+![alt text](https://github.com/szeyick/University/blob/master/INF60009%20-%20Database%20Analysis%20and%20Design/Lecture%20Notes/Lecture%205%20-%20M-M%20Relationships%2C%20Unions%20and%20Outer%20Joins/images/MultiValuedAttributes.png "Multi Value Attributes")
 
 A multi valued attribute is used when an attribute may have more than 1 value defined for it. Multi valued attributes are defined using the **{ attributeName }**.
 

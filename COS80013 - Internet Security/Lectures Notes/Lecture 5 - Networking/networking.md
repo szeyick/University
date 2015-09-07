@@ -6,7 +6,7 @@ Stands for Open Systems Interconnected, that comprises of 7 layers that allow an
 
 Of the 7 layers, not all the layers are used, routers only use layers 1 - 3 and most internet services don't use layer 5.
 
-**Insert Image**
+![alt text](https://github.com/szeyick/University/blob/master/COS80013%20-%20Internet%20Security/Lectures%20Notes/Lecture%205%20-%20Networking/images/osiStack.png "OSI Stack")
 
 The layers are as follows - 
 
@@ -79,7 +79,7 @@ Is a type of router that can open up an IP packet and re-address it. The incomin
 
 It is useful because it hides the internal details of the private network.
 
-**Insert Image**
+![alt text](https://github.com/szeyick/University/blob/master/COS80013%20-%20Internet%20Security/Lectures%20Notes/Lecture%205%20-%20Networking/images/NAT.png "NAT")
 
 A NAT only exposes the public IP address which gives access to the NAT. Afterwards it will re-address everything and route the traffic to a private IP address to a device that is within the network.
 
@@ -101,7 +101,7 @@ TCP/IP is a protocol that is used by FTP, HTTP, Telnet, POP.
 
 To guarantee data delivery, it establishes a connection through a 3 way handshake. Both endpoints need to know the packet sequence number is to receive the data properly.
 
-**Insert Image**
+![alt text](https://github.com/szeyick/University/blob/master/COS80013%20-%20Internet%20Security/Lectures%20Notes/Lecture%205%20-%20Networking/images/TCPIP.png "TCP/IP")
 
 ### UDP (User Datagram Protocol)
 

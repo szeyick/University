@@ -16,7 +16,7 @@ Consists of HTTP, SSH, POP, SMTP which interface with the program run by the use
 
 - **Presentation Layer**
 
-This layer maanges the port allocation, encryption and the variations in the application layer syntax.
+This layer manages the port allocation, encryption and the variations in the application layer syntax.
 
 - **Session Layer**
 

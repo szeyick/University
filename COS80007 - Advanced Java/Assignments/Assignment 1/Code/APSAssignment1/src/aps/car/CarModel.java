@@ -1,5 +1,7 @@
 package aps.car;
 
+import java.awt.geom.Rectangle2D;
+
 /**
  * The {@link CarModel}.
  * <p>
@@ -27,10 +29,15 @@ public class CarModel {
     private double yCoord;
     
     /**
+     * The shape that represents the car.
+     */
+    private Rectangle2D car;
+    
+    /**
      * Constructor.
      */ 
     public CarModel() {
-        // TODO: Initialise the object.
+        car = new Rectangle2D.Double(0, 0, 2, 5);
     }
     
     /**
@@ -64,5 +71,12 @@ public class CarModel {
      */
     public void assignNumberPlate(String numberPlatTmp) {
       numberPlate = numberPlatTmp;  
+    }
+    
+    /**
+     * @return - Return the shape that represents the car. 
+     */
+    public Rectangle2D getShape() {
+        return car;
     }
 }

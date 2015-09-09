@@ -3,6 +3,8 @@ package aps.timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.Clock;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.Timer;
 /**
  * The {@link APSTimer}.
@@ -13,30 +15,67 @@ import javax.swing.Timer;
  * @author szeyick
  * StudentID 0 1763652
  */
-public class APSTimer {
+public class APSTimer implements IAPSTimer {
     
     /**
      * The timer used to trigger scheduled events in the simulation. 
      */
-    private Timer timer;
+    private final Timer timer;
     
+    /**
+     * A set containing a collection of timer listeners.
+     */
+    private Set<IAPSTimerListener> timerListeners;
+            
     /**
      * Constructor.
      */
     public APSTimer() {
        timer = new Timer(1000, new TimerListener());
-       timer.start();
+       timerListeners = new HashSet<IAPSTimerListener>();
     }
-    
-    /***
-     * Update the timer, allows for speed up or slow down of the simulation.
-     * @param delay - The delay in milliseconds.
-     */
-    public void updateTimer(int delay) {
-        // When updating the time, stop the timer before continuing.
+   
+    /**
+     * {@inheritDoc  
+     */ 
+    @Override
+    public void stopTimer() {
+        System.out.println("Timer is Stopped");
         timer.stop();
-        timer.setDelay(delay);
+    }
+
+    /**
+     * {@inheritDoc  
+     */ 
+    @Override
+    public void startTimer() {
+        System.out.println("Timer is Started");
         timer.start();
+    }
+
+    /**
+     * {@inheritDoc  
+     */ 
+    @Override
+    public void pauseTimer() {
+        System.out.println("Timer is Paused");
+        timer.stop();
+    }
+
+    /**
+     * {@inheritDoc  
+     */ 
+    @Override
+    public void addTimerListener(IAPSTimerListener listener) {
+        timerListeners.add(listener);
+    }
+
+    /**
+     * {@inheritDoc  
+     */
+    @Override
+    public void removeTimerListener(IAPSTimerListener listener) {
+        timerListeners.remove(listener);
     }
     
     /***
@@ -54,7 +93,9 @@ public class APSTimer {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Timer Triggered.");
+            for (IAPSTimerListener listener : timerListeners) {
+                listener.update(1000);
+            }
         }
     }   
 }

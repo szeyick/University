@@ -21,7 +21,7 @@ public class ParkingLevelFloorView {
     /***
      * The shape object representing the floor
      */ 
-    private GeneralPath parkingFloor;
+    private final GeneralPath parkingFloor;
     
     /***
      * Constructor. 
@@ -61,7 +61,6 @@ public class ParkingLevelFloorView {
         double additionalWidth = southBayCentreX > liftCentreX ? southBayCentreX : liftCentreX;
         double totalWidth = (config.BAY_WIDTH * largestNumOfAisles) +  (additionalWidth - (config.BAY_WIDTH / 2));
         
-        System.out.print(additionalWidth - (config.BAY_WIDTH / 2));
         parkingFloor.moveTo(0, 0);
         parkingFloor.lineTo(totalWidth, 0);
         parkingFloor.moveTo(totalWidth, 0);
@@ -145,7 +144,6 @@ public class ParkingLevelFloorView {
         parkingFloor.lineTo(bayXStart, config.BAY_LENGTH * 3);
         
         int numberOfSouthBays = config.NUMBER_OF_BAYS_SOUTH;
-        double bayLength = config.BAY_LENGTH;
         double bayWidth = config.BAY_WIDTH;
         
         // Draw the rest of the bay.

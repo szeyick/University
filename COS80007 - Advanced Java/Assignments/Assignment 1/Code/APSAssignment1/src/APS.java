@@ -1,5 +1,8 @@
 
-import aps.floor.FloorPanel;
+import aps.events.EventManager;
+import aps.floor.ParkingLevelFloorPanel;
+import aps.gui.MainFrame;
+import aps.timer.APSClock;
 import aps.timer.APSTimer;
 import javax.swing.JFrame;
 
@@ -20,18 +23,15 @@ public class APS {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Hello World");
         APSTimer timer = new APSTimer();
         
         // For some reason Netbeans requires this to persist the timer.
-        JFrame frame = new JFrame();
-
-        frame.setName("Car Test");
-        frame.setSize(400, 400);
-	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        FloorPanel panel = new FloorPanel();
-
-	frame.getContentPane().add(panel);
-	frame.setVisible(true);
+        JFrame frame = new MainFrame(timer);
+        EventManager eventManager = new EventManager("simulatorTraffic.txt");
+        
+        APSClock clock = new APSClock();
+        
+        timer.addTimerListener(eventManager);
+        timer.addTimerListener(clock);
     }
 }

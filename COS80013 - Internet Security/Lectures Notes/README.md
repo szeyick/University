@@ -23,3 +23,21 @@ It can look at the contents of the payload and perform virus scanning. Default d
 Stateless firewalls don't detect patterns, it doesn't remember anything like with HTTP requests. But is really fast.
 
 Application layer firewalls will detect everything. 
+
+### Tunnelling
+
+SSH is the encrypted version of Telnet, and does authentication which SSL does not. SSL encryptes the data but not the authentication. 
+
+HTTPS is HTTP with SSL. SSL is now known as TLS (Transport Layer)
+
+MAC is the long string of hex digits that are outputted when using SSL/SSH.
+
+Block cipher will encrypt a sequence of text in a messassge with the same key.
+
+Stream cipher will encrypt a message with the generated cipher text of the previous block and the encrytpion key.  
+
+### Terminology
+
+Footprinting is practicing on an exact replica of the system that you are trying to crack into. Like getting a replica of the safe that you are trying to break. 
+
+Network recon scenario may be on the exam, as to how to find out about a network with only an IP address, server and stuff. Also think about social engineering principals a long with looking at the hardware.

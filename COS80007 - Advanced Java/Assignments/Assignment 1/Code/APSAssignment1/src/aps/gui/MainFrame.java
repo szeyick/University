@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         createSimulationControlPanel(timer);
-        createFloorView();
+        createFloorView(timer);
         setVisible(true);
     }
     
@@ -43,8 +43,9 @@ public class MainFrame extends JFrame {
     /**
      * Create the floor view and add it to the frame.
      */
-    private void createFloorView() {
-        GroundLevelFloorPanel panel = new GroundLevelFloorPanel();        
+    private void createFloorView(IAPSTimer timer) {
+        GroundLevelFloorPanel panel = new GroundLevelFloorPanel(); 
+        timer.addTimerListener(panel);
         add(panel, BorderLayout.CENTER);
     }
 }

@@ -1,4 +1,5 @@
 
+import aps.elevator.Elevator;
 import aps.events.EventManager;
 import aps.floor.ParkingLevelFloorPanel;
 import aps.gui.MainFrame;
@@ -33,5 +34,10 @@ public class APS {
         
         timer.addTimerListener(eventManager);
         timer.addTimerListener(clock);
+        
+        Elevator elevator = new Elevator(timer);
+        timer.addTimerListener(elevator);
+        
+        elevator.moveToFloor(0);
     }
 }

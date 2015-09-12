@@ -1,6 +1,7 @@
 package aps.car;
 
 import java.awt.geom.Rectangle2D;
+import utilities.APSUtilities;
 
 /**
  * The {@link CarModel}.
@@ -38,6 +39,8 @@ public class CarModel {
      */ 
     public CarModel() {
         car = new Rectangle2D.Double(0, 0, 2, 5);
+        xCoord = 100;
+        yCoord = 200;
     }
     
     /**
@@ -60,8 +63,9 @@ public class CarModel {
      * @param yCoordTmp - the new y coordinate.
      */
     public void updateXYCoordinates(double xCoordTmp, double yCoordTmp) {
-        xCoord = xCoordTmp;
-        yCoord = yCoordTmp;
+        xCoord--;
+        double m = APSUtilities.calculateGradient(xCoordTmp, yCoordTmp, xCoord, yCoord);
+        yCoord = (int) m * xCoord;
     }
     
     /**
@@ -77,6 +81,6 @@ public class CarModel {
      * @return - Return the shape that represents the car. 
      */
     public Rectangle2D getShape() {
-        return car;
+        return new Rectangle2D.Double(xCoord, yCoord, 10, 10);
     }
 }

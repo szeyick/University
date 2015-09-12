@@ -6,7 +6,10 @@
 package aps.floor;
 
 import aps.car.CarModel;
+import aps.config.Config;
+import aps.elevator.ElevatorDoor;
 import aps.timer.IAPSTimerListener;
+import aps.turntable.TurntableModel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,22 +31,27 @@ import javax.swing.JPanel;
  */
 public class GroundLevelFloorPanel extends JPanel implements IAPSTimerListener {
 
-    int x1 = 0;
-    int y1 = 0;
-    int x2 = 200;
-    int y2 = 250;
-    //
-    int x = x2;
-    int y;
-    int r = 6;
+//    int x1 = 0;
+//    int y1 = 0;
 
-    int m = (y2 - y1) / (x2 - x1);
+    int r = 6;
+    
+    private TurntableModel turntableModel;
+    
+    /**
+     * The distance things are from the wall; 
+     */
+    private final int WALL_PADDING = 5;
 
     /**
      * The shape to be drawn, representing the ground floor.
      */
     private final Shape groundLevelFloorLayout;
 
+    private CarModel model;
+    
+    private ElevatorDoor door;
+    
     /**
      * Default constructor.
      */
@@ -51,6 +59,10 @@ public class GroundLevelFloorPanel extends JPanel implements IAPSTimerListener {
         setBackground(Color.WHITE);
         groundLevelFloorLayout = new GroundLevelFloorView().getGroundFloorPlan();
         setVisible(true);
+        
+        model = new CarModel();
+        turntableModel = new TurntableModel(WALL_PADDING);
+
     }
 
     /**
@@ -84,16 +96,17 @@ public class GroundLevelFloorPanel extends JPanel implements IAPSTimerListener {
         g2.draw(groundLevelFloorLayout);
         g2.setTransform(oldTransform);
         drawCar(g2);
+        drawTurntable(g2);
+        drawElevatorDoor(g2);
     }
 
     /**
      * Draw the car onto the screen.
      */
     private void drawCar(Graphics2D g2) {
-        CarModel model = new CarModel();
-
         Rectangle2D car = model.getShape();
-
+        AffineTransform oldTransform = g2.getTransform();
+        
         Dimension d = getSize();
         Rectangle2D layout = groundLevelFloorLayout.getBounds2D();
 
@@ -101,25 +114,64 @@ public class GroundLevelFloorPanel extends JPanel implements IAPSTimerListener {
         float yScale = (float) (layout.getHeight() / car.getHeight());
         float theScale = Math.min(xScale, yScale);
 
-        System.out.println(xScale);
-
-        // The X,Y coorindate will be in the car model.
-        // This view will listen to changes in the car model
-        // To update the draw.
-        if (x <= x1) {
-            System.out.println("Stop");
-        } else {
-            x--;
-            y = m * x;
-            System.out.println("x" + x + "  y" + y);
-	    g2.drawOval(x, y, r, r);
-            g2.drawRect(x, y, 10, 10);
+        if (model.getCurrentXPosition() <= (30)) {
+            System.out.println("Parked On Turntable");
+            // Once the car has arrived, we can open the elevator door.
+        } 
+        else {
+             model.updateXYCoordinates(turntableModel.getTurntableCentreX(), turntableModel.getTurntableCentreY());
         }
-
-        g2.translate(10 * x, 10 * y); // The x and y (This will need to be updated on each update)
-        g2.scale(theScale + 4, theScale + 4);
-        g2.setColor(Color.RED);
+        float minX = (float) (car.getX());
+        float minY = (float) (car.getY());
+        
+        g2.translate(minX, 0);
         g2.draw(car);
+        g2.setTransform(oldTransform);
+    }
+    
+    private void drawTurntable(Graphics2D g2) {        
+        AffineTransform oldTransform = g2.getTransform();
+        Rectangle2D layout = groundLevelFloorLayout.getBounds2D();
+        
+        Rectangle2D turntableBounds = turntableModel.getTurntableBounds();
+        
+        // Calculate the scale.
+        float xScale = (float) (layout.getWidth() / turntableBounds.getWidth());
+        float yScale = (float) (layout.getHeight() / turntableBounds.getHeight());
+        float theScale = Math.min(xScale, yScale);
+        
+        float minX = (float) (turntableBounds.getX());
+        float minY = (float) (turntableBounds.getY());
+
+        System.out.println("X, Y: " + minX + " " + minY + " Scale " + theScale);
+        g2.scale(theScale, theScale);
+        g2.translate(minX - 5, minY);
+
+        g2.setStroke(new BasicStroke(1.0f / theScale));
+        g2.setColor(getForeground());
+        g2.drawOval((int) minX, (int) minY, 10, 10);
+        g2.setTransform(oldTransform);
+    }
+    
+    /**
+     * Draw the elevator doors opening and closing. 
+     */
+    private void drawElevatorDoor(Graphics2D g2) {
+        AffineTransform oldTransform = g2.getTransform();
+        boolean doorState = false;
+        
+        g2.setColor(getForeground());
+        if (doorState) {
+            g2.fillRect(40, 140, 10, 10);       
+        }
+        else {
+            g2.fillRect(40, 140, 50, 10);            
+        }
+        g2.setTransform(oldTransform);
+        // door.toggleDoorState();
+        // The elevator door should only open - 
+        //  - if the car has arrived on the turntable.
+        //  - the door opens, and the shuttle comes to get the car.
     }
 
     @Override

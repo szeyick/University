@@ -1,5 +1,6 @@
 package aps.gui;
 
+import aps.config.Config;
 import aps.floor.GroundLevelFloorPanel;
 import aps.floor.ParkingLevelFloorPanel;
 import aps.timer.IAPSTimer;

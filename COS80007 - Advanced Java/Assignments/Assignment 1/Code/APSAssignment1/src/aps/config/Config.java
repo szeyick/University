@@ -76,6 +76,16 @@ public class Config {
      */ 
     public double LIFT_CENTRE_X;
     
+    /**
+     * The diameter of the turntable.
+     */ 
+    public double TURNTABLE_DIAMETER;
+    
+    /**
+     * The X coordinate centre of the turntable. 
+     */ 
+    public double TURNTABLE_CENTER_X;
+    
     /***
      * The properties object containing the offline defined values.
      */ 
@@ -119,6 +129,8 @@ public class Config {
         NUMBER_OF_BAYS_SOUTH = getIntProperty("NumberOfSouthBays", 5);
         SOUTH_BAY_CENTER_X = getDoubleProperty("SouthBayCentre", 2.46);
         LIFT_CENTRE_X = getDoubleProperty("LiftCentre", 1.6);
+        TURNTABLE_DIAMETER = getDoubleProperty("TurntableDiameter", 5.75);
+        TURNTABLEX = getDoubleProperty("TurntableCenterX", 3.4);
     }
     
     /***

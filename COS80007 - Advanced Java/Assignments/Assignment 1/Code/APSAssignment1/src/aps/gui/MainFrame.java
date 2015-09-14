@@ -1,6 +1,7 @@
 package aps.gui;
 
 import aps.config.Config;
+import aps.floor.GroundLevelFloorControl;
 import aps.floor.GroundLevelFloorPanel;
 import aps.floor.ParkingLevelFloorPanel;
 import aps.timer.IAPSTimer;
@@ -39,14 +40,15 @@ public class MainFrame extends JFrame {
      */
     private void createSimulationControlPanel(IAPSTimer timer) {
         add(new SimulationControlPanel(timer), BorderLayout.SOUTH);
+
     }
     
     /**
      * Create the floor view and add it to the frame.
      */
     private void createFloorView(IAPSTimer timer) {
-        GroundLevelFloorPanel panel = new GroundLevelFloorPanel(); 
-        timer.addTimerListener(panel);
-        add(panel, BorderLayout.CENTER);
+        GroundLevelFloorControl control = new GroundLevelFloorControl(timer);
+        timer.addTimerListener(control);
+        add(control.getPanel(), BorderLayout.CENTER);
     }
 }

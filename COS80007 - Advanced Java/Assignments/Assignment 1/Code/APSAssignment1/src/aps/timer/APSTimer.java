@@ -31,7 +31,7 @@ public class APSTimer implements IAPSTimer {
      * Constructor.
      */
     public APSTimer() {
-       timer = new Timer(1000, new TimerListener());
+       timer = new Timer(100, new TimerListener());
        timerListeners = new HashSet<IAPSTimerListener>();
     }
    
@@ -94,7 +94,7 @@ public class APSTimer implements IAPSTimer {
         @Override
         public void actionPerformed(ActionEvent e) {
             for (IAPSTimerListener listener : timerListeners) {
-                listener.update(1000);
+                listener.update(100);
             }
         }
     }   

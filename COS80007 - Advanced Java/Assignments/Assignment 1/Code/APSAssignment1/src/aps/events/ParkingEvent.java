@@ -27,6 +27,11 @@ public class ParkingEvent implements Comparable<ParkingEvent> {
     private String numberPlate;
 
     /**
+     * Has the event completed.
+     */
+    private boolean eventComplete;
+    
+    /**
      * Constructor.
      * @param eventType - The type of event.
      * @param eventStartTime - The start time of the event in milliseconds.
@@ -57,6 +62,20 @@ public class ParkingEvent implements Comparable<ParkingEvent> {
      */
     public String getNumberPlate() {
         return numberPlate;
+    }
+    
+    /**
+     * Set the event state to complete.
+     */
+    public void setEventComplete() {
+        eventComplete = true;
+    }
+    
+    /**
+     * @return true if the current has been completed, false otherwise.
+     */
+    public boolean hasCurrentEventCompleted() {
+        return eventComplete;
     }
     
     /***

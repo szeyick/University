@@ -1,7 +1,15 @@
 package control;
 
+import aps.car.CarModel;
+import aps.car.CarModelManager;
+import aps.events.EventManager;
+import aps.events.EventType;
+import aps.events.IEventManagerListener;
+import aps.events.ParkingEvent;
+import aps.timer.APSTimer;
 import aps.timer.IAPSTimer;
 import aps.timer.IAPSTimerListener;
+import java.util.PriorityQueue;
 
 /**
  * The {@link APSControl}.
@@ -13,15 +21,91 @@ import aps.timer.IAPSTimerListener;
  * <p>
  * @author szeyick
  */
-public class APSControl implements IAPSTimerListener {
+public class APSControl implements IEventManagerListener, IAPSTimerListener {
 
     /**
-     * When the timer is here, check to see if the system is ready
-     * to take the next request popped off the queue.
+     * The event manager. 
+     */
+    private EventManager eventManager;
+    
+    /**
+     * A priority queue of parking events, prioritised by start time.
+     */
+    private PriorityQueue<ParkingEvent> parkingEventQueue;
+    
+    /**
+     * The current parking event.
+     */
+    private ParkingEvent currentParkingEvent;
+    
+    /**
+     * Is there an event being processed.
+     */
+    private boolean processEvent;
+    
+    /**
+     * Constructor.
+     */
+    public APSControl(APSTimer timer) {
+        parkingEventQueue = new PriorityQueue<ParkingEvent>();
+        eventManager = new EventManager("simulatorTraffic.txt");
+        processEvent = false;
+        
+        // Add listeners
+        eventManager.addEventListener(this);
+        timer.addTimerListener(this);
+        timer.addTimerListener(eventManager);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void processEvent(ParkingEvent event) {
+       // Adding event.
+       System.out.println("Adding Event " + event.getEventStartTime());
+       parkingEventQueue.add(event);
+    } 
+    
+    /***
+     * Update whether the system is currently processing an event.
+     * @param eventProcessing 
+     */
+    public void updateEventProcessing(boolean eventProcessing) {
+        processEvent = eventProcessing;
+        if (!processEvent) {
+            currentParkingEvent = null;
+        }
+    }
+
+    /**
+     * {@inheritDoc 
      */
     @Override
     public void update(long dt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (currentParkingEvent == null && !parkingEventQueue.isEmpty()) {
+            currentParkingEvent =  parkingEventQueue.poll();
+            System.out.println("Polling Event");
+        }
+        // If the current event has completed, dequeue the next one.
+        if (currentParkingEvent != null && !processEvent) {
+            processEvent = true;  
+            // Send Car or Pickup Car.
+            System.out.println("Processing Event: " + currentParkingEvent.getEventType().toString());
+            
+            if (EventType.ARRIVAL.equals(currentParkingEvent.getEventType())) {
+                // Arrival event so we create a new car and deploy it.
+                CarModelManager carModelManager = CarModelManager.getModelManager();
+                CarModel car = new CarModel();
+                
+                // Add the car to the ground floor.
+                car.updateCarState(CarModel.carState.MOVING);
+                carModelManager.setCurrentCarModel(car);
+            }
+            else {
+                // Departure event so we pick up a car.
+            }
+        }
+        // If event is still going, we do nothing.
     }
-    
 }

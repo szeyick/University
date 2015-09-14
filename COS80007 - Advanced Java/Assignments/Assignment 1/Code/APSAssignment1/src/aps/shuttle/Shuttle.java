@@ -91,7 +91,25 @@ public class Shuttle implements IAPSTimerListener {
                     System.out.println("Moving Shuttle");
                 }
             }
-            // If we are unlocked, we need to go to the designated bay.
+            if (elevator.getCurrentFloor() != 0 && 
+                    Elevator.ElevOperation.DEPLOY_SHUTTLE.equals(elevator.getCurrentElevatorOperation())) {
+             
+                // If we are unlocked, we need to go to the designated bay. If trolley contains car.
+                if (trolley.containsCar()) {
+                    // Move to designated bay
+                    // Move the shuttle along X axis
+                    if (shuttleX == centreRadiusTT) {
+                        shuttleState = ShuttleState.LOCKED;
+                        // Deploy the trolley but also stop update
+                        System.out.println("Locking Shuttle With Car");
+                        trolley.deployTrolley();
+                    }                
+                    if (shuttleX < centreRadiusTT) {
+                        shuttleX++;
+                        System.out.println("Moving Shuttle With Car");
+                    }
+                }
+            }            
         }
         if (ShuttleState.RETURNED.equals(shuttleState)) {
             // Shuttle to be marked to return to original point

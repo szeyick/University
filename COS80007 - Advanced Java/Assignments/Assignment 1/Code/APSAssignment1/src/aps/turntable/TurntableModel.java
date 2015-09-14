@@ -6,6 +6,7 @@
 package aps.turntable;
 
 import aps.config.Config;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -36,6 +37,8 @@ public class TurntableModel {
     
     private Rectangle2D bounds;
     
+    private Point2D point;
+    
     /**
      * Constructor.
      * @param config - The offline configuration.
@@ -47,6 +50,7 @@ public class TurntableModel {
         turntableCenterY = (turntableDiameter + wallPadding) / 2;
         
         bounds = new Rectangle2D.Double(turntableCentreX, turntableCenterY, turntableDiameter / 2, turntableDiameter / 2);
+        point = new Point2D.Double(turntableCentreX, turntableCentreX);
     }
 
     /**
@@ -62,5 +66,12 @@ public class TurntableModel {
     
     public double getTurntableCentreY() {
         return turntableCenterY;
+    }
+    
+    /**
+     * @return - The coordinates of the turntable.
+     */
+    public Point2D getPoint() {
+        return point;
     }
 }

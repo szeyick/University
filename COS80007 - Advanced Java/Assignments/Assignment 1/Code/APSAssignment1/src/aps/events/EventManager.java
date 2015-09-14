@@ -4,8 +4,11 @@ import aps.timer.IAPSTimerListener;
 import java.io.FileReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
+import jdk.nashorn.internal.objects.NativeArray;
 
 /**
  * The {@link EventManager}.
@@ -18,6 +21,11 @@ import java.util.PriorityQueue;
  * @author szeyick
  */
 public class EventManager implements IAPSTimerListener {
+    
+    /**
+     * A set of event listeners
+     */
+    private Set<IEventManagerListener> eventListeners;
     
     /**
      * A priority queue of parking events, prioritised by start time.
@@ -41,7 +49,24 @@ public class EventManager implements IAPSTimerListener {
      */
     public EventManager(String filename) {
         parkingEventQueue = new PriorityQueue<ParkingEvent>();
+        eventListeners = new HashSet<IEventManagerListener>();
         createParkingEvents(filename);
+    }
+    
+    /**
+     * Add a listener to listen for event manager events.
+     * @param listener - The listener to add.
+     */
+    public void addEventListener(IEventManagerListener listener) {
+        eventListeners.add(listener);
+    }
+    
+    /**
+     * Remove a listener from the event manager.
+     * @param listener - The listener to remove.
+     */
+    public void removeEventListener(IEventManagerListener listener) {
+        eventListeners.remove(listener);
     }
     
     /**
@@ -125,11 +150,20 @@ public class EventManager implements IAPSTimerListener {
     public void update(long dt) {
         currentTime += dt;
         ParkingEvent event = parkingEventQueue.peek();
-        System.out.println(currentTime);
-        while (event != null && event.getEventStartTime() <= currentTime) {
+        while (event != null && (event.getEventStartTime() <= currentTime)) {
             event = parkingEventQueue.poll();  /// Removes from queue
-            System.out.println("Processing " + event.getEventType().toString() + " Event - " + event.getEventStartTime());
+            System.out.println("Current Time : " + currentTime + " Event Start Time: " + event.getEventStartTime());
+            notifyAllListeners(event);
             event = parkingEventQueue.peek();
         }   
+    }
+    
+    /**
+     * Notify all the listeners that an event has taken place.
+     */
+    private void notifyAllListeners(ParkingEvent event) {
+        for (IEventManagerListener listener : eventListeners) {
+            listener.processEvent(event);
+        }
     }
 }

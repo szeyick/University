@@ -1,10 +1,13 @@
 
 import aps.elevator.Elevator;
 import aps.events.EventManager;
+import aps.floor.ParkingBay;
+import aps.floor.ParkingBayManager;
 import aps.floor.ParkingLevelFloorPanel;
 import aps.gui.MainFrame;
 import aps.timer.APSClock;
 import aps.timer.APSTimer;
+import control.APSControl;
 import javax.swing.JFrame;
 
 /**
@@ -28,16 +31,10 @@ public class APS {
         
         // For some reason Netbeans requires this to persist the timer.
         JFrame frame = new MainFrame(timer);
-        EventManager eventManager = new EventManager("simulatorTraffic.txt");
         
         APSClock clock = new APSClock();
-        
-        timer.addTimerListener(eventManager);
         timer.addTimerListener(clock);
         
-        Elevator elevator = new Elevator(timer);
-        timer.addTimerListener(elevator);
-        
-        elevator.moveToFloor(0);
+        APSControl control = new APSControl(timer);
     }
 }

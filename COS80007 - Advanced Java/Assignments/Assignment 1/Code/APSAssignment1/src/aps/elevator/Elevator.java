@@ -39,6 +39,8 @@ public class Elevator implements IAPSTimerListener {
     
     private Shuttle shuttle;
     
+    private int destinationFloor;
+    
     /**
      * The current direction that the elevator is traveling.
      */
@@ -55,6 +57,7 @@ public class Elevator implements IAPSTimerListener {
      */
     public Elevator(APSTimer timer) {
         currentFloor = 0;
+        destinationFloor = 0;
         currentDirection = ElevDirection.DEFAULT;
         currentElevOperation = ElevOperation.ARRIVED_AT_FLOOR;
         door = new ElevatorDoor(timer, this);
@@ -73,6 +76,10 @@ public class Elevator implements IAPSTimerListener {
         return currentFloor;
     }
     
+    public void setDestinationFloor(int destinationFloor) {
+        this.destinationFloor = destinationFloor;
+    }
+    
     // The door should call back to the elevator that it has opened.
     public void elevatorDoorCallback() {
         if (ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
@@ -80,7 +87,13 @@ public class Elevator implements IAPSTimerListener {
             currentElevOperation = ElevOperation.IDLE;
             // door.setDoorState(ElevatorDoor.ElevatorDoorState.OPENING);
             // Move to floor.
-            moveToFloor(10);
+            // If car is unloaded, then move back to 0
+            if (currentFloor != 0) {
+                moveToFloor(0);
+            }
+            else {
+                moveToFloor(destinationFloor);   
+            }
         }
         if (ElevatorDoor.ElevatorDoorState.OPENED.equals(door.getDoorState())) {
             System.out.println("Door is - " + door.getDoorState().toString());

@@ -30,6 +30,9 @@ public class Trolley implements IAPSTimerListener {
     
     private Shuttle shuttle;
     
+    // Will be true if the trolley has locked a car.
+    private boolean containsCar;
+    
     public enum TrolleyState {
         DOCKED_SHUTTLE, DEPLOYING, RETURNING, LOCKING, LOCKED;
     }
@@ -41,7 +44,12 @@ public class Trolley implements IAPSTimerListener {
         trolleyY = 0;
         lockTime = 5;
         currentTime = 0;
+        containsCar = false;
         this.shuttle = shuttle;
+    }
+    
+    public boolean containsCar() {
+        return containsCar;
     }
     
     public void deployTrolley() {
@@ -71,6 +79,7 @@ public class Trolley implements IAPSTimerListener {
         else if (TrolleyState.LOCKING.equals(state)) {
             if (currentTime == lockTime) {
                 state = TrolleyState.RETURNING;
+                containsCar = true;
                 System.out.println("Returning Trolley");
             }
             if (currentTime < lockTime) {
@@ -78,13 +87,14 @@ public class Trolley implements IAPSTimerListener {
             }    
         }
         else if (TrolleyState.RETURNING.equals(state)) {
-            if (trolleyY == targetY) {
+            if (trolleyY == 0) {
                 state = TrolleyState.DOCKED_SHUTTLE;
                 System.out.println("Docking Trolley");
                 // Return to Shuttle Control
+                currentTime = 0;
                 shuttle.updateShuttleState(Shuttle.ShuttleState.RETURNED);
             }
-            if (trolleyY > targetY) {
+            if (trolleyY > 0) {
                 trolleyY--;
             }
         }

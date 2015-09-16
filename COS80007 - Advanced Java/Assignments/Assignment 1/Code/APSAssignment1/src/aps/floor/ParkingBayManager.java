@@ -1,5 +1,6 @@
 package aps.floor;
 
+import aps.car.CarModel;
 import aps.config.Config;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,45 +17,51 @@ import java.util.Map;
  * @author szeyick
  */
 public class ParkingBayManager {
-    
+
     /**
      * An instance of the manager.
-     */ 
+     */
     private static ParkingBayManager manager;
-    
+
     /**
-     * The north bays. 
-     */ 
+     * The bay currently allocated to a car being moved.
+     */
+    private ParkingBay currentDesignatedBay;
+
+    /**
+     * The north bays.
+     */
     private Map<Integer, List<ParkingBay>> northBays;
-    
+
     /**
-     * The south bays. 
+     * The south bays.
      */
     private Map<Integer, List<ParkingBay>> southBays;
-    
+
     /**
      * Constructor.
      */
     private ParkingBayManager() {
         northBays = new HashMap<Integer, List<ParkingBay>>();
         southBays = new HashMap<Integer, List<ParkingBay>>();
+        currentDesignatedBay = null;
         initialiseParkingBays();
     }
-    
+
     /**
      * Initialise the parking bays.
-     */ 
-    private void initialiseParkingBays() {        
+     */
+    private void initialiseParkingBays() {
         // Create the north and south bays.
         Config config = Config.getConfig();
-        createBays(northBays, config.NUMBER_OF_BAYS_NORTH);
-        createBays(southBays, config.NUMBER_OF_BAYS_SOUTH);
+        createBays(northBays, config.NUMBER_OF_BAYS_NORTH, ParkingBayDirection.NORTH);
+        createBays(southBays, config.NUMBER_OF_BAYS_SOUTH, ParkingBayDirection.SOUTH);
     }
-    
+
     /**
      * Creating the parking bays for the entire parking complex.
      */
-    private void createBays(Map<Integer, List<ParkingBay>> bay, int numberOfBays) {
+    private void createBays(Map<Integer, List<ParkingBay>> bay, int numberOfBays, ParkingBayDirection direction) {
         Config config = Config.getConfig();
         int numberOfFloors = config.NF;
 
@@ -62,33 +69,69 @@ public class ParkingBayManager {
         for (int floorNo = 1; floorNo < numberOfFloors; floorNo++) {
             List<ParkingBay> parkingBayList = new ArrayList<ParkingBay>();
             for (int bayNo = 1; bayNo < numberOfBays; bayNo++) {
-                ParkingBay parkingBay = new ParkingBay(Integer.valueOf(bayNo), Integer.valueOf(floorNo));
+                ParkingBay parkingBay = new ParkingBay(Integer.valueOf(bayNo), Integer.valueOf(floorNo), direction);
                 parkingBayList.add(parkingBay);
             }
             bay.put(floorNo, parkingBayList);
         }
     }
-    
+
     /**
-     * @return the first available bay, null if there are no bays
-     * free.
+     * @return the first available bay, null if there are no bays free.
      */
     public ParkingBay getFreeBay() {
-        ParkingBay freeBay = searchParkingBays(northBays);
-        if (freeBay == null) {
-            freeBay = searchParkingBays(southBays);
+        if (currentDesignatedBay == null) {
+            ParkingBay freeBay = searchParkingBays(northBays);
+            if (freeBay == null) {
+                freeBay = searchParkingBays(southBays);
+            }
+            currentDesignatedBay = freeBay;
         }
-        return freeBay;
+        return currentDesignatedBay;
     }
     
     /**
-     * Search the parking bay for a free bay.
+     * Car has successfully been parked in the allocated bay.
      */ 
+    public void carParkedInBay() {
+        currentDesignatedBay = null;
+    }
+    
+    /**
+     * @param carModel - The car model to look for.
+     * @return the parking bay information for the a given car.
+     */ 
+    public ParkingBay getParkingBayForCar(CarModel carModel) {
+        List<ParkingBay> northBaysList = northBays.get(carModel.getFloor());
+        List<ParkingBay> southBaysList = southBays.get(carModel.getFloor());
+        
+        ParkingBay parkingBay = searchBayForCar(northBaysList, carModel);
+        if (parkingBay == null) {
+            parkingBay = searchBayForCar(southBaysList, carModel);
+        }
+        return parkingBay;
+    }
+    
+    
+    private ParkingBay searchBayForCar(List<ParkingBay> baysList, CarModel carModel) {
+        ParkingBay parkingBay = null;
+        for (ParkingBay bay : baysList) {
+            if (bay.getCarModel().equals(carModel)) {
+                parkingBay = bay;
+                break;
+            }
+        }
+        return parkingBay;
+    }
+
+    /**
+     * Search the parking bay for a free bay.
+     */
     private ParkingBay searchParkingBays(Map<Integer, List<ParkingBay>> bay) {
         ParkingBay parkingBay = null;
-        
+
         // Iterate through the north bays to find the first free bay.
-        for (Integer floorNo: northBays.keySet()) {
+        for (Integer floorNo : northBays.keySet()) {
             List<ParkingBay> baysList = northBays.get(floorNo);
             for (ParkingBay parkingBayTmp : baysList) {
                 if (!parkingBayTmp.containsCar()) {
@@ -102,7 +145,7 @@ public class ParkingBayManager {
         }
         return parkingBay;
     }
-    
+
     /**
      * @return an instance of the parking manager.
      */

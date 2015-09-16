@@ -36,21 +36,21 @@ public class ParkingBay {
     private Integer floorNumber;
     
     /**
-     * The enum representing whether the bay is in the north or south.
-     */
-    public enum direction {
-        NORTH, SOUTH;
-    }
+     * The direction of the parking bay.
+     */ 
+    private ParkingBayDirection direction;
     
     /**
      * Constructor.
      * @param bayNumberTmp - The bay number assigned to this car.
      * @param floorNoTmp  - The floor that this bay belongs to.
+     * @param directionTmp - The direction of the parking bay.
      */
-    public ParkingBay(Integer bayNumberTmp, Integer floorNoTmp) {
+    public ParkingBay(Integer bayNumberTmp, Integer floorNoTmp, ParkingBayDirection directionTmp) {
         containsCar = false;
         floorNumber = floorNoTmp;
         bayNumber = bayNumberTmp;
+        direction = directionTmp;
     }
     
     /**
@@ -92,5 +92,9 @@ public class ParkingBay {
     
     public int getBayNumber() {
         return bayNumber;
+    }
+    
+    public ParkingBayDirection getDirection() {
+        return direction;
     }
 }

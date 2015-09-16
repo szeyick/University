@@ -7,12 +7,13 @@ package aps.floor;
 
 import aps.car.CarModel;
 import aps.car.CarModelManager;
+import aps.events.EventType;
+import aps.events.ParkingEvent;
 import aps.timer.IAPSTimer;
 import aps.timer.IAPSTimerListener;
 import aps.turntable.TurntableModel;
 import aps.userStation.UserStationControl;
-import java.awt.Point;
-import java.awt.geom.Rectangle2D;
+import control.APSControl;
 
 /**
  * The {@link GroundLevelFloorControl}.
@@ -62,7 +63,7 @@ public class GroundLevelFloorControl implements IAPSTimerListener {
     public GroundLevelFloorControl(IAPSTimer timer) {
         turntable = new TurntableModel(WALL_PADDING);
         panel = new GroundLevelFloorPanel(turntable);
-        userStationControl = new UserStationControl();
+        userStationControl = APSControl.getControl().getUserStation();
         timer.addTimerListener(userStationControl);
     }
 
@@ -95,9 +96,8 @@ public class GroundLevelFloorControl implements IAPSTimerListener {
             if (car.getCarState().equals(CarModel.carState.MOVING)) {
                 System.out.println("Car has arrived on the turntable");                
                 car.updateCarState(CarModel.carState.IDLE);
-                userStationControl.requestUserPickup();
+                userStationControl.requestUserDropOff();
             }
-
         }
         panel.draw();
     }

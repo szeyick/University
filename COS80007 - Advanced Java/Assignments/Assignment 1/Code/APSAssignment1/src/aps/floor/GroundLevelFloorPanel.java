@@ -6,11 +6,12 @@
 package aps.floor;
 
 import aps.car.CarModel;
-import aps.car.CarModelManager;
-import aps.config.Config;
+import aps.elevator.Elevator;
 import aps.elevator.ElevatorDoor;
-import aps.timer.IAPSTimerListener;
+import aps.shuttle.Shuttle;
+import aps.shuttle.Trolley;
 import aps.turntable.TurntableModel;
+import control.APSControl;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -52,6 +53,7 @@ public class GroundLevelFloorPanel extends JPanel {
 
     /**
      * Default constructor.
+     *
      * @param turntable - The turntable component.
      */
     public GroundLevelFloorPanel(TurntableModel turntable) {
@@ -96,6 +98,9 @@ public class GroundLevelFloorPanel extends JPanel {
         drawCar(g2);
         drawTurntable(g2);
         drawElevatorDoor(g2);
+        drawElevator(g2);
+        drawShuttle(g2);
+        drawTrolley(g2);
     }
 
     /**
@@ -114,10 +119,7 @@ public class GroundLevelFloorPanel extends JPanel {
             float theScale = Math.min(xScale, yScale);
 
             System.out.println("Car X: " + carModel.getCurrentXPosition() + " Y: " + carModel.getCurrentYPosition() + " Scale:" + theScale);
-            if (carModel.getCurrentXPosition() <= (30)) {
-                System.out.println("Parked On Turntable");
-            } 
-          
+
             float minX = (float) (car.getX());
             float minY = (float) (car.getY());
 
@@ -159,19 +161,74 @@ public class GroundLevelFloorPanel extends JPanel {
      */
     private void drawElevatorDoor(Graphics2D g2) {
         AffineTransform oldTransform = g2.getTransform();
-        boolean doorState = false;
 
-        g2.setColor(getForeground());
-        if (doorState) {
-            g2.fillRect(40, 140, 10, 10);
-        } else {
-            g2.fillRect(40, 140, 50, 10);
+        Elevator elevator = APSControl.getControl().getElevator();
+        ElevatorDoor elevatorDoor = elevator.getDoor();
+
+        int doorLength = elevatorDoor.getDoorLength();
+        if (doorLength == 0) {
+            doorLength = 1;
         }
+        g2.setColor(getForeground());
+        g2.fillRect(40, 140, (10 * doorLength), 10);
+
         g2.setTransform(oldTransform);
         // door.toggleDoorState();
         // The elevator door should only open - 
         //  - if the car has arrived on the turntable.
         //  - the door opens, and the shuttle comes to get the car.
+    }
+
+    /**
+     * Draw the elevator if it is on the floor.
+     */
+    private void drawElevator(Graphics2D g2) {
+        Elevator elevator = APSControl.getControl().getElevator();
+        if (elevator.getCurrentFloor() == 0) {
+            AffineTransform oldTransform = g2.getTransform();
+
+            // Translate the elevator to the correct position before drawing.
+            g2.translate(25, 100);
+            g2.scale(10, 10);
+
+            g2.setColor(getForeground());
+            g2.fill(elevator.getBounds());
+            g2.setTransform(oldTransform);
+        }
+    }
+
+    /**
+     * Draw the shuttle if we are on the correct floor.
+     */
+    private void drawShuttle(Graphics2D g2) {
+        Elevator elevator = APSControl.getControl().getElevator();
+        if (elevator.getCurrentFloor() == 0) {
+            AffineTransform oldTransform = g2.getTransform();
+            Shuttle shuttle = elevator.getShuttle();
+            g2.translate(25, 100);
+            g2.scale(10, 10);
+
+            g2.setColor(Color.ORANGE);
+            g2.fill(shuttle.getBounds());
+            g2.setTransform(oldTransform);
+        }
+    }
+
+    /**
+     * Draw the trolley if we are on the correct floor.
+     */
+    private void drawTrolley(Graphics2D g2) {
+        Elevator elevator = APSControl.getControl().getElevator();
+        if (elevator.getCurrentFloor() == 0) {
+            AffineTransform oldTransform = g2.getTransform();
+            Trolley trolley = elevator.getShuttle().getTrolley();
+            g2.translate(25, 100);
+            g2.scale(10, 10);
+
+            g2.setColor(Color.PINK);
+            g2.fill(trolley.getBounds());
+            g2.setTransform(oldTransform);
+        }
     }
 
     /**

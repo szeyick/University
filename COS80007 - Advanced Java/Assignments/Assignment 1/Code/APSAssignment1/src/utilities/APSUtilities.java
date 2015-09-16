@@ -1,5 +1,7 @@
 package utilities;
 
+import aps.config.Config;
+
 /**
  * The {@link APSUtilities}
  * <p>
@@ -20,5 +22,16 @@ public class APSUtilities {
      */
     public static double calculateGradient(double x1, double y1, double x2, double y2) {
         return (y2 - y1) / (x2 - x1);
+    }
+    
+    public static double getNorthBayDistanceFromEastWall() {
+        Config config = Config.getConfig();
+        
+        // The centre of the first north bay has to be at least this distance
+        // away.
+        double liftCentreX = config.LIFT_CENTRE_X;
+        double bayWidth = config.BAY_WIDTH;
+        // The wall will be 1.1m away from the centre since the total width is 2.2
+        return liftCentreX - (bayWidth / 2);
     }
 }

@@ -81,4 +81,11 @@ public class ElevatorDoor implements IAPSTimerListener {
             }
         }
     }
+    
+    /**
+     * @return the length of the door.
+     */ 
+    public int getDoorLength() {
+        return doorLength;
+    }
 }

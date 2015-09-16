@@ -89,6 +89,22 @@ public class CarModelManager {
     }
     
     /**
+     * @return a parked car. (Return the first available car)
+     */
+    public CarModel getParkedCarModel() {
+        CarModel carModel = null;
+        for (Integer floorNumber : carModelMap.keySet()) {
+            List<CarModel> carList = carModelMap.get(floorNumber);
+            for (CarModel carModelTmp : carList) {
+                carModel = carModelTmp;
+                break;
+            }
+        }
+        currentCarModel = carModel;
+        return currentCarModel;
+    }
+    
+    /**
      * @return the instance of the model manager.
      */
     public static CarModelManager getModelManager() {

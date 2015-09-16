@@ -2,9 +2,11 @@ package aps.userStation;
 
 import aps.car.CarModel;
 import aps.car.CarModelManager;
+import aps.elevator.Elevator;
 import aps.floor.ParkingBay;
 import aps.floor.ParkingBayManager;
 import aps.timer.IAPSTimerListener;
+import control.APSControl;
 
 /**
  * The {@link UserStationControl}.
@@ -64,9 +66,10 @@ public class UserStationControl implements IAPSTimerListener {
      */
     public void requestUserPickup() {
         state = UserControlState.PICKUP;
+        System.out.println("Requesting Pickup");
         currentTime = 0;
     }
-    
+
     public void resetTimer() {
         currentTime = 0;
     }
@@ -84,7 +87,7 @@ public class UserStationControl implements IAPSTimerListener {
             // Ensure that the adequate delay has been done.
             if (currentTime == delay) {
                 // If requesting pickup, then call the elevator.
-                if (UserControlState.PICKUP.equals(state)) {
+                if (UserControlState.DROP_OFF.equals(state)) {
                     // Find a free bay and move the car there.
                     ParkingBayManager manager = ParkingBayManager.getManager();
                     ParkingBay parkingBay = manager.getFreeBay();
@@ -95,10 +98,19 @@ public class UserStationControl implements IAPSTimerListener {
                             System.out.println("Calling Elevator to Ground...");
                             state = UserControlState.IDLE;
                             resetTimer();
+                            Elevator elevator = APSControl.getControl().getElevator();
+                            elevator.setDestinationFloor(parkingBay.getFloorNumber());
+                            elevator.moveToFloor(0);
                         }
                     }
-                } else if (UserControlState.DROP_OFF.equals(state)) {
-                            System.out.println("Requesting Pickup.");
+                } else if (UserControlState.PICKUP.equals(state)) {
+                    CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
+                    System.out.println("Requesting Pickup.");
+                    state = UserControlState.IDLE;
+                    resetTimer();
+                    Elevator elevator = APSControl.getControl().getElevator();
+                    elevator.setDestinationFloor(carModel.getFloor());
+                    elevator.moveToFloor(carModel.getFloor());
                 }
             }
         }

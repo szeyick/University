@@ -17,6 +17,8 @@ import javax.swing.Timer;
  */
 public class APSTimer implements IAPSTimer {
     
+    private static APSTimer apsTimer;
+    
     /**
      * The timer used to trigger scheduled events in the simulation. 
      */
@@ -30,7 +32,7 @@ public class APSTimer implements IAPSTimer {
     /**
      * Constructor.
      */
-    public APSTimer() {
+    private APSTimer() {
        timer = new Timer(100, new TimerListener());
        timerListeners = new HashSet<IAPSTimerListener>();
     }
@@ -76,6 +78,13 @@ public class APSTimer implements IAPSTimer {
     @Override
     public void removeTimerListener(IAPSTimerListener listener) {
         timerListeners.remove(listener);
+    }
+    
+    public static APSTimer getTimer() {
+        if (apsTimer == null) {
+            apsTimer = new APSTimer();
+        }
+        return apsTimer;
     }
     
     /***

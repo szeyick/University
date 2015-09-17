@@ -151,7 +151,7 @@ public class Trolley implements IAPSTimerListener {
             // If current floor is not 0 we need to move up or down depending on the allocated bay.
             // This is for unloading a car onto a bay.
             ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
-            if (EventType.ARRIVAL.equals(event.getEventType())) {
+            if (event != null && EventType.ARRIVAL.equals(event.getEventType())) {
                 ParkingBay parkingBay = ParkingBayManager.getManager().getFreeBay();
                 Config config = Config.getConfig();
                 if (TrolleyState.DEPLOYING.equals(state)) {
@@ -204,11 +204,57 @@ public class Trolley implements IAPSTimerListener {
                     }
                 }
             }
-            if (EventType.DEPARTURE.equals(event.getEventType())) {
+            if (event != null && EventType.DEPARTURE.equals(event.getEventType())) {
                 // Pick up a car.
                 CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
-                ParkingBay parkedBay = ParkingBayManager.getManager().getParkingBayForCar(carModel);
-            
+                ParkingBay parkingBay = ParkingBayManager.getManager().getParkingBayForCar(carModel);
+
+                Config config = Config.getConfig();
+                if (TrolleyState.DEPLOYING.equals(state)) {
+                    targetY = targetY = (float) config.BAY_LENGTH;
+                    // If deploying to retrieve the car, we should only update the trolley pos
+                    if (ParkingBayDirection.NORTH.equals(parkingBay.getDirection())) {
+                        if (trolleyY <= targetY) {
+                            state = TrolleyState.LOCKING;
+                            System.out.println("Locking Trolley");
+                        }
+                        if (trolleyY > targetY) {
+                            trolleyY--;
+                        }
+                    }
+                } else if (TrolleyState.LOCKING.equals(state)) {
+                    if (currentTime == lockTime) {
+                        // Drop the car off.
+                        state = TrolleyState.RETURNING;
+                        containsCar = true;
+                        carModel.updateFloor(parkingBay.getFloorNumber());
+                        parkingBay.setCarModel(carModel);
+                        CarModelManager.getModelManager().addCarToFloor(parkingBay.getFloorNumber(), carModel);
+                        System.out.println("Returning Trolley");
+                    }
+                    if (currentTime < lockTime) {
+                        currentTime += dt;
+                    }
+                } else if (TrolleyState.RETURNING.equals(state)) {
+                    // Return to lift centre.
+                    targetY = shuttle.getY(); // Should be centre of the turntable.
+                    if (trolleyY >= targetY) {
+                        trolleyY = shuttle.getY();
+                        state = TrolleyState.DOCKED_SHUTTLE;
+                        System.out.println("Docking Trolley");
+                        // Return to Shuttle Control
+                        currentTime = 0;
+                        shuttle.updateShuttleState(Shuttle.ShuttleState.RETURNED);
+                    }
+                    if (trolleyY < targetY) {
+                        trolleyY++;
+                    }
+                    if (containsCar) {
+                        carModel.setDestinationPoint(new Point2D.Float(shuttle.getX(), trolleyY));
+                        carModel.updateDxDy(0, 10);
+                        carModel.updateCoordinates();
+                    }
+                }
             }
         }
     }

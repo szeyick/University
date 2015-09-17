@@ -1,6 +1,7 @@
 package aps.elevator;
 
 import aps.config.Config;
+import aps.events.EventType;
 import aps.events.ParkingEvent;
 import aps.shuttle.Shuttle;
 import aps.timer.APSTimer;
@@ -120,7 +121,10 @@ public class Elevator implements IAPSTimerListener {
                 destinationFloor = 0;
                 moveToFloor(destinationFloor);
                 // Terminate the event here
-                APSControl.getControl().updateEventProcessing(false);
+                ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
+                if (!EventType.DEPARTURE.equals(event.getEventType())) {
+                    APSControl.getControl().updateEventProcessing(false);
+                }
             } else {
                 moveToFloor(destinationFloor);
             }
@@ -183,10 +187,17 @@ public class Elevator implements IAPSTimerListener {
                 System.out.println("Elevator has arrived at floor: " + currentFloor);
 
                 // Need to figure out the next command (Whether to open or close the door)
-                if (ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
-                    currentElevOperation = ElevOperation.OPENING_DOOR;
-                } else if (ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
-                    currentElevOperation = ElevOperation.CLOSING_DOOR;
+                if (EventType.DEPARTURE.equals(event.getEventType()) && currentFloor == 0
+                        && shuttle.getTrolley().containsCar()) {
+                    System.out.println("Calling User to Pickup Car...");
+                    APSControl.getControl().getUserStation().carReadyForPickup();
+
+                } else {
+                    if (ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
+                        currentElevOperation = ElevOperation.OPENING_DOOR;
+                    } else if (ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
+                        currentElevOperation = ElevOperation.CLOSING_DOOR;
+                    }
                 }
             }
             if (ElevDirection.UP.equals(currentDirection)) {

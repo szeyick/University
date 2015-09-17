@@ -9,11 +9,15 @@ import aps.car.CarModel;
 import aps.car.CarModelManager;
 import aps.config.Config;
 import aps.elevator.Elevator;
+import aps.events.EventType;
+import aps.events.ParkingEvent;
 import aps.floor.ParkingBay;
 import aps.floor.ParkingBayDirection;
 import aps.floor.ParkingBayManager;
 import aps.timer.APSTimer;
 import aps.timer.IAPSTimerListener;
+import control.APSControl;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import utilities.APSUtilities;
 
@@ -208,6 +212,15 @@ public class Shuttle implements IAPSTimerListener {
             if (shuttleX > 0) {
                 shuttleX--;
                 System.out.println("Moving Shuttle Back to Base");
+            }
+            ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
+            
+            // If we have the car, we need to move that too.
+            if (event != null && EventType.DEPARTURE.equals(event.getEventType()) && trolley.containsCar()) {
+                CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
+                carModel.setDestinationPoint(new Point2D.Float(shuttleX, shuttleY));
+                carModel.updateDxDy(-10, 0);
+                carModel.updateCoordinates();
             }
         }
     }

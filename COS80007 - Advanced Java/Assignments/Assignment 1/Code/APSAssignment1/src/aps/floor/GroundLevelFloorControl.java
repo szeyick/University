@@ -14,6 +14,7 @@ import aps.timer.IAPSTimerListener;
 import aps.turntable.TurntableModel;
 import aps.userStation.UserStationControl;
 import control.APSControl;
+import java.awt.geom.Point2D;
 
 /**
  * The {@link GroundLevelFloorControl}.
@@ -55,9 +56,10 @@ public class GroundLevelFloorControl implements IAPSTimerListener {
      * The user station control
      */
     private UserStationControl userStationControl;
-            
+
     /**
      * Constructor.
+     *
      * @param timer - The timer.
      */
     public GroundLevelFloorControl(IAPSTimer timer) {
@@ -81,7 +83,9 @@ public class GroundLevelFloorControl implements IAPSTimerListener {
     public void update(long dt) {
         // The car model will be updated then draw the rest of the shit.
         car = CarModelManager.getModelManager().getCurrentCarModel();
-        if (car != null && car.getFloor() == FLOOR_NUMBER && CarModel.carState.MOVING.equals(car.getCarState())) {
+        ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
+        if (car != null && car.getFloor() == FLOOR_NUMBER && CarModel.carState.MOVING.equals(car.getCarState())
+                && EventType.ARRIVAL.equals(event.getEventType())) {
             System.out.println("Drawing Car");
             car.setDestinationPoint(turntable.getPoint());
             car.updateDxDy(-2, -2);
@@ -89,12 +93,22 @@ public class GroundLevelFloorControl implements IAPSTimerListener {
             car.updateCoordinates();
             car.updateCarState(CarModel.carState.MOVING);
             panel.setCarModel(car);
+        }
+        if (car != null && car.getFloor() == FLOOR_NUMBER && CarModel.carState.MOVING.equals(car.getCarState())
+                && EventType.DEPARTURE.equals(event.getEventType())) {
             
+            System.out.println("Drawing Car Leaving");
+            Point2D point = new Point2D.Float((float) turntable.getPoint().getX(), 0);
+            car.setDestinationPoint(point);
+            car.updateDxDy(0, 10);
+            car.updateDimension(panel.getSize());
+            car.updateCoordinates();
+            panel.setCarModel(car);
         }
         // If the car has arrived on the turntable we stop moving the car.
         if (car != null && car.getBounds().intersects(turntable.getTurntableBounds())) {
             if (car.getCarState().equals(CarModel.carState.MOVING)) {
-                System.out.println("Car has arrived on the turntable");                
+                System.out.println("Car has arrived on the turntable");
                 car.updateCarState(CarModel.carState.IDLE);
                 userStationControl.requestUserDropOff();
             }

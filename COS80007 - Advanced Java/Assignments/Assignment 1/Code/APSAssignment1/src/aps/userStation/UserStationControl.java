@@ -7,6 +7,7 @@ import aps.floor.ParkingBay;
 import aps.floor.ParkingBayManager;
 import aps.timer.IAPSTimerListener;
 import control.APSControl;
+import java.awt.geom.Point2D;
 
 /**
  * The {@link UserStationControl}.
@@ -70,6 +71,15 @@ public class UserStationControl implements IAPSTimerListener {
         currentTime = 0;
     }
 
+    /**
+     * The callback from the elevator to notify the user that their car is ready
+     * for pickup.
+     */
+    public void carReadyForPickup() {
+        state = UserControlState.COLLECT_CAR;
+        resetTimer();
+    }
+
     public void resetTimer() {
         currentTime = 0;
     }
@@ -111,6 +121,24 @@ public class UserStationControl implements IAPSTimerListener {
                     Elevator elevator = APSControl.getControl().getElevator();
                     elevator.setDestinationFloor(carModel.getFloor());
                     elevator.moveToFloor(carModel.getFloor());
+                }
+            }
+            if (currentTime >= delay) {
+                if (UserControlState.COLLECT_CAR.equals(state)) {
+                    System.out.println("Picking Up Car...Hello");
+                    CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
+                    // If the car is outside the bounds of the panel then go away
+                    carModel.updateCarState(CarModel.carState.MOVING);
+                    carModel.updateFloor(0);
+                    System.out.println("Car Y Pos: " + carModel.getCurrentYPosition());
+                    if (carModel.getCurrentYPosition() > 350) {
+                        CarModelManager.getModelManager().removeCarModel(carModel);
+                        System.out.println("Car has left the building...");
+                        state = UserControlState.IDLE;
+                        resetTimer();
+                        APSControl.getControl().updateEventProcessing(false);
+                    }
+
                 }
             }
         }

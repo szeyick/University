@@ -25,5 +25,11 @@ public enum UserControlState {
      * The user control is in drop off mode. This means that someone has dropped
      * off their car to be allocated to a bay.
      */
-    DROP_OFF;
+    DROP_OFF,
+    
+    /**
+     * The user can collect their car and drive off. It is available on the ground
+     * floor ready for them to leave.
+     */
+    COLLECT_CAR;
 }

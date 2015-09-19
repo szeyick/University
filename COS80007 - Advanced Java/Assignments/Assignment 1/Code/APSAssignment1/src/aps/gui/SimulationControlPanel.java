@@ -17,6 +17,7 @@ import javax.swing.JPanel;
  * make up the controls for the Automatic Parking Simulator.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class SimulationControlPanel extends JPanel {
     
@@ -64,5 +65,4 @@ public class SimulationControlPanel extends JPanel {
         
         add(buttonPanel);
     }
-    
 }

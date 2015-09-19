@@ -3,31 +3,35 @@ package aps.events;
 /**
  * The {@link ParkingEvent}.
  * <p>
- * This class represents an individual parking event. A parking event is
- * comprised of either an arrival or departure event, meaning that a
- * driver is either requesting pickup or drop off of their vehicle.
+ * This class represents a single parking event. A parking event is can be
+ * either of two types, an arrival or departure event. This class
+ * is a composition required by the system to determine the
+ * type of event that will be triggered.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class ParkingEvent implements Comparable<ParkingEvent> {
     
     /**
-     * The type of event.
+     * The type of this parking event (Arrival, Departure)
      */
-    private EventType eventType;
+    private final EventType eventType;
 
     /**
-     * The start time of this event. 
+     * The time that this event is to begin.
      */
-    private long eventStartTime;
+    private final long eventStartTime;
     
     /**
-     * The number plate of the car to add/remove 
+     * The number plate of the car to add or remove
+     * from the car park.
      */
-    private String numberPlate;
+    private final String numberPlate;
 
     /**
-     * Has the event completed.
+     * A flag to determine if a parking event
+     * has been completed.
      */
     private boolean eventComplete;
     
@@ -79,10 +83,12 @@ public class ParkingEvent implements Comparable<ParkingEvent> {
     }
     
     /***
-     * Comparator will be based on the event start time.
+     * Compare a parking event with another to determine the 
+     * order in which events will be executed.
+     * @param  otherParkingEvent - The parking event to compare.
      */
     @Override
-    public int compareTo(ParkingEvent other) {
-        return (int)(this.eventStartTime - other.eventStartTime);
+    public int compareTo(ParkingEvent otherParkingEvent) {
+        return (int)(this.eventStartTime - otherParkingEvent.eventStartTime);
     }
 }

@@ -24,6 +24,11 @@ public class APSUtilities {
         return (y2 - y1) / (x2 - x1);
     }
     
+    /**
+     * Calculate the distance the first north bay is from the east wall of the
+     * car park.
+     * @return - The calculated distance.
+     */
     public static double getNorthBayDistanceFromEastWall() {
         Config config = Config.getConfig();
         
@@ -31,6 +36,7 @@ public class APSUtilities {
         // away.
         double liftCentreX = config.LIFT_CENTRE_X;
         double bayWidth = config.BAY_WIDTH;
+        
         // The wall will be 1.1m away from the centre since the total width is 2.2
         return liftCentreX - (bayWidth / 2);
     }

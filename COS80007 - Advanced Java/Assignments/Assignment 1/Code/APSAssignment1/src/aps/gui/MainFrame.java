@@ -2,6 +2,7 @@ package aps.gui;
 
 import aps.floor.GroundLevelFloorControl;
 import aps.floor.ParkingLevelFloorControl;
+import aps.timer.APSTimer;
 import aps.timer.IAPSTimer;
 import aps.timer.IAPSTimerListener;
 import control.APSControl;
@@ -12,30 +13,46 @@ import javax.swing.JFrame;
  * The {@link MainFrame}.
  * <p>
  * This class is responsible for holding all the graphical components that
- * are to be seen as part of the Automatic Parking Simulator.
+ * are to be displayed as part of the Automatic Parking Simulator.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class MainFrame extends JFrame implements IAPSTimerListener {
     
+    /**
+     * The control object that is responsible for all the ground
+     * level components.
+     */
     private GroundLevelFloorControl control;
     
+    /**
+     * The parking floor control that is responsible for all the
+     * parking level components of a particular floor.
+     */
     private ParkingLevelFloorControl parkingFloorControl;
     
+    /**
+     * The current floor that is being displayed by the
+     * frame.
+     */
     private int currentFloor;
             
     /**
      * Constructor.
      */
-    public MainFrame(IAPSTimer timer) {
+    public MainFrame() {
         super("APS - Sze Yick");
         
         setSize(500,500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         currentFloor = APSControl.getControl().getElevator().getCurrentFloor();
+        IAPSTimer timer = APSTimer.getTimer();
         
         timer.addTimerListener(this);
+        
+        // Create the controls and components for the car park.
         createSimulationControlPanel(timer);
         createFloorView(timer);
         createParkingFloorView(timer);
@@ -52,7 +69,7 @@ public class MainFrame extends JFrame implements IAPSTimerListener {
     }
     
     /**
-     * Create the floor view and add it to the frame.
+     * Create the floor control and add the view to the frame.
      */
     private void createFloorView(IAPSTimer timer) {
         control = new GroundLevelFloorControl(timer);
@@ -60,6 +77,10 @@ public class MainFrame extends JFrame implements IAPSTimerListener {
         add(control.getPanel(), BorderLayout.CENTER);
     }
     
+    /**
+     * Create the parking floor control and add the view
+     * to the frame.
+     */ 
     private void createParkingFloorView(IAPSTimer timer) {
         parkingFloorControl = new ParkingLevelFloorControl();
         timer.addTimerListener(parkingFloorControl);
@@ -67,14 +88,17 @@ public class MainFrame extends JFrame implements IAPSTimerListener {
     }
 
     /**
-     * Change the view if the current floor is changed.
+     * Update the displayed view in the frame if the current floor
+     * has changed.
+     * <p>
+     * {@inheritDoc }.
      */ 
     @Override
     public void update(long dt) {
         if (currentFloor != APSControl.getControl().getElevator().getCurrentFloor()) {
             currentFloor = APSControl.getControl().getElevator().getCurrentFloor();
             
-            System.out.println("SWAPPING FLOOR :" + currentFloor);
+            // System.out.println("SWAPPING FLOOR :" + currentFloor);
             if (currentFloor == 0) {
                 remove(parkingFloorControl.getPanel());
                 add(control.getPanel(), BorderLayout.CENTER);
@@ -83,11 +107,10 @@ public class MainFrame extends JFrame implements IAPSTimerListener {
                 remove(control.getPanel());
                 add(parkingFloorControl.getPanel(), BorderLayout.CENTER);
             }
+            // re-draw the floor if it has changed.
             invalidate();
             validate();
             repaint();
         }
     }
-    
-    
 }

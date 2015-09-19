@@ -1,26 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aps.timer;
 
 /**
- *
+ * The {@link APSClock}.
+ * <p>
+ * This class is responsible for providing the current time that has lapsed
+ * since the start of the simulation. By default, the simulation is to start
+ * at 08:00am.
+ * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class APSClock implements IAPSTimerListener {
     
-        /** Simulations are assumed to start at this time of day.
-     This is added for display only -- internally time is done in ms
-     starting from 0. */
+    /**
+     * The default start time of the simulation.
+     */
     public static final int HOUR_ZERO = 8;
     
+    /**
+     * The current simulation time.
+     */
     private long t = 0;
     
-    public APSClock() {
-    }
-
     /**
      * Returns an 12-char string representing the simulated time of day.
      * @param t the simulated time (from 8am, in milliseconds)

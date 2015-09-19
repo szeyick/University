@@ -16,6 +16,7 @@ import aps.floor.ParkingBayDirection;
 import aps.floor.ParkingBayManager;
 import aps.timer.IAPSTimerListener;
 import control.APSControl;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -101,14 +102,22 @@ public class Trolley implements IAPSTimerListener {
     public TrolleyState getState() {
         return state;
     }
+    
+    public void unlockTrolley() {
+        containsCar = false;
+    }
 
+    /**
+     * {@inherit}
+     */ 
     @Override
     public void update(long dt) {
         Elevator elevator = APSControl.getControl().getElevator();
         // If we are on the ground floor, move the trolley up to pick up the car.
         if (elevator.getCurrentFloor() == 0) {
-            if (TrolleyState.DEPLOYING.equals(state)) {
-                targetY = 5.0f; // Should be centre of the turntable.
+            if (TrolleyState.DEPLOYING.equals(state)) {             
+                targetY = 0; // Should be centre of the turntable.
+                System.out.println("Trolley Y: " + trolleyY);
                 if (trolleyY <= targetY) {
                     state = TrolleyState.LOCKING;
                     System.out.println("Locking Trolley");
@@ -160,7 +169,7 @@ public class Trolley implements IAPSTimerListener {
                     if (ParkingBayDirection.NORTH.equals(parkingBay.getDirection())) {
                         if (trolleyY <= targetY) {
                             state = TrolleyState.LOCKING;
-                            System.out.println("Locking Trolley");
+                            System.out.println("Arrival Locking Trolley");
                         }
                         if (trolleyY > targetY) {
                             trolleyY--;
@@ -181,7 +190,8 @@ public class Trolley implements IAPSTimerListener {
                         carModel.updateFloor(parkingBay.getFloorNumber());
                         parkingBay.setCarModel(carModel);
                         CarModelManager.getModelManager().addCarToFloor(parkingBay.getFloorNumber(), carModel);
-                        System.out.println("Returning Trolley");
+                        ParkingBayManager.getManager().carParkedInBay();
+                        System.out.println("Arrival Returning Trolley");
                     }
                     if (currentTime < lockTime) {
                         currentTime += dt;
@@ -193,7 +203,7 @@ public class Trolley implements IAPSTimerListener {
                         if (trolleyY >= targetY) {
                             trolleyY = shuttle.getY();
                             state = TrolleyState.DOCKED_SHUTTLE;
-                            System.out.println("Docking Trolley");
+                            System.out.println("Arrival Docking Trolley");
                             // Return to Shuttle Control
                             currentTime = 0;
                             shuttle.updateShuttleState(Shuttle.ShuttleState.RETURNED);
@@ -216,7 +226,7 @@ public class Trolley implements IAPSTimerListener {
                     if (ParkingBayDirection.NORTH.equals(parkingBay.getDirection())) {
                         if (trolleyY <= targetY) {
                             state = TrolleyState.LOCKING;
-                            System.out.println("Locking Trolley");
+                            System.out.println("Departure Locking Trolley");
                         }
                         if (trolleyY > targetY) {
                             trolleyY--;
@@ -230,7 +240,7 @@ public class Trolley implements IAPSTimerListener {
                         carModel.updateFloor(parkingBay.getFloorNumber());
                         parkingBay.setCarModel(carModel);
                         CarModelManager.getModelManager().addCarToFloor(parkingBay.getFloorNumber(), carModel);
-                        System.out.println("Returning Trolley");
+                        System.out.println("Departure Returning Trolley");
                     }
                     if (currentTime < lockTime) {
                         currentTime += dt;
@@ -241,7 +251,7 @@ public class Trolley implements IAPSTimerListener {
                     if (trolleyY >= targetY) {
                         trolleyY = shuttle.getY();
                         state = TrolleyState.DOCKED_SHUTTLE;
-                        System.out.println("Docking Trolley");
+                        System.out.println("Departure Docking Trolley");
                         // Return to Shuttle Control
                         currentTime = 0;
                         shuttle.updateShuttleState(Shuttle.ShuttleState.RETURNED);
@@ -264,6 +274,26 @@ public class Trolley implements IAPSTimerListener {
      */
     public Rectangle2D getBounds() {
         return new Rectangle2D.Float(shuttle.getX(), trolleyY, 0.3f, 4.75f);
-
+    }
+    
+    /**
+     * @return the trolley shape to draw.
+     */ 
+    public GeneralPath getTrolleyShape() {
+        GeneralPath trolleyShape = drawTrolley();
+        return trolleyShape;
+    }
+    
+    /**
+     * @return the trolley shape
+     */ 
+    private GeneralPath drawTrolley() {
+        GeneralPath trolleyShape = new GeneralPath();
+        trolleyShape.moveTo(shuttle.getX(), trolleyY);
+        trolleyShape.lineTo(shuttle.getX() + 0.3f + 1, trolleyY + (4.75f / 2));
+        trolleyShape.lineTo(shuttle.getX() - 0.3f - 1, trolleyY + (4.75f / 2));
+        trolleyShape.closePath();
+        
+        return trolleyShape;
     }
 }

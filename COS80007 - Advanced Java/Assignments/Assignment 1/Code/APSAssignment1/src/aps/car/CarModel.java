@@ -1,5 +1,6 @@
 package aps.car;
 
+import aps.config.Config;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -7,47 +8,43 @@ import java.awt.geom.Rectangle2D;
 /**
  * The {@link CarModel}.
  * <p>
- * This class represents the data structure for holding details about a car
- * instance.
- * <p>
- * @author szeyick StudentID - 1763652
+ This class represents the data structure for holding information about
+ a single carShape instance.
+ <p>
+ * @author szeyick 
+ * StudentID - 1763652
  */
 public class CarModel {
 
     /**
-     * The floor the car is on.
+     * The floor the carShape is on.
      */
     private int floor;
 
     /**
-     * The number plate for the car.
+     * The number plate for the carShape.
      */
     private String numberPlate;
 
     /**
-     * The current x position of the car, relative to the floor.
+     * The current x position of the carShape.
      */
     private double xCoord;
 
     /**
-     * The current y position of the car, relative to the floor.
+     * The current y position of the carShape.
      */
     private double yCoord;
 
     /**
-     * The x direction in which to move the car.
+     * The x direction in which to move the carShape.
      */
     private int dx;
 
     /**
-     * The y direction in which to move the car.
+     * The y direction in which to move the carShape.
      */
     private int dy;
-
-    /**
-     * The shape that represents the car.
-     */
-    private Rectangle2D car;
 
     /**
      * The destination point to move the car to.
@@ -59,44 +56,44 @@ public class CarModel {
      */
     private Dimension dimension;
 
-    private int carWidth;
-
-    private int carLength;
-
-    private carState state;
-    
     /**
-     * The two states that a car can be in. The current car will be moving, all
-     * other cars will be idle. If it is idle, the listener will not update the
-     * coordinates.
-     */
-    public enum carState {
+     * The width of the car.
+     */ 
+    private final float carWidth;
 
-        IDLE, MOVING;
-    }
+    /**
+     * The length of the car.
+     */ 
+    private final float carLength;
 
+    /**
+     * The current state of the car.
+     */ 
+    private CarState state;
+    
     /**
      * Constructor.
      */
     public CarModel() {
-        carWidth = 2;
-        carLength = 5;
-        car = new Rectangle2D.Double(0, 0, carWidth, carLength);
-        xCoord = 100;
-        yCoord = 200;
+        carWidth = Config.getConfig().CAR_WIDTH;
+        carLength = Config.getConfig().CAR_LENGTH;
+        
+        // Default parameters of the car.
+        xCoord = 150;
+        yCoord = 150;
         floor = 0;
-        state = carState.IDLE;
+        state = CarState.IDLE;
     }
 
     /**
-     * @return the current x position of the car.
+     * @return the current x position of the carShape.
      */
     public double getCurrentXPosition() {
         return xCoord;
     }
 
     /**
-     * @return the current y position of the car.
+     * @return the current y position of the carShape.
      */
     public double getCurrentYPosition() {
         return yCoord;
@@ -105,11 +102,10 @@ public class CarModel {
     /**
      * Update the coordinates. This will move the target from x,y to x + dx, y +
      * dy
-     *
-     * 200, 200 move to 50, 50 (Decremental steps)
      */
     public void updateCoordinates() {
         // Move in the x direction.
+        System.out.println("Destination X,Y : " + destination.getX() + " " + destination.getY());
         if (destination.getX() <= xCoord) {
             xCoord += dx;
             if (xCoord < 0) {
@@ -136,7 +132,7 @@ public class CarModel {
     }
 
     /**
-     * Update the dx, dy values to change the direction the car will move in.
+     * Update the dx, dy values to change the direction the carShape will move in.
      *
      * @param dxTmp - The new x direction in pixels.
      * @param dyTmp - The new y direction in pixels.
@@ -147,9 +143,9 @@ public class CarModel {
     }
 
     /**
-     * Update the dimension object to calculate the new position of the car
+     * Update the dimension object to calculate the new position of the carShape
      * model.
-     *
+     * <p>
      * @param dimension - The dimension of the containing panel.
      */
     public void updateDimension(Dimension dimension) {
@@ -157,8 +153,8 @@ public class CarModel {
     }
 
     /**
-     * Update the number plate details for this car instance.
-     *
+     * Update the number plate details for this carShape instance.
+     * <p>
      * @param numberPlatTmp - The number plate associated to this vehicle.
      */
     public void assignNumberPlate(String numberPlatTmp) {
@@ -187,8 +183,8 @@ public class CarModel {
     }
 
     /**
-     * Move the car to a destination point.
-     *
+     * Set a destination point to move the car to.
+     * <p>
      * @param point - The point that the car needs to move to.
      */
     public void setDestinationPoint(Point2D point) {
@@ -196,34 +192,40 @@ public class CarModel {
     }
 
     /**
-     * Return the floor that the car is on.
+     * @return the floor that the car is on.
      */
     public int getFloor() {
         return floor;
     }
 
     /**
-     * Update the floor that the car is on.
+     * Update the floor that the carShape is on.
+     * @param floorNo - the floor the car is now on.
      */
     public void updateFloor(int floorNo) {
         floor = floorNo;
     }
     
+    /**
+     * @return the bounds of the car to draw.
+     */ 
     public Rectangle2D getBounds() {
         return new Rectangle2D.Double(xCoord, yCoord, carWidth, carLength);
     }
     
     /**
      * Update the state of the car.
+     * <p>
+     * @param state - The state of the car.
      */ 
-    public void updateCarState(CarModel.carState state) {
+    public void updateCarState(CarState state) {
         this.state = state;
     }
     
     /**
-     * @return the state of the car.
+     * @return the state of the carShape.
      */ 
-    public CarModel.carState getCarState() {
+    public CarState getCarState() {
         return state;
     }
 }

@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aps.floor;
 
 import aps.car.CarModel;
 import aps.car.CarModelManager;
+import aps.car.CarState;
 import aps.events.EventType;
 import aps.events.ParkingEvent;
 import aps.timer.IAPSTimer;
@@ -14,6 +10,7 @@ import aps.timer.IAPSTimerListener;
 import aps.turntable.TurntableModel;
 import aps.userStation.UserStationControl;
 import control.APSControl;
+import java.awt.Dimension;
 import java.awt.geom.Point2D;
 
 /**
@@ -23,7 +20,7 @@ import java.awt.geom.Point2D;
  * Parking Simulator. It will be responsible for creating the view and the
  * components that will be drawn by the {@link GroundLevelFloorView}.
  * <p>
- * @author szeyick
+ * @author szeyick StudentID - 1763652.
  */
 public class GroundLevelFloorControl implements IAPSTimerListener {
 
@@ -33,14 +30,14 @@ public class GroundLevelFloorControl implements IAPSTimerListener {
     private final int FLOOR_NUMBER = 0;
 
     /**
-     * The distance things are from the wall;
+     * The distance components are from the wall;
      */
-    private final int WALL_PADDING = 5;
+    private final int WALL_PADDING = 10;
 
     /**
      * The panel managed by this view.
      */
-    private GroundLevelFloorPanel panel;
+    private final GroundLevelFloorPanel panel;
 
     /**
      * The car to be drawn on the ground floor.
@@ -50,12 +47,12 @@ public class GroundLevelFloorControl implements IAPSTimerListener {
     /**
      * The turntable to draw on the ground floor.
      */
-    private TurntableModel turntable;
+    private final TurntableModel turntable;
 
     /**
      * The user station control
      */
-    private UserStationControl userStationControl;
+    private final UserStationControl userStationControl;
 
     /**
      * Constructor.
@@ -81,38 +78,50 @@ public class GroundLevelFloorControl implements IAPSTimerListener {
      */
     @Override
     public void update(long dt) {
-        // The car model will be updated then draw the rest of the shit.
         car = CarModelManager.getModelManager().getCurrentCarModel();
         ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
-        if (car != null && car.getFloor() == FLOOR_NUMBER && CarModel.carState.MOVING.equals(car.getCarState())
+        if (car != null && car.getFloor() == FLOOR_NUMBER && CarState.MOVING.equals(car.getCarState())
                 && EventType.ARRIVAL.equals(event.getEventType())) {
-            System.out.println("Drawing Car");
-            car.setDestinationPoint(turntable.getPoint());
-            car.updateDxDy(-2, -2);
-            car.updateDimension(panel.getSize());
-            car.updateCoordinates();
-            car.updateCarState(CarModel.carState.MOVING);
+            updateCarModel(turntable.getPoint(), -2, -2, panel.getSize());
+            updateCarState(CarState.MOVING);
             panel.setCarModel(car);
         }
-        if (car != null && car.getFloor() == FLOOR_NUMBER && CarModel.carState.MOVING.equals(car.getCarState())
+        if (car != null && car.getFloor() == FLOOR_NUMBER && CarState.MOVING.equals(car.getCarState())
                 && EventType.DEPARTURE.equals(event.getEventType())) {
-            
-            System.out.println("Drawing Car Leaving");
-            Point2D point = new Point2D.Float((float) turntable.getPoint().getX(), 0);
-            car.setDestinationPoint(point);
-            car.updateDxDy(0, 10);
-            car.updateDimension(panel.getSize());
-            car.updateCoordinates();
+
+            Point2D destinationPoint = new Point2D.Float((float) turntable.getPoint().getX(), 0);
+            updateCarModel(destinationPoint, 0, 10, panel.getSize());
             panel.setCarModel(car);
         }
         // If the car has arrived on the turntable we stop moving the car.
         if (car != null && car.getBounds().intersects(turntable.getTurntableBounds())) {
-            if (car.getCarState().equals(CarModel.carState.MOVING)) {
-                System.out.println("Car has arrived on the turntable");
-                car.updateCarState(CarModel.carState.IDLE);
+            if (car.getCarState().equals(CarState.MOVING)) {
+                updateCarState(CarState.IDLE);
                 userStationControl.requestUserDropOff();
             }
         }
         panel.draw();
+    }
+
+    /**
+     * Update the car models coordinates.
+     * @param destinationPoint - The point that the car will need to move to.
+     * @param dx - The x direction in pixels that the car will need to move.
+     * @param dy - The y direction in pixels that the car will need to move.
+     * @param panelDimensions - The size of the panel the car will be drawn on.
+     */ 
+    private void updateCarModel(Point2D destinationPoint, int dx, int dy, Dimension panelDimensions) {
+        car.setDestinationPoint(destinationPoint);
+        car.updateDxDy(dx, dy);
+        car.updateDimension(panelDimensions);
+        car.updateCoordinates();
+    }
+    
+    /**
+     * Update the state of the car.
+     * @param state - The new car state.
+     */ 
+    private void updateCarState(CarState state) {
+        car.updateCarState(state);
     }
 }

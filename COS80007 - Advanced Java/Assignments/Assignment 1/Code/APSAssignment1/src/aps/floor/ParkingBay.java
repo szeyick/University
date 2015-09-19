@@ -12,6 +12,7 @@ import aps.car.CarModel;
  * Each floor will have the same number of parking bays.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class ParkingBay {
     
@@ -28,17 +29,17 @@ public class ParkingBay {
     /**
      * The bay number.
      */
-    private Integer bayNumber;
+    private final Integer bayNumber;
     
     /**
      * The floor number.
      */ 
-    private Integer floorNumber;
+    private final Integer floorNumber;
     
     /**
      * The direction of the parking bay.
      */ 
-    private ParkingBayDirection direction;
+    private final ParkingBayDirection direction;
     
     /**
      * Constructor.
@@ -59,7 +60,7 @@ public class ParkingBay {
      */ 
     public void setCarModel(CarModel carModel) {
         this.car = carModel;
-        containsCar = false;
+        containsCar = true;
     }
     
     /**
@@ -80,20 +81,29 @@ public class ParkingBay {
     }
     
     /**
-     * @param true if the bay contains a car, false otherwise.
+     * @return true if the bay contains a car, false otherwise.
      */
     public boolean containsCar() {
         return containsCar;
     }
     
+    /**
+     * @return the floor that the parking bay is located on.
+     */ 
     public int getFloorNumber() {
         return floorNumber;
     }
     
+    /**
+     * @return the bay number.
+     */ 
     public int getBayNumber() {
         return bayNumber;
     }
     
+    /**
+     * @return the location of the parking bay, north or south.
+     */
     public ParkingBayDirection getDirection() {
         return direction;
     }

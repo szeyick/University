@@ -7,6 +7,7 @@ package aps.floor;
  * north located parking bay, or south located parking bay.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public enum ParkingBayDirection {
     

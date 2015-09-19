@@ -15,6 +15,7 @@ import java.util.Map;
  * to park a car and the bay that a particular car is stored in.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class ParkingBayManager {
 
@@ -31,19 +32,19 @@ public class ParkingBayManager {
     /**
      * The north bays.
      */
-    private Map<Integer, List<ParkingBay>> northBays;
+    private final Map<Integer, List<ParkingBay>> northBays;
 
     /**
      * The south bays.
      */
-    private Map<Integer, List<ParkingBay>> southBays;
+    private final Map<Integer, List<ParkingBay>> southBays;
 
     /**
      * Constructor.
      */
     private ParkingBayManager() {
-        northBays = new HashMap<Integer, List<ParkingBay>>();
-        southBays = new HashMap<Integer, List<ParkingBay>>();
+        northBays = new HashMap<>();
+        southBays = new HashMap<>();
         currentDesignatedBay = null;
         initialiseParkingBays();
     }
@@ -67,7 +68,7 @@ public class ParkingBayManager {
 
         // Create the bays.
         for (int floorNo = 1; floorNo < numberOfFloors; floorNo++) {
-            List<ParkingBay> parkingBayList = new ArrayList<ParkingBay>();
+            List<ParkingBay> parkingBayList = new ArrayList<>();
             for (int bayNo = 1; bayNo < numberOfBays; bayNo++) {
                 ParkingBay parkingBay = new ParkingBay(Integer.valueOf(bayNo), Integer.valueOf(floorNo), direction);
                 parkingBayList.add(parkingBay);
@@ -112,7 +113,12 @@ public class ParkingBayManager {
         return parkingBay;
     }
     
-    
+    /**
+     * Search all the bays in the car park for a given car.
+     * @param baysList - The list of bays on a floor.
+     * @param carModel - The car model to find.
+     * @return the bay that the car is in, null otherwise.
+     */
     private ParkingBay searchBayForCar(List<ParkingBay> baysList, CarModel carModel) {
         ParkingBay parkingBay = null;
         for (ParkingBay bay : baysList) {
@@ -126,6 +132,7 @@ public class ParkingBayManager {
 
     /**
      * Search the parking bay for a free bay.
+     * @param bay - a map of bays.
      */
     private ParkingBay searchParkingBays(Map<Integer, List<ParkingBay>> bay) {
         ParkingBay parkingBay = null;

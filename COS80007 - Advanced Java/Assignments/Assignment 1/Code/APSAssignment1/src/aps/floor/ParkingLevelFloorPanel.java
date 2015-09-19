@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aps.floor;
 
 import aps.car.CarModel;
@@ -16,7 +11,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -30,6 +24,7 @@ import javax.swing.JPanel;
  * on the screen.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class ParkingLevelFloorPanel extends JPanel {
 
@@ -66,6 +61,9 @@ public class ParkingLevelFloorPanel extends JPanel {
         }
     }
 
+    /**
+     * Draw the floor layout for the parking level.
+     */ 
     private void drawFloorLayout(Graphics2D g2) {
         AffineTransform oldTransform = g2.getTransform();
 
@@ -79,6 +77,7 @@ public class ParkingLevelFloorPanel extends JPanel {
         float minX = (float) (rect.getX());
         float minY = (float) (rect.getY());
 
+        System.out.println("Parking Floor Scale: " + theScale);
         g2.translate(0.0f, (float) (d.getHeight()));
         g2.scale(theScale, -theScale);
         g2.translate(-minX, -minY);
@@ -92,7 +91,7 @@ public class ParkingLevelFloorPanel extends JPanel {
 
     /**
      * Draw the elevator if it has arrived on the floor.
-     *
+     * <p>
      * @param g2 - The graphics 2D
      */
     private void drawElevator(Graphics2D g2) {
@@ -100,11 +99,12 @@ public class ParkingLevelFloorPanel extends JPanel {
         AffineTransform oldTransform = g2.getTransform();
 
         // Translate the elevator to the correct position before drawing.
-        g2.translate(10, 100);
+        g2.translate(0, 125);
         g2.scale(5, 5);
 
         g2.setColor(getForeground());
-        g2.fill(elevator.getBounds());
+        // g2.fill(elevator.getBounds());
+        g2.draw(elevator.getBounds());
         g2.setTransform(oldTransform);
     }
 
@@ -115,11 +115,12 @@ public class ParkingLevelFloorPanel extends JPanel {
         Elevator elevator = APSControl.getControl().getElevator();
         AffineTransform oldTransform = g2.getTransform();
         Trolley trolley = elevator.getShuttle().getTrolley();
-        g2.translate(10, 100);
-        g2.scale(10, 10);
+        g2.translate(0, 125);
+        g2.scale(5, 5);
 
         g2.setColor(Color.PINK);
-        g2.fill(trolley.getBounds());
+        // g2.fill(trolley.getBounds());
+        g2.fill(trolley.getTrolleyShape());
         g2.setTransform(oldTransform);
     }
 
@@ -128,7 +129,7 @@ public class ParkingLevelFloorPanel extends JPanel {
      */
     private void drawCar(Graphics2D g2) {
         CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
-        if (carModel != null) {
+        if (carModel != null && carModel.getFloor() == 1) {
             Rectangle2D car = carModel.getShape();
             AffineTransform oldTransform = g2.getTransform();
 
@@ -141,11 +142,11 @@ public class ParkingLevelFloorPanel extends JPanel {
 
             System.out.println("Car X: " + carModel.getCurrentXPosition() + " Y: " + carModel.getCurrentYPosition() + " Scale:" + theScale);
 
-            float minX = (float) (car.getX());
-            float minY = (float) (car.getY());
+            // float minX = (float) (car.getX());
+            // float minY = (float) (car.getY());
 
-            g2.scale(theScale, theScale);
-            g2.translate(minX, 0);
+            // g2.scale(theScale, theScale);
+            // g2.translate(minX, 0);
             g2.draw(car);
             g2.setTransform(oldTransform);
         }
@@ -158,11 +159,12 @@ public class ParkingLevelFloorPanel extends JPanel {
         Elevator elevator = APSControl.getControl().getElevator();
         AffineTransform oldTransform = g2.getTransform();
         Shuttle shuttle = elevator.getShuttle();
-        g2.translate(0, 100);
-        g2.scale(10, 10);
+        g2.translate(0, 125);
+        g2.scale(5, 5);
 
         g2.setColor(Color.ORANGE);
-        g2.fill(shuttle.getBounds());
+        // g2.fill(shuttle.getBounds());
+        g2.draw(shuttle.getShuttle());
         g2.setTransform(oldTransform);
     }
 

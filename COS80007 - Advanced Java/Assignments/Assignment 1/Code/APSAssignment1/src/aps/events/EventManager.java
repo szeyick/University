@@ -8,49 +8,42 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
-import jdk.nashorn.internal.objects.NativeArray;
 
 /**
  * The {@link EventManager}.
  * <p>
- * This class is responsible for creating events to be pushed into the
- * Automatic Parking Simulator. This manager will listen for update
- * requests from the APS timer so it will load new events each time
- * where sufficient time has lapsed.
+ * This class is responsible for creating {@link ParkingEvents} that will
+ * be pushed into the simulation. It will listen to the {@link APSTimer}
+ * to create new parking events when sufficient time has lapsed.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class EventManager implements IAPSTimerListener {
     
     /**
-     * A set of event listeners
+     * A set of parking event listeners
      */
-    private Set<IEventManagerListener> eventListeners;
+    private final Set<IEventManagerListener> eventListeners;
     
     /**
      * A priority queue of parking events, prioritised by start time.
      */
-    private PriorityQueue<ParkingEvent> parkingEventQueue;
+    private final PriorityQueue<ParkingEvent> parkingEventQueue;
     
     /**
-     * The current time. (milliseconds since start)
+     * The time in milliseconds since the start of the simulation.
      */
     private long currentTime = 0;
-    
-    /**
-     * The simulation start time. // This will need to be consolidated but for
-     * the sake of the manager, writing it here.
-     */
-    private long startTime;
-    
+        
     /**
      * Constructor.
      * @param fileName - The name of the input file for simulated traffic.
      */
-    public EventManager(String filename) {
-        parkingEventQueue = new PriorityQueue<ParkingEvent>();
-        eventListeners = new HashSet<IEventManagerListener>();
-        createParkingEvents(filename);
+    public EventManager(String fileName) {
+        parkingEventQueue = new PriorityQueue<>();
+        eventListeners = new HashSet<>();
+        createParkingEvents(fileName);
     }
     
     /**
@@ -90,11 +83,11 @@ public class EventManager implements IAPSTimerListener {
                 
                 parkingEventQueue.addAll(createParkingEvents(eventType, minutesAfterStart, numberOfVehicles, interval));
             }
-            // Close the file.
+            // Close the file after reading.
             reader.close();
         }
         catch (Exception e) {
-            System.out.println("Error - No input file found");
+            System.out.println("Error - Line Number: " + lineNumber);
             e.printStackTrace();
         }
     }
@@ -139,12 +132,16 @@ public class EventManager implements IAPSTimerListener {
     }
 
     /**
-     * Concrete implementation of the listeners update method. For the event
-     * manager, this will trigger an event to be loaded into the simulation
-     * so long as the item at the head of the priority queue is at the current
-     * time or already in the past. Event items that are still in the future
-     * are not removed from the queue, and must wait until the correct time before
-     * they are available to be executed.
+     * When the {@link APSTimer} triggers an update event, this manager will
+     * evaluate if sufficient time has passed so as to invoke another {@link ParkingEvent}.
+     * <p>
+     * If sufficient time has lapsed, a {@link ParkingEvent} will be removed from the
+     * managers priority queue and loaded into the simulation by notifying listeners
+     * of this manager that a new parking event is ready to be invoked.
+     * <p>
+     * {@link ParkingEvent} items that are still to occur in the future, are not
+     * removed from the priority queue and will remain in the queue until sufficient
+     * time has lapsed to render the event at the current time or in the past.
      */
     @Override
     public void update(long dt) {
@@ -152,14 +149,15 @@ public class EventManager implements IAPSTimerListener {
         ParkingEvent event = parkingEventQueue.peek();
         while (event != null && (event.getEventStartTime() <= currentTime)) {
             event = parkingEventQueue.poll();  /// Removes from queue
-            System.out.println("Current Time : " + currentTime + " Event Start Time: " + event.getEventStartTime());
+            // System.out.println("Current Time : " + currentTime + " Event Start Time: " + event.getEventStartTime());
             notifyAllListeners(event);
             event = parkingEventQueue.peek();
         }   
     }
     
     /**
-     * Notify all the listeners that an event has taken place.
+     * Notify all the listeners of this event manager that a parking
+     * event is to be loaded into the simulation.
      */
     private void notifyAllListeners(ParkingEvent event) {
         for (IEventManagerListener listener : eventListeners) {

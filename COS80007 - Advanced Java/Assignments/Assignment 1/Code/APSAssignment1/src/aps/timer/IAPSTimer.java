@@ -7,6 +7,7 @@ package aps.timer;
  * methods for the timer.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public interface IAPSTimer {
 

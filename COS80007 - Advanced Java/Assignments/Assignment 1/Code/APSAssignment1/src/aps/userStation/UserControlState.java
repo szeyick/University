@@ -3,10 +3,11 @@ package aps.userStation;
 /**
  * The {@link UserControlState}.
  * <p>
- * This enum class represents the states that the user controller can be
- * in.
+ * This enumeration class represents the states that the user control
+ * can be in.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public enum UserControlState {
     
@@ -16,7 +17,7 @@ public enum UserControlState {
     IDLE,
     
     /**
-     * The user control is in pickup model. This means that someone has requested
+     * The user control is in pickup mode. This means that someone has requested
      * to pick up their vehicle.
      */ 
     PICKUP,
@@ -28,8 +29,8 @@ public enum UserControlState {
     DROP_OFF,
     
     /**
-     * The user can collect their car and drive off. It is available on the ground
-     * floor ready for them to leave.
+     * The car is ready for collection. The user can collect their car and drive off. 
+     * It is available on the ground floor ready for them to leave.
      */
     COLLECT_CAR;
 }

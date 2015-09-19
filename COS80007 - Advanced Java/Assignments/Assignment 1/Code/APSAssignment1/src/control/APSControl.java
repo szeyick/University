@@ -2,6 +2,7 @@ package control;
 
 import aps.car.CarModel;
 import aps.car.CarModelManager;
+import aps.car.CarState;
 import aps.elevator.Elevator;
 import aps.events.EventManager;
 import aps.events.EventType;
@@ -9,53 +10,59 @@ import aps.events.IEventManagerListener;
 import aps.events.ParkingEvent;
 import aps.timer.APSTimer;
 import aps.timer.IAPSTimerListener;
+import aps.turntable.TurntableModel;
 import aps.userStation.UserStationControl;
 import java.util.PriorityQueue;
 
 /**
  * The {@link APSControl}.
  * <p>
- * This class is responsible for managing the sequence of events in the
- * Automatic Parking Simulator. It responds to the events received from the
- * {@link EventManager} to start the adding or removal of a car from the car
- * park.
+ * This class is responsible for managing the {@link ParkingEvents} in the
+ * simulation. It responds to events received from the {@link EventManager}
+ * to begin the event of adding or removing a car from the car park.
+ * <p>
+ * If multiple events are received, it is queued within this controller and
+ * subsequent events will only be executed when the current event has completed
+ * its execution.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class APSControl implements IEventManagerListener, IAPSTimerListener {
 
     /**
-     * The event manager.
+     * A reference to the event manager.
      */
-    private EventManager eventManager;
+    private final EventManager eventManager;
 
     /**
      * A priority queue of parking events, prioritised by start time.
      */
-    private PriorityQueue<ParkingEvent> parkingEventQueue;
+    private final PriorityQueue<ParkingEvent> parkingEventQueue;
 
     /**
-     * The current parking event.
+     * The current parking event being executed.
      */
     private ParkingEvent currentParkingEvent;
 
     /**
-     * Is there an event being processed.
+     * boolean flag to indicate if there is a parking event
+     * that is currently being processed.
      */
     private boolean processEvent;
 
     /**
      * An instance of the elevator to be shared within the simulation.
      */
-    private Elevator elevator;
+    private final Elevator elevator;
 
     /**
      * An instance of the user control.
      */
-    private UserStationControl userStationControl;
+    private final UserStationControl userStationControl;
 
     /**
-     * The instance of the control.
+     * The singleton instance of this control.
      */
     private static APSControl control;
 
@@ -63,7 +70,7 @@ public class APSControl implements IEventManagerListener, IAPSTimerListener {
      * Constructor.
      */
     private APSControl() {
-        parkingEventQueue = new PriorityQueue<ParkingEvent>();
+        parkingEventQueue = new PriorityQueue<>();
         eventManager = new EventManager("simulatorTraffic.txt");
         processEvent = false;
         userStationControl = new UserStationControl();
@@ -71,7 +78,7 @@ public class APSControl implements IEventManagerListener, IAPSTimerListener {
         APSTimer timer = APSTimer.getTimer();
         elevator = new Elevator(timer);
 
-        // Add listeners
+        // Add components as listeners to the timer.
         eventManager.addEventListener(this);
         timer.addTimerListener(this);
         timer.addTimerListener(eventManager);
@@ -95,25 +102,29 @@ public class APSControl implements IEventManagerListener, IAPSTimerListener {
 
     /**
      * {@inheritDoc}
+     * Add a parking event to the simulation.
      */
     @Override
     public void processEvent(ParkingEvent event) {
-        // Adding event.
-        System.out.println("Adding Event " + event.getEventStartTime());
+        // System.out.println("Adding Event " + event.getEventStartTime());
         parkingEventQueue.add(event);
     }
 
     /**
-     * *
-     * Update whether the system is currently processing an event.
-     *
-     * @param eventProcessing
+     * Update the state of the currently processed event.
+     * <p>
+     * @param eventProcessing - true if there is an event being
+     * processed, false otherwise. False will indicate that the
+     * current event has finished processing.
      */
     public void updateEventProcessing(boolean eventProcessing) {
         processEvent = eventProcessing;
         if (!processEvent) {
             currentParkingEvent = null;
+            // Perhaps return the elevator to the ground floor before
+            // terminating the simulation.
             elevator.stopElevator();
+            CarModelManager.getModelManager().stopCurrentCarModel();
         }
     }
 
@@ -126,32 +137,31 @@ public class APSControl implements IEventManagerListener, IAPSTimerListener {
             currentParkingEvent = parkingEventQueue.poll();
             System.out.println("Polling Event");
         }
-        // If the current event has completed, dequeue the next one.
+        // If the current event has completed, dequeue and execute the next event.
         if (currentParkingEvent != null && !processEvent) {
             processEvent = true;
-            // Send Car or Pickup Car.
             System.out.println("Processing Event: " + currentParkingEvent.getEventType().toString());
 
             if (EventType.ARRIVAL.equals(currentParkingEvent.getEventType())) {
-                // Arrival event so we create a new car and deploy it.
+                // Arrival event so we create a new car and load it into the simulation.
                 CarModelManager carModelManager = CarModelManager.getModelManager();
                 CarModel car = new CarModel();
 
                 // Add the car to the ground floor.
-                car.updateCarState(CarModel.carState.MOVING);
+                car.updateCarState(CarState.MOVING);
                 carModelManager.setCurrentCarModel(car);
-            } else {
+            } 
+            else {
                 // Departure event so we pick up a car.
                 CarModelManager carModelManager = CarModelManager.getModelManager();
                 CarModel car = carModelManager.getParkedCarModel();
 
                 if (car != null) {
-                    // Move to floor and start doing things.
+                    // User makes the request to pick up car from the user station.
                     userStationControl.requestUserPickup();
                 }
             }
         }
-        // If event is still going, we do nothing.
     }
 
     /**

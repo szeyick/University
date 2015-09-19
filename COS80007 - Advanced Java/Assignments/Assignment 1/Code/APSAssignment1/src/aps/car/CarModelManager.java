@@ -14,7 +14,8 @@ import java.util.Map;
  * for cars that are being moved around the car park, it will manage the single
  * instance of it.
  * <p>
- * @author szeyick
+ * @author szeyick 
+ * StudentID - 1763652.
  */
 public class CarModelManager {
 
@@ -27,7 +28,7 @@ public class CarModelManager {
      * A collection that will map the car models to the floor that they appear
      * on.
      */
-    private Map<Integer, List<CarModel>> carModelMap;
+    private final Map<Integer, List<CarModel>> carModelMap;
 
     /**
      * The current car being moved in the car park.
@@ -43,14 +44,13 @@ public class CarModelManager {
      * Constructor.
      */
     private CarModelManager() {
-        carModelMap = new HashMap<Integer, List<CarModel>>();
+        carModelMap = new HashMap<>();
         currentCarCount = 0;
     }
 
     /**
-     * *
-     * Get a list of cars for a particular floor.
-     *
+     * Get all the cars parked on a particular floor.
+     * <p>
      * @param floorNumber - The floor number to retrieve the cars for.
      * @return a list of cars for a given floor.
      */
@@ -60,14 +60,14 @@ public class CarModelManager {
 
     /**
      * Add a car to the floor.
-     *
+     * <p>
      * @param floorNumber - The floor to add the car to.
      * @param car - The car model to add.
      */
     public void addCarToFloor(Integer floorNumber, CarModel car) {
         List<CarModel> carList = carModelMap.get(floorNumber);
         if (carList == null) {
-            carList = new ArrayList<CarModel>();
+            carList = new ArrayList<>();
         }
         carList.add(car);
         carModelMap.put(floorNumber, carList);
@@ -75,7 +75,7 @@ public class CarModelManager {
 
     /**
      * Set the current car to be moved.
-     *
+     * <p>
      * @param car - The current car to be operated on.
      */
     public void setCurrentCarModel(CarModel car) {
@@ -84,10 +84,15 @@ public class CarModelManager {
         // The number plates are just the number of cars in there.
         currentCarModel.assignNumberPlate(String.valueOf(currentCarCount));
     }
+    
+    public void stopCurrentCarModel() {
+        currentCarModel = null;
+    }
 
     /**
-     * Remove the car model from the model manager.
-     *
+     * Remove a car from the model manager. A car will be removed if it has
+     * departed the car park.
+     * <p>
      * @param car - The car to remove.
      */
     public void removeCarModel(CarModel car) {
@@ -102,8 +107,8 @@ public class CarModelManager {
             }
         }
         if (carFloorToRemove != null) {
-             carModelMap.get(carFloorToRemove).remove(car);
-             System.out.println("Removing Car From Model Manager");
+            carModelMap.get(carFloorToRemove).remove(car);
+            System.out.println("Removing Car From Model Manager");
         }
         currentCarModel = null;
         currentCarCount--;
@@ -117,7 +122,9 @@ public class CarModelManager {
     }
 
     /**
-     * @return a parked car. (Return the first available car)
+     * @return a car that has been parked. It will return the first car found on
+     * a floor that contains a car. It will return null, if there is a car
+     * already being moved.
      */
     public CarModel getParkedCarModel() {
         CarModel carModel = null;

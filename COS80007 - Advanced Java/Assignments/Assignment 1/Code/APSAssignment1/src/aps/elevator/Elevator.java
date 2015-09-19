@@ -73,7 +73,7 @@ public class Elevator implements IAPSTimerListener {
 
     public enum ElevOperation {
 
-        OPENING_DOOR, CLOSING_DOOR, MOVING, ARRIVED_AT_FLOOR, IDLE, DEPLOY_SHUTTLE;
+        OPENING_DOOR, CLOSING_DOOR, MOVING, ARRIVED_AT_FLOOR, IDLE, DEPLOY_SHUTTLE, RESET;
     }
 
     /**
@@ -119,11 +119,13 @@ public class Elevator implements IAPSTimerListener {
             // If car is unloaded, then move back to 0
             if (currentFloor != 0) {
                 destinationFloor = 0;
-                moveToFloor(destinationFloor);
                 // Terminate the event here
                 ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
                 if (!EventType.DEPARTURE.equals(event.getEventType())) {
-                    APSControl.getControl().updateEventProcessing(false);
+                    currentElevOperation = ElevOperation.RESET;   
+                }
+                else {
+                    moveToFloor(destinationFloor);
                 }
             } else {
                 moveToFloor(destinationFloor);
@@ -190,9 +192,11 @@ public class Elevator implements IAPSTimerListener {
                 if (EventType.DEPARTURE.equals(event.getEventType()) && currentFloor == 0
                         && shuttle.getTrolley().containsCar()) {
                     System.out.println("Calling User to Pickup Car...");
+                    shuttle.getTrolley().unlockTrolley();
                     APSControl.getControl().getUserStation().carReadyForPickup();
 
                 } else {
+                        
                     if (ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
                         currentElevOperation = ElevOperation.OPENING_DOOR;
                     } else if (ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
@@ -203,7 +207,7 @@ public class Elevator implements IAPSTimerListener {
             if (ElevDirection.UP.equals(currentDirection)) {
                 currentFloor++;
                 currentElevOperation = ElevOperation.MOVING;
-                System.out.println("Elevator is moving up");
+                System.out.println("Elevator is moving up - " + currentFloor);
                 if (currentFloor == destinationFloor) {
                     currentElevOperation = ElevOperation.ARRIVED_AT_FLOOR;
                 }
@@ -212,7 +216,7 @@ public class Elevator implements IAPSTimerListener {
                 // Decrement the current floor count.
                 currentFloor--;
                 currentElevOperation = ElevOperation.MOVING;
-                System.out.println("Elevator is moving down");
+                System.out.println("Elevator is moving down - " + currentFloor);
                 if (currentFloor == destinationFloor) {
                     currentElevOperation = ElevOperation.ARRIVED_AT_FLOOR;
                 }
@@ -226,6 +230,13 @@ public class Elevator implements IAPSTimerListener {
                 // If the door is currently closed, we need to open.
                 door.setDoorState(ElevatorDoor.ElevatorDoorState.CLOSING);
                 currentElevOperation = ElevOperation.CLOSING_DOOR;
+            }
+            if (ElevOperation.RESET.equals(currentElevOperation)) {
+                currentFloor--;
+                if (currentFloor == destinationFloor) {
+                    currentElevOperation = ElevOperation.IDLE;
+                    APSControl.getControl().updateEventProcessing(false);
+                }
             }
         }
 

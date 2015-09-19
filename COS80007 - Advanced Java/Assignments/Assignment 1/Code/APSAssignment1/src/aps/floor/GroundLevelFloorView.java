@@ -22,7 +22,7 @@ public class GroundLevelFloorView {
     /***
      * The shape object representing the ground floor.
      */ 
-    private GeneralPath groundFloorOutline;
+    private final GeneralPath groundFloorOutline;
     
     /***
      * Default constructor.

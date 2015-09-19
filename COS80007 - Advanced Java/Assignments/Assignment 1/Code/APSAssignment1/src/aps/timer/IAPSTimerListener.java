@@ -3,18 +3,19 @@ package aps.timer;
 /**
  * The {@link IAPSTimerListener}.
  * <p>
- * This interface class contains the update method that will trigger
- * updates in the Automatic Parking Simulator. Classes that wish to
- * directly respond to {@link APSTimer} updates will need to implement
- * this interface and register themselves as a listener.
+ * This interface is responsible for providing an update method that will
+ * be called whenever the timer triggers. Concrete classes that wish to 
+ * respond to {@link APSTimer} updates will be required to implement this
+ * interface and register themselves with the timer as a listener.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public interface IAPSTimerListener {
     
     /**
-     * Method to invoke when update is received.
-     * @param dt - The current time in the simulation.
+     * Notify an implementing class that a timer update has been received.
+     * @param dt - The time passed since the last triggered event.
      */
     void update(long dt);
 }

@@ -14,8 +14,7 @@ import java.util.Map;
  * for cars that are being moved around the car park, it will manage the single
  * instance of it.
  * <p>
- * @author szeyick 
- * StudentID - 1763652.
+ * @author szeyick StudentID - 1763652.
  */
 public class CarModelManager {
 
@@ -74,6 +73,28 @@ public class CarModelManager {
     }
 
     /**
+     * Update the floor that the car is on.
+     *
+     * @param car - The car to update
+     */
+    public void removeCarFromBay(CarModel car) {
+        Integer carFloorToRemove = null;
+        for (Integer floorNumber : carModelMap.keySet()) {
+            List<CarModel> carList = carModelMap.get(floorNumber);
+            for (CarModel carModelTmp : carList) {
+                if (car.equals(carModelTmp)) {
+                    carFloorToRemove = floorNumber;
+                    break;
+                }
+            }
+        }
+        if (carFloorToRemove != null) {
+            carModelMap.get(carFloorToRemove).remove(car);
+            System.out.println("Removing Car From Model Manager");
+        }
+    }
+
+    /**
      * Set the current car to be moved.
      * <p>
      * @param car - The current car to be operated on.
@@ -84,7 +105,7 @@ public class CarModelManager {
         // The number plates are just the number of cars in there.
         currentCarModel.assignNumberPlate(String.valueOf(currentCarCount));
     }
-    
+
     public void stopCurrentCarModel() {
         currentCarModel = null;
     }

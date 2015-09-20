@@ -14,6 +14,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 import javax.swing.JPanel;
 
 /**
@@ -23,8 +24,7 @@ import javax.swing.JPanel;
  * Parking Simulator. It provides the component that will be drawn and displayed
  * on the screen.
  * <p>
- * @author szeyick
- * StudentID - 1763652
+ * @author szeyick StudentID - 1763652
  */
 public class ParkingLevelFloorPanel extends JPanel {
 
@@ -52,6 +52,7 @@ public class ParkingLevelFloorPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
 
         drawFloorLayout(g2);
+        drawParkedCars(g2);
         Elevator elevator = APSControl.getControl().getElevator();
         if (elevator.getCurrentFloor() == 1) {
             drawElevator(g2);
@@ -63,7 +64,7 @@ public class ParkingLevelFloorPanel extends JPanel {
 
     /**
      * Draw the floor layout for the parking level.
-     */ 
+     */
     private void drawFloorLayout(Graphics2D g2) {
         AffineTransform oldTransform = g2.getTransform();
 
@@ -141,12 +142,6 @@ public class ParkingLevelFloorPanel extends JPanel {
             float theScale = Math.min(xScale, yScale);
 
             System.out.println("Car X: " + carModel.getCurrentXPosition() + " Y: " + carModel.getCurrentYPosition() + " Scale:" + theScale);
-
-            // float minX = (float) (car.getX());
-            // float minY = (float) (car.getY());
-
-            // g2.scale(theScale, theScale);
-            // g2.translate(minX, 0);
             g2.draw(car);
             g2.setTransform(oldTransform);
         }
@@ -166,6 +161,33 @@ public class ParkingLevelFloorPanel extends JPanel {
         // g2.fill(shuttle.getBounds());
         g2.draw(shuttle.getShuttle());
         g2.setTransform(oldTransform);
+    }
+
+    /**
+     * Draw the cars parked on this floor.
+     */
+    private void drawParkedCars(Graphics2D g2) {
+        CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
+        List<CarModel> carModelList = CarModelManager.getModelManager().getCarModelsForFloor(1);
+        if (carModelList != null && !carModelList.isEmpty()) {
+            for (CarModel parkedCar : carModelList) {
+                // Do not draw the car that is currently moving.
+                Rectangle2D car = parkedCar.getShape();
+                AffineTransform oldTransform = g2.getTransform();
+
+                Dimension d = getSize();
+                Rectangle2D layout = parkingLevelFloorLayout.getBounds2D();
+
+                float xScale = (float) (layout.getWidth() / car.getWidth());
+                float yScale = (float) (layout.getHeight() / car.getHeight());
+                float theScale = Math.min(xScale, yScale);
+
+                System.out.println("Car X: " + parkedCar.getCurrentXPosition() + " Y: " + parkedCar.getCurrentYPosition() + " Scale:" + theScale);
+                g2.draw(car);
+                g2.setTransform(oldTransform);
+            }
+        }
+
     }
 
     public void draw() {

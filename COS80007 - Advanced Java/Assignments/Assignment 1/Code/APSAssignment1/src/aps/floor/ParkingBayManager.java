@@ -82,9 +82,9 @@ public class ParkingBayManager {
      */
     public ParkingBay getFreeBay() {
         if (currentDesignatedBay == null) {
-            ParkingBay freeBay = searchParkingBays(northBays);
+            ParkingBay freeBay = searchParkingBays(southBays);
             if (freeBay == null) {
-                freeBay = searchParkingBays(southBays);
+                freeBay = searchParkingBays(northBays);
             }
             currentDesignatedBay = freeBay;
         }
@@ -122,7 +122,7 @@ public class ParkingBayManager {
     private ParkingBay searchBayForCar(List<ParkingBay> baysList, CarModel carModel) {
         ParkingBay parkingBay = null;
         for (ParkingBay bay : baysList) {
-            if (bay.getCarModel().equals(carModel)) {
+            if (bay.getCarModel() != null && bay.getCarModel().equals(carModel)) {
                 parkingBay = bay;
                 break;
             }
@@ -138,8 +138,8 @@ public class ParkingBayManager {
         ParkingBay parkingBay = null;
 
         // Iterate through the north bays to find the first free bay.
-        for (Integer floorNo : northBays.keySet()) {
-            List<ParkingBay> baysList = northBays.get(floorNo);
+        for (Integer floorNo : bay.keySet()) {
+            List<ParkingBay> baysList = bay.get(floorNo);
             for (ParkingBay parkingBayTmp : baysList) {
                 if (!parkingBayTmp.containsCar()) {
                     parkingBay = parkingBayTmp;

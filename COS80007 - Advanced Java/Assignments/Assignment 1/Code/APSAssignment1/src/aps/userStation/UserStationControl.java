@@ -131,6 +131,7 @@ public class UserStationControl implements IAPSTimerListener {
                     ParkingBay parkingBay = manager.getFreeBay();
                     if (parkingBay != null) {
                         System.out.println("Parking in Bay: " + parkingBay.getBayNumber());
+                        System.out.println("Bay Direction: " + parkingBay.getDirection());
                         CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
                         if (carModel != null) {
                             // Call the elevator to the ground floor.
@@ -155,8 +156,8 @@ public class UserStationControl implements IAPSTimerListener {
                     carModel.updateFloor(0);
                     // System.out.println("Car Y Pos: " + carModel.getCurrentYPosition());
                     if (carModel.getCurrentYPosition() > 350) {
-                        CarModelManager.getModelManager().removeCarModel(carModel);
                         // System.out.println("Car has left the building...");
+                        CarModelManager.getModelManager().removeCarModel(carModel);
                         setIdleAndReset();
                         APSControl.getControl().updateEventProcessing(false);
                     }

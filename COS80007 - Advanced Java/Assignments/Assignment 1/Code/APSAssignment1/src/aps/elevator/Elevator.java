@@ -1,8 +1,12 @@
 package aps.elevator;
 
+import aps.car.CarModel;
+import aps.car.CarModelManager;
 import aps.config.Config;
 import aps.events.EventType;
 import aps.events.ParkingEvent;
+import aps.floor.ParkingBay;
+import aps.floor.ParkingBayManager;
 import aps.shuttle.Shuttle;
 import aps.timer.APSTimer;
 import aps.timer.IAPSTimerListener;
@@ -193,6 +197,13 @@ public class Elevator implements IAPSTimerListener {
                         && shuttle.getTrolley().containsCar()) {
                     System.out.println("Calling User to Pickup Car...");
                     shuttle.getTrolley().unlockTrolley();
+                    // Update the floor for the car.
+                    CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
+                    CarModelManager.getModelManager().removeCarFromBay(carModel);
+                    ParkingBay parkingBay = ParkingBayManager.getManager().getParkingBayForCar(carModel);
+                    if (parkingBay != null) {
+                        parkingBay.removeCarModel();
+                    }
                     APSControl.getControl().getUserStation().carReadyForPickup();
 
                 } else {

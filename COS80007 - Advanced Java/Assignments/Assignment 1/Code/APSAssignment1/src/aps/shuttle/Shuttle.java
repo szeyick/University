@@ -165,6 +165,13 @@ public class Shuttle implements IAPSTimerListener {
                         double centreBay = (bayNumber * bayWidth) + distanceFromEastWall - (0.5 * bayWidth);
                         centreRadiusTT = (float) centreBay;
                     }
+                    if (ParkingBayDirection.SOUTH.equals(parkingBay.getDirection())) {
+                        // It is the south bay so we need to move accordingly.
+                        double centreXBay = config.SOUTH_BAY_CENTER_X;
+                        double bayXStart = centreXBay - (config.BAY_WIDTH / 2);
+
+                        centreRadiusTT = (float) bayXStart;
+                    }
                     // Move the shuttle along X axis  ()
                     System.out.println("Shuttle X: " + shuttleX + " centreRadiusTT: " + (centreRadiusTT * 5));
                     if (shuttleX >= (centreRadiusTT * 7)) {
@@ -198,6 +205,13 @@ public class Shuttle implements IAPSTimerListener {
 
                         double centreBay = (bayNumber * bayWidth) + distanceFromEastWall - (0.5 * bayWidth);
                         centreRadiusTT = (float) centreBay;
+                    }
+                    if (ParkingBayDirection.SOUTH.equals(parkedBay.getDirection())) {
+                        // If is the south bay, so we need to do something.
+                        double centreXBay = config.SOUTH_BAY_CENTER_X;
+                        double bayXStart = centreXBay - (config.BAY_WIDTH / 2);
+
+                        centreRadiusTT = (float) bayXStart;
                     }
                     // Move the shuttle along X axis  ()
                     if (shuttleX >= (centreRadiusTT * 7)) {

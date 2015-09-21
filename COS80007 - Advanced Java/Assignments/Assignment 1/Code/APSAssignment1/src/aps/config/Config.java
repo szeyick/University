@@ -17,7 +17,7 @@ public class Config {
     /**
      * The name of the configuration file.
      */
-    private static final String CONFIG_FILE_NAME = "APS.properties";
+    private static final String CONFIG_FILE_NAME = "resources/APS.properties";
 
     /**
      * An singleton instance of the {@link Config}

@@ -16,6 +16,10 @@ import java.util.Set;
  * be pushed into the simulation. It will listen to the {@link APSTimer}
  * to create new parking events when sufficient time has lapsed.
  * <p>
+ * <strong>Warning: </strong> As of the revised update to Assignment 1, the parking
+ * events will not be read from an offline defined file and will be user
+ * interaction driven.
+ * <p>
  * @author szeyick
  * StudentID - 1763652
  */
@@ -43,7 +47,7 @@ public class EventManager implements IAPSTimerListener {
     public EventManager(String fileName) {
         parkingEventQueue = new PriorityQueue<>();
         eventListeners = new HashSet<>();
-        createParkingEvents(fileName);
+        // createParkingEvents(fileName);
     }
     
     /**

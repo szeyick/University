@@ -1,5 +1,6 @@
 package aps.gui;
 
+import aps.config.Config;
 import aps.floor.GroundLevelFloorControl;
 import aps.floor.ParkingLevelFloorControl;
 import aps.timer.APSTimer;
@@ -27,17 +28,14 @@ public class MainFrame extends JFrame implements IAPSTimerListener {
     private GroundLevelFloorControl control;
 
     /**
-     * The parking floor control that is responsible for all the parking level
-     * components of a particular floor.
-     */
-    private ParkingLevelFloorControl parkingFloorControl;
-
-    /**
      * The current floor that is being displayed by the frame.
      */
     private int currentFloor;
 
-    private JTabbedPane tabbedPane;
+    /**
+     * The tabbed pane containing the floor layouts.
+     */ 
+    private final JTabbedPane tabbedPane;
 
     /**
      * Constructor.
@@ -45,7 +43,7 @@ public class MainFrame extends JFrame implements IAPSTimerListener {
     public MainFrame() {
         super("APS - Sze Yick");
 
-        setSize(500, 500);
+        setSize(600, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         currentFloor = APSControl.getControl().getElevator().getCurrentFloor();
@@ -58,7 +56,7 @@ public class MainFrame extends JFrame implements IAPSTimerListener {
         // Create the controls and components for the car park.
         createSimulationControlPanel(timer);
         createFloorView(timer);
-        createParkingFloorView(timer);
+        createParkingFloorViews();
 
         add(tabbedPane, BorderLayout.CENTER);
         setVisible(true);
@@ -79,17 +77,21 @@ public class MainFrame extends JFrame implements IAPSTimerListener {
         control = new GroundLevelFloorControl(timer);
         timer.addTimerListener(control);
         tabbedPane.addTab("Ground", control.getPanel());
-        // add(control.getPanel(), BorderLayout.CENTER);
     }
-
+    
     /**
-     * Create the parking floor control and add the view to the frame.
+     * Create n number of floors that cars can be parked on and
+     * add them to the tabbed pane.
      */
-    private void createParkingFloorView(IAPSTimer timer) {
-        parkingFloorControl = new ParkingLevelFloorControl();
-        timer.addTimerListener(parkingFloorControl);
-        // add(parkingFloorControl.getPanel(), BorderLayout.CENTER);
-        tabbedPane.addTab("Floor 1", parkingFloorControl.getPanel());
+    private void createParkingFloorViews() {
+        IAPSTimer timer = APSTimer.getTimer();
+        int numberOfFloors = Config.getConfig().NF;
+        for (int floor = 1; floor <= numberOfFloors; floor++) {
+            ParkingLevelFloorControl parkingFloorControl = new ParkingLevelFloorControl(floor);
+            timer.addTimerListener(parkingFloorControl);
+            String floorID = "Floor " + floor;
+            tabbedPane.addTab(floorID, parkingFloorControl.getPanel());
+        }
     }
 
     /**
@@ -101,9 +103,7 @@ public class MainFrame extends JFrame implements IAPSTimerListener {
     public void update(long dt) {
         if (currentFloor != APSControl.getControl().getElevator().getCurrentFloor()) {
             currentFloor = APSControl.getControl().getElevator().getCurrentFloor();
-
-
-            // System.out.println("SWAPPING FLOOR :" + currentFloor);
+            System.out.println("Switching to View - Floor" + currentFloor);
             if (currentFloor == 0) {
                 tabbedPane.setSelectedIndex(currentFloor);
             } else {

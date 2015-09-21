@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aps.shuttle;
 
 import aps.car.CarModel;
 import aps.car.CarModelManager;
 import aps.config.Config;
+import aps.elevator.ElevOperation;
 import aps.elevator.Elevator;
 import aps.events.EventType;
 import aps.events.ParkingEvent;
@@ -31,7 +27,7 @@ import utilities.APSUtilities;
  * X with either the centre of the elevator, or the parking bay in which it is
  * to deliver the car.
  * <p>
- * @author szeyick
+ * @author szeyick StudentID - 1763652
  */
 public class Shuttle implements IAPSTimerListener {
 
@@ -48,12 +44,12 @@ public class Shuttle implements IAPSTimerListener {
     /**
      * The centre Y of the shuttle.
      */
-    private float shuttleY;
+    private final float shuttleY;
 
     /**
      * The elevator.
      */
-    private Elevator elevator;
+    private final Elevator elevator;
 
     /**
      * The centre radius of the turntable.
@@ -68,45 +64,42 @@ public class Shuttle implements IAPSTimerListener {
     /**
      * The trolley.
      */
-    private Trolley trolley;
+    private final Trolley trolley;
 
     /**
      * The width of the shuttle.
      */
-    private float shuttleWidth = 0.5f;
+    private final float shuttleWidth;
 
     /**
      * The length of the shuttle.
      */
-    private float shuttleLength = 5.75f;
-
-    /**
-     * The states that the shuttle can be in.
-     */
-    public enum ShuttleState {
-
-        DEPLOYING, LOCKED, UNLOCKED, RETURNED, IDLE;
-    }
+    private final float shuttleLength;
 
     /**
      * Constructor.
      *
      * @param elevator - A reference to the elevator.
      */
-    public Shuttle(Elevator elevator, APSTimer timer) {
+    public Shuttle(Elevator elevator) {
         this.elevator = elevator;
+        shuttleWidth = Config.getConfig().SHUTTLE_WIDTH;
+        shuttleLength = Config.getConfig().SHUTTLE_LENGTH;
         centreRadiusTT = 5; // Move to the this one.
         shuttleX = 1.6f + 2.5f; // Default to centre elevator.
-        shuttleY = (5.75f * 3) / 2; // Default to centre elevator.
+        shuttleY = (Config.getConfig().BAY_LENGTH * 3) / 2;
         shuttleState = ShuttleState.LOCKED;
         trolley = new Trolley(this);
-        timer.addTimerListener(trolley);
+        APSTimer.getTimer().addTimerListener(trolley);
     }
 
+    /**
+     * Update the state of the shuttle.
+     *
+     * @param state - The new state of the shuttle.
+     */
     public void updateShuttleState(ShuttleState state) {
         shuttleState = state;
-
-        // Update shuttle
     }
 
     /**
@@ -121,109 +114,40 @@ public class Shuttle implements IAPSTimerListener {
      */
     @Override
     public void update(long dt) {
-        // Need a reference to whether we are doing a delivery or retrieval.
-        // For deliveries, we need to know the bay to assign. Means we need 
-        // a bay manager.
         if (ShuttleState.LOCKED.equals(shuttleState)
-                && Elevator.ElevOperation.DEPLOY_SHUTTLE.equals(elevator.getCurrentElevatorOperation())
-                && Trolley.TrolleyState.DOCKED_SHUTTLE.equals(trolley.getState())) {
+                && ElevOperation.DEPLOY_SHUTTLE.equals(elevator.getCurrentElevatorOperation())
+                && TrolleyState.DOCKED_SHUTTLE.equals(trolley.getState())) {
             shuttleState = ShuttleState.UNLOCKED;
-            System.out.println("Unlocking Shuttle");
         }
         if (ShuttleState.UNLOCKED.equals(shuttleState)) {
             if (elevator.getCurrentFloor() == 0
-                    && Elevator.ElevOperation.DEPLOY_SHUTTLE.equals(elevator.getCurrentElevatorOperation())) {
+                    && ElevOperation.DEPLOY_SHUTTLE.equals(elevator.getCurrentElevatorOperation())) {
 
-                //if (shuttleX >= centreRadiusTT) {
                 shuttleState = ShuttleState.LOCKED;
                 // Deploy the trolley but also stop update
-                System.out.println("Locking Shuttle");
                 trolley.deployTrolley();
-                //}
-                // Move the shuttle along X axis
-                //if (shuttleX < centreRadiusTT) {
-                //    shuttleX++;
-                //    System.out.println("Moving Shuttle");
-                //}
             }
             if (elevator.getCurrentFloor() != 0
-                    && Elevator.ElevOperation.DEPLOY_SHUTTLE.equals(elevator.getCurrentElevatorOperation())) {
-
-                // Find the parking bay to move the car to.                
-                ParkingBay parkingBay = ParkingBayManager.getManager().getFreeBay();
-                Config config = Config.getConfig();
+                    && ElevOperation.DEPLOY_SHUTTLE.equals(elevator.getCurrentElevatorOperation())) {
 
                 // If we are unlocked, we need to go to the designated bay. If trolley contains car.
                 if (trolley.containsCar()) {
                     // Move to designated bay (if north bay we need the distance from the east wall.
-                    if (ParkingBayDirection.NORTH.equals(parkingBay.getDirection())) {
-                        // It is a north bay, so we do something.
-                        double distanceFromEastWall = APSUtilities.getNorthBayDistanceFromEastWall();
-                        int bayNumber = parkingBay.getBayNumber();
-                        double bayWidth = config.BAY_WIDTH;
-
-                        double centreBay = (bayNumber * bayWidth) + distanceFromEastWall - (0.5 * bayWidth);
-                        centreRadiusTT = (float) centreBay;
-                    }
-                    if (ParkingBayDirection.SOUTH.equals(parkingBay.getDirection())) {
-                        // It is the south bay so we need to move accordingly.
-                        double centreXBay = config.SOUTH_BAY_CENTER_X;
-                        double bayXStart = centreXBay - (config.BAY_WIDTH / 2);
-
-                        centreRadiusTT = (float) bayXStart;
-                    }
+                    updateCentreRadius();
                     // Move the shuttle along X axis  ()
-                    System.out.println("Shuttle X: " + shuttleX + " centreRadiusTT: " + (centreRadiusTT * 5));
-                    if (shuttleX >= (centreRadiusTT * 7)) {
-                        shuttleState = ShuttleState.LOCKED;
-                        // Deploy the trolley but also stop update
-                        System.out.println("Locking Shuttle With Car");
-                        trolley.deployTrolley();
-                    }
-                    if (shuttleX < (centreRadiusTT * 7)) {
-                        shuttleX++;
-                        System.out.println("Moving Shuttle With Car");
-                    }
+                    moveShuttlePositiveXAxis();
                     if (trolley.containsCar()) {
                         CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
                         carModel.setDestinationPoint(new Point2D.Float(shuttleX, shuttleY));
-                        carModel.updateDxDy(5, 0);
+                        carModel.updateDxDy(2, 0);
                         carModel.updateFloor(elevator.getCurrentFloor());
                         carModel.updateCoordinates();
                     }
                 }
                 if (!trolley.containsCar()) {
                     // If we do not have the car, we're here to pick one up.
-                    CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
-                    ParkingBay parkedBay = ParkingBayManager.getManager().getParkingBayForCar(carModel);
-
-                    if (ParkingBayDirection.NORTH.equals(parkedBay.getDirection())) {
-                        // It is a north bay, so we do something.
-                        double distanceFromEastWall = APSUtilities.getNorthBayDistanceFromEastWall();
-                        int bayNumber = parkedBay.getBayNumber();
-                        double bayWidth = config.BAY_WIDTH;
-
-                        double centreBay = (bayNumber * bayWidth) + distanceFromEastWall - (0.5 * bayWidth);
-                        centreRadiusTT = (float) centreBay;
-                    }
-                    if (ParkingBayDirection.SOUTH.equals(parkedBay.getDirection())) {
-                        // If is the south bay, so we need to do something.
-                        double centreXBay = config.SOUTH_BAY_CENTER_X;
-                        double bayXStart = centreXBay - (config.BAY_WIDTH / 2);
-
-                        centreRadiusTT = (float) bayXStart;
-                    }
-                    // Move the shuttle along X axis  ()
-                    if (shuttleX >= (centreRadiusTT * 7)) {
-                        shuttleState = ShuttleState.LOCKED;
-                        // Deploy the trolley but also stop update
-                        System.out.println("Locking Shuttle With Car");
-                        trolley.deployTrolley();
-                    }
-                    if (shuttleX < (centreRadiusTT * 7)) {
-                        shuttleX++;
-                        System.out.println("Moving Shuttle With Car");
-                    }
+                    updateCentreRadius();
+                    moveShuttlePositiveXAxis();
                 }
             }
         }
@@ -232,14 +156,13 @@ public class Shuttle implements IAPSTimerListener {
             // If shuttle moves x, the trolley needs to move too.
             if (shuttleX <= centreRadiusTT || shuttleX <= (1.6f + 2.5f)) {
                 shuttleX = 1.6f + 2.5f;
+                   
                 // Return to elevator operations.
                 shuttleState = ShuttleState.IDLE;
-                System.out.println("Shuttle Idle");
                 elevator.shuttleCallback();
             }
-            if (shuttleX > centreRadiusTT) {
+            if ((shuttleX > centreRadiusTT) && !ShuttleState.IDLE.equals(shuttleState)) {
                 shuttleX--;
-                System.out.println("Moving Shuttle Back to Base");
             }
             ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
 
@@ -247,11 +170,68 @@ public class Shuttle implements IAPSTimerListener {
             if (event != null && EventType.DEPARTURE.equals(event.getEventType()) && trolley.containsCar()) {
                 CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
                 carModel.setDestinationPoint(new Point2D.Float(shuttleX, shuttleY));
-                carModel.updateDxDy(-5, 0);
+                carModel.updateDxDy(-2, 0);
                 carModel.updateFloor(elevator.getCurrentFloor());
                 carModel.updateCoordinates();
             }
         }
+    }
+
+    /**
+     * Move the shuttle in the X direction. It will move it to the right.
+     */ 
+    private void moveShuttlePositiveXAxis() {
+        if (shuttleX >= (centreRadiusTT * 3)) {
+            shuttleState = ShuttleState.LOCKED;
+            // Deploy the trolley but also stop update
+            trolley.deployTrolley();
+        }
+        if (shuttleX < (centreRadiusTT * 3)) {
+            shuttleX++;
+        }
+    }
+
+    /**
+     * Update the centre radius of the elevator that the shuttle is required to
+     * move from and return to.
+     */
+    private void updateCentreRadius() {
+        ParkingBay parkingBay = ParkingBayManager.getManager().getFreeBay();
+        if (ParkingBayDirection.NORTH.equals(parkingBay.getDirection())) {
+            centreRadiusTT = calculateCentreRadiusNorth(parkingBay);
+        }
+        if (ParkingBayDirection.SOUTH.equals(parkingBay.getDirection())) {
+            centreRadiusTT = calculateCentreRadiusSouth(parkingBay);
+        }
+    }
+
+    /**
+     * Calculate the distance to travel along the X axis if we are parking in a
+     * north bay.
+     *
+     * @param parkedBay - The allocated bay to pick up or retrieve a car from.
+     * @return the calculated centre of the designated north bay.
+     */
+    private float calculateCentreRadiusNorth(ParkingBay parkedBay) {
+        // It is a north bay, so we do something.
+        double distanceFromEastWall = APSUtilities.getNorthBayDistanceFromEastWall();
+        int bayNumber = parkedBay.getBayNumber();
+        double bayWidth = Config.getConfig().BAY_WIDTH;
+
+        double centreBay = (bayNumber * bayWidth) + distanceFromEastWall - (0.5 * bayWidth);
+        return (float) centreBay;
+    }
+
+    /**
+     * Calculate the distance to travel along the X axis if we are parking in a
+     * south bay.
+     */
+    private float calculateCentreRadiusSouth(ParkingBay parkedBay) {
+        double centreXBay = Config.getConfig().SOUTH_BAY_CENTER_X;
+        double bayWidth = Config.getConfig().BAY_WIDTH;
+        double bayXStart = (parkedBay.getBayNumber() * bayWidth) + centreXBay - (Config.getConfig().BAY_WIDTH / 2);
+
+        return (float) bayXStart;
     }
 
     /**
@@ -270,6 +250,9 @@ public class Shuttle implements IAPSTimerListener {
         return shuttleShape;
     }
 
+    /**
+     * Draw the shuttle as a triangle.
+     */
     private void drawShuttle() {
         shuttleShape.moveTo(shuttleX, shuttleY);
         shuttleShape.lineTo(shuttleX + shuttleWidth + 1, shuttleY + (shuttleLength / 2));

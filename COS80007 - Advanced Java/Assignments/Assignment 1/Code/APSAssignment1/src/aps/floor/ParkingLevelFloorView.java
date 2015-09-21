@@ -51,11 +51,8 @@ public class ParkingLevelFloorView {
         int numberOfSouthBays = config.NUMBER_OF_BAYS_SOUTH;
         int largestNumOfAisles = numberOfNorthBays > numberOfSouthBays ? numberOfNorthBays : numberOfSouthBays;
     
-        // The total length should be dependant on whether there are south bays
-        // but this should suffice.
         double totalLength = config.BAY_LENGTH * 3;
-        // Has to take in either the lift centre X or south bay centre X to get distance away from wall the bays
-        // start from.
+
         double southBayCentreX = config.SOUTH_BAY_CENTER_X;
         double liftCentreX = config.LIFT_CENTRE_X;
         double additionalWidth = southBayCentreX > liftCentreX ? southBayCentreX : liftCentreX;

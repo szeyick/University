@@ -22,11 +22,6 @@ import control.APSControl;
 public class UserStationControl implements IAPSTimerListener {
 
     /**
-     * The data model containing the user station.
-     */
-    private final UserStationModel model;
-
-    /**
      * The state of the user control.
      */
     private UserControlState state;
@@ -45,7 +40,6 @@ public class UserStationControl implements IAPSTimerListener {
      * Constructor.
      */
     public UserStationControl() {
-        model = new UserStationModel();
         state = UserControlState.IDLE;
         currentTime = 0;
     }
@@ -110,7 +104,6 @@ public class UserStationControl implements IAPSTimerListener {
         Elevator elevator = APSControl.getControl().getElevator();
         elevator.setDestinationFloor(destinationFloor);
         elevator.moveToFloor(moveToFloor);
-        System.out.println("Moving Elevator - " + destinationFloor + " " + moveToFloor);
     }
 
     /**
@@ -121,7 +114,6 @@ public class UserStationControl implements IAPSTimerListener {
     public void update(long dt) {
         if (!UserControlState.IDLE.equals(state)) {
             currentTime += dt;
-            // System.out.println("User Station Delay - " + currentTime);
             // Ensure that the adequate delay has been done.
             if (currentTime == delay) {
                 // If requesting pickup, then call the elevator.
@@ -132,31 +124,27 @@ public class UserStationControl implements IAPSTimerListener {
                     if (parkingBay != null) {
                         System.out.println("Parking in Bay: " + parkingBay.getBayNumber());
                         System.out.println("Bay Direction: " + parkingBay.getDirection());
+                        System.out.println("Bay Floor: " + parkingBay.getFloorNumber());
                         CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
                         if (carModel != null) {
                             // Call the elevator to the ground floor.
-                            // System.out.println("Calling Elevator to Ground...");
                             setIdleAndReset();
                             callElevator(parkingBay.getFloorNumber(), 0);
                         }
                     }
                 } else if (UserControlState.PICKUP.equals(state)) {
                     CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
-                    // System.out.println("Requesting Pickup.");
                     setIdleAndReset();
                     callElevator(carModel.getFloor(), carModel.getFloor());
                 }
             }
             if (currentTime >= delay) {
                 if (UserControlState.COLLECT_CAR.equals(state)) {
-                    // System.out.println("Picking Up Car...Hello");
                     CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
                     // If the car is outside the bounds of the panel then go away
                     carModel.updateCarState(CarState.MOVING);
                     carModel.updateFloor(0);
-                    // System.out.println("Car Y Pos: " + carModel.getCurrentYPosition());
                     if (carModel.getCurrentYPosition() > 350) {
-                        // System.out.println("Car has left the building...");
                         CarModelManager.getModelManager().removeCarModel(carModel);
                         setIdleAndReset();
                         APSControl.getControl().updateEventProcessing(false);
@@ -164,7 +152,5 @@ public class UserStationControl implements IAPSTimerListener {
                 }
             }
         }
-        // Check if car has arrived on TT, if it has then do move open elevator door.
-
     }
 }

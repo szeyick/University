@@ -32,12 +32,19 @@ public class ParkingLevelFloorPanel extends JPanel {
      * The shape to be drawn, representing the parking level floor.
      */
     private final Shape parkingLevelFloorLayout;
+    
+    /**
+     * An integer representing the current floor.
+     */
+    private final int FLOOR_NUMBER;
 
     /**
-     * Default constructor.
+     * Constructor.
+     * @param floorNum - The floor that this panel represents.
      */
-    public ParkingLevelFloorPanel() {
+    public ParkingLevelFloorPanel(int floorNum) {
         setBackground(Color.WHITE);
+        FLOOR_NUMBER = floorNum;
         parkingLevelFloorLayout = new ParkingLevelFloorView().getFloorLayout();
         setVisible(true);
     }
@@ -54,7 +61,7 @@ public class ParkingLevelFloorPanel extends JPanel {
         drawFloorLayout(g2);
         drawParkedCars(g2);
         Elevator elevator = APSControl.getControl().getElevator();
-        if (elevator.getCurrentFloor() == 1) {
+        if (elevator.getCurrentFloor() == FLOOR_NUMBER) {
             drawElevator(g2);
             drawCar(g2);
             drawShuttle(g2);
@@ -78,13 +85,12 @@ public class ParkingLevelFloorPanel extends JPanel {
         float minX = (float) (rect.getX());
         float minY = (float) (rect.getY());
 
-        System.out.println("Parking Floor Scale: " + theScale);
         g2.translate(0.0f, (float) (d.getHeight()));
         g2.scale(theScale, -theScale);
         g2.translate(-minX, -minY);
 
         g2.setStroke(new BasicStroke(1.0f / theScale));
-        g2.setColor(getForeground());  // probably black
+        g2.setColor(getForeground());
 
         g2.draw(parkingLevelFloorLayout);
         g2.setTransform(oldTransform);
@@ -104,13 +110,12 @@ public class ParkingLevelFloorPanel extends JPanel {
         g2.scale(5, 5);
 
         g2.setColor(getForeground());
-        // g2.fill(elevator.getBounds());
         g2.draw(elevator.getBounds());
         g2.setTransform(oldTransform);
     }
 
     /**
-     * Draw the trolley if we are on the correct floor.
+     * Draw the trolley on to the panel. 
      */
     private void drawTrolley(Graphics2D g2) {
         Elevator elevator = APSControl.getControl().getElevator();
@@ -120,8 +125,7 @@ public class ParkingLevelFloorPanel extends JPanel {
         g2.scale(5, 5);
 
         g2.setColor(Color.PINK);
-        // g2.fill(trolley.getBounds());
-        g2.fill(trolley.getTrolleyShape());
+        g2.fill(trolley.getBounds());
         g2.setTransform(oldTransform);
     }
 
@@ -130,18 +134,9 @@ public class ParkingLevelFloorPanel extends JPanel {
      */
     private void drawCar(Graphics2D g2) {
         CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
-        if (carModel != null && carModel.getFloor() == 1) {
+        if (carModel != null && carModel.getFloor() == FLOOR_NUMBER) {
             Rectangle2D car = carModel.getShape();
             AffineTransform oldTransform = g2.getTransform();
-
-            Dimension d = getSize();
-            Rectangle2D layout = parkingLevelFloorLayout.getBounds2D();
-
-            float xScale = (float) (layout.getWidth() / car.getWidth());
-            float yScale = (float) (layout.getHeight() / car.getHeight());
-            float theScale = Math.min(xScale, yScale);
-
-            System.out.println("Car X: " + carModel.getCurrentXPosition() + " Y: " + carModel.getCurrentYPosition() + " Scale:" + theScale);
             g2.draw(car);
             g2.setTransform(oldTransform);
         }
@@ -158,8 +153,7 @@ public class ParkingLevelFloorPanel extends JPanel {
         g2.scale(5, 5);
 
         g2.setColor(Color.ORANGE);
-        // g2.fill(shuttle.getBounds());
-        g2.draw(shuttle.getShuttle());
+        g2.draw(shuttle.getBounds());
         g2.setTransform(oldTransform);
     }
 
@@ -167,31 +161,24 @@ public class ParkingLevelFloorPanel extends JPanel {
      * Draw the cars parked on this floor.
      */
     private void drawParkedCars(Graphics2D g2) {
-        CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
-        List<CarModel> carModelList = CarModelManager.getModelManager().getCarModelsForFloor(1);
+        List<CarModel> carModelList = CarModelManager.getModelManager().getCarModelsForFloor(FLOOR_NUMBER);
         if (carModelList != null && !carModelList.isEmpty()) {
             for (CarModel parkedCar : carModelList) {
                 // Do not draw the car that is currently moving.
                 Rectangle2D car = parkedCar.getShape();
                 AffineTransform oldTransform = g2.getTransform();
 
-                Dimension d = getSize();
-                Rectangle2D layout = parkingLevelFloorLayout.getBounds2D();
-
-                float xScale = (float) (layout.getWidth() / car.getWidth());
-                float yScale = (float) (layout.getHeight() / car.getHeight());
-                float theScale = Math.min(xScale, yScale);
-
-                System.out.println("Car X: " + parkedCar.getCurrentXPosition() + " Y: " + parkedCar.getCurrentYPosition() + " Scale:" + theScale);
                 g2.draw(car);
                 g2.setTransform(oldTransform);
             }
         }
-
     }
 
+    /**
+     * Invoking of this method will trigger the
+     * panel and all its contents to be redrawn.
+     */ 
     public void draw() {
         repaint();
     }
-
 }

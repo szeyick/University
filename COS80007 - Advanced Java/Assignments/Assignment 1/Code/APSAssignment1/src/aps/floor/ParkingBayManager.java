@@ -38,7 +38,7 @@ public class ParkingBayManager {
      * The south bays.
      */
     private final Map<Integer, List<ParkingBay>> southBays;
-
+    
     /**
      * Constructor.
      */
@@ -69,7 +69,7 @@ public class ParkingBayManager {
         // Create the bays.
         for (int floorNo = 1; floorNo < numberOfFloors; floorNo++) {
             List<ParkingBay> parkingBayList = new ArrayList<>();
-            for (int bayNo = 1; bayNo < numberOfBays; bayNo++) {
+            for (int bayNo = 1; bayNo <= numberOfBays; bayNo++) {
                 ParkingBay parkingBay = new ParkingBay(Integer.valueOf(bayNo), Integer.valueOf(floorNo), direction);
                 parkingBayList.add(parkingBay);
             }

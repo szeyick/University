@@ -3,6 +3,8 @@ package aps.floor;
 import aps.car.CarModel;
 import aps.elevator.Elevator;
 import aps.elevator.ElevatorDoor;
+import aps.events.EventType;
+import aps.events.ParkingEvent;
 import aps.shuttle.Shuttle;
 import aps.shuttle.Trolley;
 import aps.turntable.TurntableModel;
@@ -28,16 +30,11 @@ import javax.swing.JPanel;
  */
 public class GroundLevelFloorPanel extends JPanel {
 
-    // int r = 6;
     /**
      * The turntable model.
      */
     private final TurntableModel turntableModel;
 
-    /**
-     * The distance things are from the wall;
-     */
-    // private final int WALL_PADDING = 5;
     /**
      * The shape to be drawn, representing the ground floor.
      */
@@ -48,10 +45,6 @@ public class GroundLevelFloorPanel extends JPanel {
      */
     private CarModel carModel;
 
-    /**
-     * The elevator door.
-     */
-    // private ElevatorDoor door;
     /**
      * Constructor.
      * <p>
@@ -81,6 +74,8 @@ public class GroundLevelFloorPanel extends JPanel {
         drawElevator(g2);
         drawShuttle(g2);
         drawTrolley(g2);
+        drawUserStation(g2);
+
     }
 
     /**
@@ -98,7 +93,6 @@ public class GroundLevelFloorPanel extends JPanel {
         float yScale = (float) (d.getHeight() / rect.getHeight());
         float theScale = Math.min(xScale, yScale);
 
-        System.out.println("Layout Scale: " + theScale);
         float minX = (float) (rect.getX());
         float minY = (float) (rect.getY());
 
@@ -121,22 +115,9 @@ public class GroundLevelFloorPanel extends JPanel {
     private void drawCar(Graphics2D g2) {
         if (carModel != null && carModel.getFloor() == 0) {
             Rectangle2D car = carModel.getShape();
-            AffineTransform oldTransform = g2.getTransform();
-
-            Dimension d = getSize();
-            Rectangle2D layout = groundLevelFloorLayout.getBounds2D();
-
-            float xScale = (float) (layout.getWidth() / car.getWidth());
-            float yScale = (float) (layout.getHeight() / car.getHeight());
-            float theScale = Math.min(xScale, yScale);
-
-            System.out.println("Car X: " + carModel.getCurrentXPosition() + " Y: " + carModel.getCurrentYPosition() + " Scale:" + theScale);
-
-            // float minX = (float) (car.getX());
-            // float minY = (float) (car.getY());
+            AffineTransform oldTransform = g2.getTransform(); 
             Rectangle2D turntableBounds = turntableModel.getTurntableBounds();
 
-            // g2.scale(theScale, theScale);
             int scaleFactor = turntableModel.getScaleFactor() - 1;
             g2.translate(turntableBounds.getX() * scaleFactor, turntableBounds.getY() * scaleFactor);
             g2.draw(car);
@@ -164,13 +145,9 @@ public class GroundLevelFloorPanel extends JPanel {
             float minX = (float) (turntableBounds.getX());
             float minY = (float) (turntableBounds.getY());
 
-            System.out.println("Turntable: X, Y: " + minX + " " + minY + " Scale " + theScale);
-            // System.out.println("Turntable: W, H: " + turntableBounds.getWidth() + " " + turntableBounds.getHeight());
-            // System.out.println("Layout: W, H: " + layout.getWidth() + " " + layout.getHeight());
             g2.drawOval(67, 89, (int) turntableBounds.getWidth(), (int) turntableBounds.getHeight());
 
             turntableModel.addScaleFactor(5);
-            // g2.translate(minX, minY);
             g2.scale(5, 5);
 
             g2.setStroke(new BasicStroke(1.0f / theScale));
@@ -200,10 +177,6 @@ public class GroundLevelFloorPanel extends JPanel {
         g2.fillRect(40, 140, (10 * doorLength), 10);
 
         g2.setTransform(oldTransform);
-        // door.toggleDoorState();
-        // The elevator door should only open - 
-        //  - if the car has arrived on the turntable.
-        //  - the door opens, and the shuttle comes to get the car.
     }
 
     /**
@@ -216,17 +189,11 @@ public class GroundLevelFloorPanel extends JPanel {
         if (elevator.getCurrentFloor() == 0) {
             AffineTransform oldTransform = g2.getTransform();
 
-            // Translate the elevator to the correct position before drawing.
-            System.out.println("Elevator X, Y: " + elevator.getBounds().getX() + " " + elevator.getBounds().getY());
-            g2.drawRect(41, 186, 50, 60);
-            g2.drawRect(66, 216, 10, 10);
-            
             g2.translate(25, 100);
             g2.scale(10, 10);
 
             g2.setStroke(new BasicStroke(1.0f / 10));
             g2.setColor(getForeground());
-            // g2.fill(elevator.getBounds());
             g2.draw(elevator.getBounds());
             g2.setTransform(oldTransform);
         }
@@ -246,8 +213,7 @@ public class GroundLevelFloorPanel extends JPanel {
             g2.scale(10, 10);
 
             g2.setColor(Color.ORANGE);
-            // g2.fill(shuttle.getShuttle());
-            g2.draw(shuttle.getShuttle());
+            g2.draw(shuttle.getBounds());
             g2.setTransform(oldTransform);
         }
     }
@@ -266,9 +232,34 @@ public class GroundLevelFloorPanel extends JPanel {
             g2.scale(10, 10);
 
             g2.setColor(Color.PINK);
-            g2.fill(trolley.getTrolleyShape());
+            g2.fill(trolley.getBounds());
             g2.setTransform(oldTransform);
         }
+    }
+
+    /**
+     * Draw the user station onto the display and display in text the current
+     * event operation.
+     * @param g2 - The graphics drawer.
+     */ 
+    private void drawUserStation(Graphics2D g2) {
+        AffineTransform oldTransform = g2.getTransform();
+        g2.translate(25, 100);
+        g2.setColor(Color.BLACK);
+
+        Rectangle2D rect = new Rectangle2D.Float(70, 90, 15, 15);
+        g2.draw(rect);
+        String drawString;
+        ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
+        if (event != null) {
+            if (EventType.ARRIVAL.equals(event.getEventType())) {
+                drawString = "P";
+            } else {
+                drawString = "C";
+            }
+            g2.drawString(drawString, 75, 100);
+        }
+        g2.setTransform(oldTransform);
     }
 
     /**

@@ -37,4 +37,14 @@ public interface IAPSTimer {
      * @param listener - The object to be removed from listening to timer updates.
      */ 
     void removeTimerListener(IAPSTimerListener listener);
+    
+    /**
+     * Increase the speed of the simulation by 100 milliseconds.
+     */ 
+    void speedUpTimer();
+    
+    /**
+     * Decrease the speed of the simulation by 100 milliseconds.
+     */ 
+    void slowDownTimer();
 }

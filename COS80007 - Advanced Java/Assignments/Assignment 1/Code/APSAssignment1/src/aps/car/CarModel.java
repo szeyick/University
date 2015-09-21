@@ -105,7 +105,6 @@ public class CarModel {
      */
     public void updateCoordinates() {
         // Move in the x direction.
-        System.out.println("Destination X,Y : " + destination.getX() + " " + destination.getY());
         if (destination.getX() <= xCoord) {
             xCoord += dx;
             if (xCoord < 0) {

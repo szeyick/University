@@ -1,5 +1,7 @@
 package aps.timer;
 
+import javax.swing.JLabel;
+
 /**
  * The {@link APSClock}.
  * <p>
@@ -18,10 +20,21 @@ public class APSClock implements IAPSTimerListener {
     public static final int HOUR_ZERO = 8;
     
     /**
+     * The label to display the time lapsed in the simulation.
+     */
+    private final JLabel timeLapsedLabel;
+    
+    /**
      * The current simulation time.
      */
     private long t = 0;
     
+    /**
+     * Constructor.
+     */ 
+    public APSClock() {
+        timeLapsedLabel = new JLabel("00:00:00.000", JLabel.CENTER);
+    }
     /**
      * Returns an 12-char string representing the simulated time of day.
      * @param t the simulated time (from 8am, in milliseconds)
@@ -61,7 +74,14 @@ public class APSClock implements IAPSTimerListener {
     public void update(long dt) {
         t += dt;
         if (t%1000 == 0) {
-            // System.out.println(this);
+            timeLapsedLabel.setText(toString());
         }
+    }
+    
+    /**
+     * @return the panel representing the clock.
+     */
+    public JLabel getPanel() {
+        return timeLapsedLabel;
     }
 }

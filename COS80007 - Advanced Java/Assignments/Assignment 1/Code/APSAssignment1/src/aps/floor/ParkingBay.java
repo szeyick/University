@@ -59,8 +59,14 @@ public class ParkingBay {
      * @param carModel - The car in this bay.
      */ 
     public void setCarModel(CarModel carModel) {
+        if (carModel == null) {
+            containsCar = false;
+        }
+        else {
+            containsCar = true;            
+        }
         this.car = carModel;
-        containsCar = true;
+
     }
     
     /**

@@ -33,12 +33,18 @@ public class APSTimer implements IAPSTimer {
      * A set containing a collection of timer listeners.
      */
     private final Set<IAPSTimerListener> timerListeners;
+    
+    /**
+     * The time in milliseconds that the timer will be triggered
+     */
+    private int timerDelay;
 
     /**
      * Constructor.
      */
     private APSTimer() {
-        timer = new Timer(Config.getConfig().TIMER_PERIOD, new TimerListener());
+        timerDelay = Config.getConfig().TIMER_PERIOD;
+        timer = new Timer(timerDelay, new TimerListener());
         timerListeners = new HashSet<>();
     }
 
@@ -47,7 +53,6 @@ public class APSTimer implements IAPSTimer {
      */
     @Override
     public void stopTimer() {
-        System.out.println("Timer is Stopped");
         timer.stop();
     }
 
@@ -56,7 +61,6 @@ public class APSTimer implements IAPSTimer {
      */
     @Override
     public void startTimer() {
-        System.out.println("Timer is Started");
         timer.start();
     }
 
@@ -65,7 +69,6 @@ public class APSTimer implements IAPSTimer {
      */
     @Override
     public void pauseTimer() {
-        System.out.println("Timer is Paused");
         timer.stop();
     }
 
@@ -93,6 +96,26 @@ public class APSTimer implements IAPSTimer {
             apsTimer = new APSTimer();
         }
         return apsTimer;
+    }
+
+    /**
+     * {@inheritDoc} 
+     */ 
+    @Override
+    public void speedUpTimer() {
+        if (!((timerDelay - 100) <= 0)) {
+            timerDelay -= 100;
+        }
+        timer.setDelay(timerDelay);
+    }
+
+    /**
+     * {@inheritDoc 
+     */
+    @Override
+    public void slowDownTimer() {
+        timerDelay += 100;
+        timer.setDelay(timerDelay);
     }
 
     /**

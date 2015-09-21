@@ -1,90 +1,113 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aps.elevator;
 
+import aps.config.Config;
 import aps.timer.APSTimer;
-import aps.timer.IAPSTimer;
 import aps.timer.IAPSTimerListener;
 
 /**
- *
- * @author szeyick
+ * The {@link ElevatorDoor}.
+ * <p>
+ * This class is responsible for managing the state of the elevator door in the
+ * parking simulation along with providing the graphical representation of the
+ * door.
+ * <p>
+ * @author szeyick StudentID - 1763652.
  */
 public class ElevatorDoor implements IAPSTimerListener {
-    
-    private boolean isOpen;
-    
+
+    /**
+     * The length of the elevator door.
+     */
     private int doorLength;
-    
+
     /**
-     * The state of the elevator door. 
-     */ 
+     * The state of the elevator door.
+     */
     private ElevatorDoorState doorState;
-    
-    private Elevator elevator;
-    
+
     /**
-     * The states that the elevator door can be in.
+     * A reference to the elevator.
      */
-    public enum ElevatorDoorState {
-        OPENED, CLOSED, OPENING, CLOSING;
-    }
+    private final Elevator elevator;
+
     /**
-     * Constructor. 
+     * The time that it takes for the door to open/close (in milliseconds).
      */
-    public ElevatorDoor(APSTimer timer, Elevator elevator) {
-        isOpen = false;
+    private int doorTimer;
+
+    /**
+     * Constructor.
+     *
+     * @param elevator - The elevator.
+     */
+    public ElevatorDoor(Elevator elevator) {
         doorState = ElevatorDoorState.CLOSED;
+        doorTimer = 0;
         doorLength = 5;
         this.elevator = elevator;
-        timer.addTimerListener(this);
+        APSTimer.getTimer().addTimerListener(this);
     }
-    
+
+    /**
+     * Update the state of the elevator door.
+     *
+     * @param newState - The new state of the door.
+     */
     public void setDoorState(ElevatorDoorState newState) {
         doorState = newState;
-    } 
-    
-    /***
+    }
+
+    /**
+     * *
      * @return the current state of the elevator door.
      */
     public ElevatorDoorState getDoorState() {
         return doorState;
     }
-            
+
     /**
-     * Update the state of the elevator door. 
-     */ 
+     * Update the state of the elevator door.
+     */
     @Override
     public void update(long dt) {
+        doorTimer += dt;
         if (ElevatorDoorState.OPENING.equals(doorState)) {
-            System.out.println("Door is opening: " + doorLength);
-            // If it is opening then we open the door (update door attributes)
             doorLength--;
-            if (doorLength == 0) {
-                // Door is fully closed.
-                doorState = ElevatorDoorState.OPENED;
-                System.out.println("Door is opened: ");
-                elevator.elevatorDoorCallback();
+            if (doorLength <= 0) {
+                doorLength = 0;
+                // Door is fully opened.
+                if (hasDoorTimerExpired()) {
+                    doorState = ElevatorDoorState.OPENED;
+                    elevator.elevatorDoorCallback();
+                }
+
             }
         }
         if (ElevatorDoorState.CLOSING.equals(doorState)) {
-            // If it is closing, then we close the door (update door attributes)
-            System.out.println("Door is closing: ");
             doorLength++;
-            if (doorLength == 5) {
-                doorState = ElevatorDoorState.CLOSED;
-                System.out.println("Door is closed: ");
-                elevator.elevatorDoorCallback();
+            if (doorLength >= 5) {
+                doorLength = 5;
+                if (hasDoorTimerExpired()) {
+                    doorState = ElevatorDoorState.CLOSED; 
+                    elevator.elevatorDoorCallback();
+                }
             }
         }
+        if (ElevatorDoorState.CLOSED.equals(doorState) || ElevatorDoorState.OPENED.equals(doorState)) {
+            doorTimer = 0;
+        }
     }
-    
+
+    /**
+     * @return true if the door timer has expired, false otherwise.
+     */
+    private boolean hasDoorTimerExpired() {
+        return doorTimer >= Config.getConfig().ELEVATOR_DOOR_PERIOD;
+    }
+
     /**
      * @return the length of the door.
-     */ 
+     */
     public int getDoorLength() {
         return doorLength;
     }

@@ -1,6 +1,6 @@
 package aps.action;
 
-import aps.timer.IAPSTimer;
+import aps.timer.APSTimer;
 
 /**
  * The {@link StartTimerAction}.
@@ -8,27 +8,15 @@ import aps.timer.IAPSTimer;
  * This class is responsible for starting the timer.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class StartTimerAction implements IAction {
-
-        /**
-     * The simulation timer.
-     */ 
-    private final IAPSTimer timer;
-    
-    /**
-     * Constructor
-     * @param timer - A reference to the simulation timer.
-     */
-    public StartTimerAction(IAPSTimer timer) {
-        this.timer = timer;
-    }
     
     /**
      * {@inheritDoc}
      */ 
     @Override
     public void executeAction() {
-        timer.startTimer();
+        APSTimer.getTimer().startTimer();
     }
 }

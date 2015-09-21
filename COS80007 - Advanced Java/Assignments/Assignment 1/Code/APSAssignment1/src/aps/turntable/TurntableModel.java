@@ -89,6 +89,8 @@ public class TurntableModel {
     
     /**
      * Add the scale that the dimensions are scaled by
+     * @param scale - The scale factor of the turntable compared with the
+     * panel it is drawn on.
      */ 
     public void addScaleFactor(int scale) {
         this.scale = scale;

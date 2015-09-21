@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JLabel;
 
 /**
  * The {@link CarModelManager}.
@@ -35,16 +36,16 @@ public class CarModelManager {
     private CarModel currentCarModel;
 
     /**
-     * The number of cars currently in the car park.
+     * The number plate assigned to the car..
      */
-    private int currentCarCount;
-
+    private int numberPlate;
+    
     /**
      * Constructor.
      */
     private CarModelManager() {
         carModelMap = new HashMap<>();
-        currentCarCount = 0;
+        numberPlate = 0;
     }
 
     /**
@@ -73,11 +74,11 @@ public class CarModelManager {
     }
 
     /**
-     * Update the floor that the car is on.
-     *
+     * Remove a car from the floor it was on.
+     * <p>
      * @param car - The car to update
      */
-    public void removeCarFromBay(CarModel car) {
+    public void removeCarFromFloor(CarModel car) {
         Integer carFloorToRemove = null;
         for (Integer floorNumber : carModelMap.keySet()) {
             List<CarModel> carList = carModelMap.get(floorNumber);
@@ -90,7 +91,6 @@ public class CarModelManager {
         }
         if (carFloorToRemove != null) {
             carModelMap.get(carFloorToRemove).remove(car);
-            System.out.println("Removing Car From Model Manager");
         }
     }
 
@@ -101,11 +101,14 @@ public class CarModelManager {
      */
     public void setCurrentCarModel(CarModel car) {
         currentCarModel = car;
-        currentCarCount++;
-        // The number plates are just the number of cars in there.
-        currentCarModel.assignNumberPlate(String.valueOf(currentCarCount));
+        numberPlate++;
+        // The number plates are just incrementing integers.
+        currentCarModel.assignNumberPlate(String.valueOf(numberPlate));
     }
 
+    /**
+     * Remove the current car from being updated.
+     */
     public void stopCurrentCarModel() {
         currentCarModel = null;
     }
@@ -117,22 +120,8 @@ public class CarModelManager {
      * @param car - The car to remove.
      */
     public void removeCarModel(CarModel car) {
-        Integer carFloorToRemove = null;
-        for (Integer floorNumber : carModelMap.keySet()) {
-            List<CarModel> carList = carModelMap.get(floorNumber);
-            for (CarModel carModelTmp : carList) {
-                if (car.equals(carModelTmp)) {
-                    carFloorToRemove = floorNumber;
-                    break;
-                }
-            }
-        }
-        if (carFloorToRemove != null) {
-            carModelMap.get(carFloorToRemove).remove(car);
-            System.out.println("Removing Car From Model Manager");
-        }
+        removeCarFromFloor(car);
         currentCarModel = null;
-        currentCarCount--;
     }
 
     /**
@@ -159,7 +148,7 @@ public class CarModelManager {
         currentCarModel = carModel;
         return currentCarModel;
     }
-
+    
     /**
      * @return the instance of the model manager.
      */

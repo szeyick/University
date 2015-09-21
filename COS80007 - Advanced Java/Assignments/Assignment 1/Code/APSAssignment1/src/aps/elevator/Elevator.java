@@ -8,6 +8,7 @@ import aps.events.ParkingEvent;
 import aps.floor.ParkingBay;
 import aps.floor.ParkingBayManager;
 import aps.shuttle.Shuttle;
+import aps.shuttle.ShuttleState;
 import aps.timer.APSTimer;
 import aps.timer.IAPSTimerListener;
 import control.APSControl;
@@ -20,7 +21,7 @@ import java.awt.geom.Rectangle2D;
  * is made up of a variety of components, including the elevator door. The
  * elevator itself can move up and down, between floors.
  * <p>
- * @author szeyick
+ * @author szeyick StudentID - 1763652
  */
 public class Elevator implements IAPSTimerListener {
 
@@ -30,14 +31,9 @@ public class Elevator implements IAPSTimerListener {
     private int currentFloor;
 
     /**
-     * The target floor to move to.
+     * The elevator door component.
      */
-    private int targetFloor;
-
-    /**
-     * The elevator door.
-     */
-    private ElevatorDoor door;
+    private final ElevatorDoor door;
 
     /**
      * The current direction of the elevator.
@@ -50,54 +46,59 @@ public class Elevator implements IAPSTimerListener {
     private ElevOperation currentElevOperation;
 
     /**
-     * The shuttle.
+     * The shuttle component.
      */
-    private Shuttle shuttle;
+    private final Shuttle shuttle;
 
     /**
      * The floor to send the elevator to.
      */
     private int destinationFloor;
 
-    private float elevatorCentreX;
-
-    private float elevatorCentreY;
-
-    private float elevatorWidth;
-
-    private float elevatorLength;
+    /**
+     * The centre X coordinate of the elevator.
+     */
+    private final float elevatorCentreX;
 
     /**
-     * The current direction that the elevator is traveling.
+     * The centre Y coordinate of the elevator.
      */
-    public enum ElevDirection {
+    private final float elevatorCentreY;
 
-        UP, DOWN, IDLE, DEFAULT;
-    }
+    /**
+     * The width of the elevator.
+     */
+    private final float elevatorWidth;
 
-    public enum ElevOperation {
-
-        OPENING_DOOR, CLOSING_DOOR, MOVING, ARRIVED_AT_FLOOR, IDLE, DEPLOY_SHUTTLE, RESET;
-    }
+    /**
+     * The length of the elevator.
+     */
+    private final float elevatorLength;
 
     /**
      * Constructor.
      */
-    public Elevator(APSTimer timer) {
+    public Elevator() {
+        Config config = Config.getConfig();
+
         currentFloor = 0;
         destinationFloor = 0;
-        elevatorCentreX = 1.6f;
-        elevatorCentreY = (5.75f * 3) / 2;
-        elevatorLength = 6.0f;
-        elevatorWidth = 5.0f;
+        elevatorCentreX = config.LIFT_CENTRE_X;
+        elevatorCentreY = (config.BAY_LENGTH * 3) / 2;
+        elevatorLength = config.LIFT_LENGTH;
+        elevatorWidth = config.LIFT_WIDTH;
+
         currentDirection = ElevDirection.IDLE;
         currentElevOperation = ElevOperation.IDLE;
 
-        door = new ElevatorDoor(timer, this);
-        shuttle = new Shuttle(this, timer);
-        timer.addTimerListener(shuttle);
+        door = new ElevatorDoor(this);
+        shuttle = new Shuttle(this);
+        APSTimer.getTimer().addTimerListener(shuttle);
     }
 
+    /**
+     * @return the current operating state of the elevator.
+     */
     public ElevOperation getCurrentElevatorOperation() {
         return currentElevOperation;
     }
@@ -109,46 +110,48 @@ public class Elevator implements IAPSTimerListener {
         return currentFloor;
     }
 
+    /**
+     * Assign the floor the elevator is required to travel to.
+     *
+     * @param destinationFloor - The floor to send the elevator.
+     */
     public void setDestinationFloor(int destinationFloor) {
         this.destinationFloor = destinationFloor;
     }
 
-    // The door should call back to the elevator that it has opened.
+    /**
+     * The callback function from the elevator door when it has completed its
+     * tasks.
+     */
     public void elevatorDoorCallback() {
-        if (ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
-            System.out.println("Door is - " + door.getDoorState().toString());
+        if (ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
             currentElevOperation = ElevOperation.IDLE;
-            // door.setDoorState(ElevatorDoor.ElevatorDoorState.OPENING);
-            // Move to floor.
-            // If car is unloaded, then move back to 0
+            // If car is unloaded, then move back to floor 0
             if (currentFloor != 0) {
                 destinationFloor = 0;
-                // Terminate the event here
                 ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
                 if (!EventType.DEPARTURE.equals(event.getEventType())) {
-                    currentElevOperation = ElevOperation.RESET;   
-                }
-                else {
+                    currentElevOperation = ElevOperation.RESET;
+                } else {
                     moveToFloor(destinationFloor);
                 }
             } else {
                 moveToFloor(destinationFloor);
             }
         }
-        if (ElevatorDoor.ElevatorDoorState.OPENED.equals(door.getDoorState())) {
-            System.out.println("Door is - " + door.getDoorState().toString());
+        if (ElevatorDoorState.OPENED.equals(door.getDoorState())) {
             currentElevOperation = ElevOperation.IDLE;
-            // door.setDoorState(ElevatorDoor.ElevatorDoorState.CLOSING);
             // If door is opened and idle, then deploy the trolley.
-            System.out.println("Deploy Shuttle X: ");
             currentElevOperation = ElevOperation.DEPLOY_SHUTTLE;
-            shuttle.updateShuttleState(Shuttle.ShuttleState.LOCKED);
+            shuttle.updateShuttleState(ShuttleState.LOCKED);
         }
     }
 
+    /**
+     * The callback method for the shuttle when it has completed its operation.
+     */
     public void shuttleCallback() {
         currentElevOperation = ElevOperation.CLOSING_DOOR;
-        System.out.println("Shuttle Ready - Close Door");
     }
 
     /**
@@ -166,80 +169,51 @@ public class Elevator implements IAPSTimerListener {
      * @param floorNumber - The floor to move to.
      */
     public void moveToFloor(int floorNumber) {
-        targetFloor = floorNumber;
+        currentElevOperation = ElevOperation.MOVING;
         if (currentFloor < floorNumber) {
-            // If the current floor is at a lower floor than the target we need to go up.
             currentDirection = ElevDirection.UP;
         } else if (currentFloor > floorNumber) {
             currentDirection = ElevDirection.DOWN;
-        } else {
+        }
+        else {
             currentElevOperation = ElevOperation.ARRIVED_AT_FLOOR;
         }
     }
 
     /**
-     * Perform an operation on the elevator. Update how far the
+     * Perform an operation on the elevator. Update the elevator state if it is
+     * currently in operation.
      */
     @Override
     public void update(long dt) {
         ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
         // Only move the elevator if there is an event.
         if (event != null) {
-            // If the elevator has arrived at the floor we only do something if we are instructed to.
             if (ElevOperation.ARRIVED_AT_FLOOR.equals(currentElevOperation)) {
-                // Wait for command
-                currentDirection = ElevDirection.IDLE;
-                currentElevOperation = ElevOperation.IDLE;
-                System.out.println("Elevator has arrived at floor: " + currentFloor);
-
-                // Need to figure out the next command (Whether to open or close the door)
-                if (EventType.DEPARTURE.equals(event.getEventType()) && currentFloor == 0
-                        && shuttle.getTrolley().containsCar()) {
-                    System.out.println("Calling User to Pickup Car...");
-                    shuttle.getTrolley().unlockTrolley();
-                    // Update the floor for the car.
-                    CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
-                    CarModelManager.getModelManager().removeCarFromBay(carModel);
-                    ParkingBay parkingBay = ParkingBayManager.getManager().getParkingBayForCar(carModel);
-                    if (parkingBay != null) {
-                        parkingBay.removeCarModel();
-                    }
-                    APSControl.getControl().getUserStation().carReadyForPickup();
-
-                } else {
-                        
-                    if (ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
-                        currentElevOperation = ElevOperation.OPENING_DOOR;
-                    } else if (ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
-                        currentElevOperation = ElevOperation.CLOSING_DOOR;
-                    }
-                }
+                elevatorArrivedAtFloor(event);
             }
             if (ElevDirection.UP.equals(currentDirection)) {
                 currentFloor++;
                 currentElevOperation = ElevOperation.MOVING;
-                System.out.println("Elevator is moving up - " + currentFloor);
                 if (currentFloor == destinationFloor) {
                     currentElevOperation = ElevOperation.ARRIVED_AT_FLOOR;
                 }
-            }
-            if (ElevDirection.DOWN.equals(currentDirection)) {
+            } else if (ElevDirection.DOWN.equals(currentDirection)) {
                 // Decrement the current floor count.
                 currentFloor--;
                 currentElevOperation = ElevOperation.MOVING;
-                System.out.println("Elevator is moving down - " + currentFloor);
                 if (currentFloor == destinationFloor) {
                     currentElevOperation = ElevOperation.ARRIVED_AT_FLOOR;
                 }
             }
-            if (ElevOperation.OPENING_DOOR.equals(currentElevOperation) && ElevatorDoor.ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
-                // If the door is currently closed, we need to open.
-                door.setDoorState(ElevatorDoor.ElevatorDoorState.OPENING);
+            if (ElevOperation.OPENING_DOOR.equals(currentElevOperation) && ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
+                // If the door is currently closed, we need to open it.
+                door.setDoorState(ElevatorDoorState.OPENING);
                 currentElevOperation = ElevOperation.OPENING_DOOR;
             }
-            if (ElevOperation.CLOSING_DOOR.equals(currentElevOperation) && ElevatorDoor.ElevatorDoorState.OPENED.equals(door.getDoorState())) {
-                // If the door is currently closed, we need to open.
-                door.setDoorState(ElevatorDoor.ElevatorDoorState.CLOSING);
+            if (ElevOperation.CLOSING_DOOR.equals(currentElevOperation) && ElevatorDoorState.OPENED.equals(door.getDoorState())) {
+                // If the door is currently open, we need to close.
+                door.setDoorState(ElevatorDoorState.CLOSING);
                 currentElevOperation = ElevOperation.CLOSING_DOOR;
             }
             if (ElevOperation.RESET.equals(currentElevOperation)) {
@@ -250,7 +224,40 @@ public class Elevator implements IAPSTimerListener {
                 }
             }
         }
+    }
 
+    /**
+     * Evaluate the next state to proceed to when the elevator has arrived at
+     * its destination floor. If the elevator is on the target floor and it is a
+     * collect (DEPARTURE) event, the shuttle will be automatically deployed to
+     * retrieve the car, however for a parking event (ARRIVAL), the ground floor
+     * door will be opened to retrieve the car from the turntable.
+     *
+     * @param event - The current parking event.
+     */
+    private void elevatorArrivedAtFloor(ParkingEvent event) {
+        currentDirection = ElevDirection.IDLE;
+        currentElevOperation = ElevOperation.IDLE;
+
+        if (EventType.DEPARTURE.equals(event.getEventType()) && currentFloor == 0
+                && shuttle.getTrolley().containsCar()) {
+            shuttle.getTrolley().unlockTrolley();
+            // Update the floor for the car.
+            CarModel carModel = CarModelManager.getModelManager().getCurrentCarModel();
+            CarModelManager.getModelManager().removeCarFromFloor(carModel);
+            ParkingBay parkingBay = ParkingBayManager.getManager().getParkingBayForCar(carModel);
+            if (parkingBay != null) {
+                parkingBay.removeCarModel();
+            }
+            APSControl.getControl().getUserStation().carReadyForPickup();
+
+        } else {
+            if (ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
+                currentElevOperation = ElevOperation.OPENING_DOOR;
+            } else if (ElevatorDoorState.CLOSED.equals(door.getDoorState())) {
+                currentElevOperation = ElevOperation.CLOSING_DOOR;
+            }
+        }
     }
 
     /**

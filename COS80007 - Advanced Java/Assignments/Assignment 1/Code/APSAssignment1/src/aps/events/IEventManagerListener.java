@@ -8,6 +8,10 @@ package aps.events;
  * that wish to be notified of parking events will be required to implement
  * this interface and register themselves as listeners to the {@link EventManager}.
  * <p>
+ * <strong>Warning: </strong> As of the revised update to Assignment 1, the parking
+ * events will not be read from an offline defined file and will be user
+ * interaction driven.
+ * <p>
  * @author szeyick
  * StudentID - 1763652.
  */

@@ -15,13 +15,11 @@ import java.util.Properties;
 public class Config {
 
     /**
-     * *
      * The name of the configuration file.
      */
     private static final String CONFIG_FILE_NAME = "APS.properties";
 
     /**
-     * *
      * An singleton instance of the {@link Config}
      */
     private static Config config;
@@ -32,30 +30,29 @@ public class Config {
     public int NF;
 
     /**
-     * *
      * The turntable Y value
      */
-    public double TURNTABLEY;
+    public float TURNTABLEY;
 
     /**
      * The turntable X value
      */
-    public double TURNTABLEX;
+    public float TURNTABLEX;
 
     /**
      * The width of a single bay.
      */
-    public double BAY_WIDTH;
+    public float BAY_WIDTH;
 
     /**
      * The length of a single bay.
      */
-    public double BAY_LENGTH;
+    public float BAY_LENGTH;
 
     /**
      * The Y point defining the centre of the aisle.
      */
-    public double AISLE_CENTRE_Y;
+    public float AISLE_CENTRE_Y;
 
     /**
      * The number of bays located north of the aisle.
@@ -70,27 +67,43 @@ public class Config {
     /**
      * The X coordinate of the centre of the first bay south of the aisle.
      */
-    public double SOUTH_BAY_CENTER_X;
+    public float SOUTH_BAY_CENTER_X;
 
     /**
      * The X coordinate of the centre of the lift.
      */
-    public double LIFT_CENTRE_X;
+    public float LIFT_CENTRE_X;
+    
+    /**
+     * The length of the elevator.
+     */
+    public float LIFT_LENGTH;
+    
+    /**
+     * The width of the elevator.
+     */
+    public float LIFT_WIDTH;
 
     /**
      * The diameter of the turntable.
      */
-    public double TURNTABLE_DIAMETER;
+    public float TURNTABLE_DIAMETER;
 
     /**
      * The X coordinate centre of the turntable.
      */
-    public double TURNTABLE_CENTER_X;
+    public float TURNTABLE_CENTER_X;
 
     /**
      * The period in milliseconds that the timer is to trigger an update.
      */
     public int TIMER_PERIOD;
+    
+    /**
+     * The period in milliseconds that it takes the elevator door
+     * to open/close.
+     */ 
+    public int ELEVATOR_DOOR_PERIOD;
 
     /**
      * The length of the car.
@@ -101,6 +114,21 @@ public class Config {
      * The width of the car.
      */
     public float CAR_WIDTH;
+    
+    /**
+     * The width of the shuttle.
+     */ 
+    public float SHUTTLE_WIDTH;
+    
+    /**
+     * The length of the shuttle.
+     */
+    public float SHUTTLE_LENGTH;
+    
+    /**
+     * The period in milliseconds it takes to lock the trolley.
+     */
+    public int TROLLEY_LOCK_PERIOD;
 
     /**
      * *
@@ -109,7 +137,6 @@ public class Config {
     private Properties properties;
 
     /**
-     * *
      * Private constructor.
      */
     private Config() {
@@ -141,19 +168,25 @@ public class Config {
      */
     private void initialiseProperties() {
         NF = getIntProperty("NF", 5);
-        TURNTABLEY = getDoubleProperty("turnTableY", 5.5);
-        TURNTABLEX = getDoubleProperty("turnTableX", 4.0);
-        BAY_WIDTH = getDoubleProperty("BayWidth", 2.2);
-        BAY_LENGTH = getDoubleProperty("BayLength", 5.75);
+        TURNTABLEY = getFloatProperty("turnTableY", 5.5f);
+        TURNTABLEX = getFloatProperty("turnTableX", 4.0f);
+        BAY_WIDTH = getFloatProperty("BayWidth", 2.2f);
+        BAY_LENGTH = getFloatProperty("BayLength", 5.75f);
         NUMBER_OF_BAYS_NORTH = getIntProperty("NumberOfNorthBays", 5);
         NUMBER_OF_BAYS_SOUTH = getIntProperty("NumberOfSouthBays", 5);
-        SOUTH_BAY_CENTER_X = getDoubleProperty("SouthBayCentre", 2.46);
-        LIFT_CENTRE_X = getDoubleProperty("LiftCentre", 1.6);
-        TURNTABLE_DIAMETER = getDoubleProperty("TurntableDiameter", 5.75);
-        TURNTABLEX = getDoubleProperty("TurntableCenterX", 3.4);
+        SOUTH_BAY_CENTER_X = getFloatProperty("SouthBayCentre", 2.46f);
+        LIFT_CENTRE_X = getFloatProperty("LiftCentre", 1.6f);
+        TURNTABLE_DIAMETER = getFloatProperty("TurntableDiameter", 5.75f);
+        TURNTABLEX = getFloatProperty("TurntableCenterX", 3.4f);
         TIMER_PERIOD = getIntProperty("TimerPeriod", 50);
         CAR_LENGTH = getFloatProperty("CarLength", 5.0f);
         CAR_WIDTH = getFloatProperty("CarWidth", 2.0f);
+        LIFT_LENGTH = getFloatProperty("LiftLength", 6.0f);
+        LIFT_WIDTH = getFloatProperty("LiftWidth", 5.0f);
+        ELEVATOR_DOOR_PERIOD = getIntProperty("ElevatorDoorPeriod", 100);
+        SHUTTLE_LENGTH = getFloatProperty("ShuttleLength", 5.75f);
+        SHUTTLE_WIDTH = getFloatProperty("ShuttleWidth", 0.5f);
+        TROLLEY_LOCK_PERIOD = getIntProperty("TrolleyLockPeriod", 100);
     }
 
     /**

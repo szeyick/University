@@ -74,53 +74,70 @@ public class GroundLevelFloorControl implements IAPSTimerListener {
     }
 
     /**
-     * Update the models.
+     * Update the car and turntable graphical components.
      */
     @Override
     public void update(long dt) {
         car = CarModelManager.getModelManager().getCurrentCarModel();
         ParkingEvent event = APSControl.getControl().getCurrentParkingEvent();
-        if (car != null && car.getFloor() == FLOOR_NUMBER && CarState.MOVING.equals(car.getCarState())
-                && EventType.ARRIVAL.equals(event.getEventType())) {
-            updateCarModel(turntable.getPoint(), -2, -2, panel.getSize());
-            updateCarState(CarState.MOVING);
-            panel.setCarModel(car);
-        }
-        if (car != null && car.getFloor() == FLOOR_NUMBER && CarState.MOVING.equals(car.getCarState())
-                && EventType.DEPARTURE.equals(event.getEventType())) {
 
-            Point2D destinationPoint = new Point2D.Float((float) turntable.getPoint().getX(), 0);
-            updateCarModel(destinationPoint, 0, 10, panel.getSize());
-            panel.setCarModel(car);
-        }
-        // If the car has arrived on the turntable we stop moving the car.
-        if (car != null && car.getBounds().intersects(turntable.getTurntableBounds())) {
-            if (car.getCarState().equals(CarState.MOVING)) {
-                updateCarState(CarState.IDLE);
-                userStationControl.requestUserDropOff();
+        if (car != null) {
+            if (CarState.MOVING.equals(car.getCarState())) {
+                if (car.getFloor() == FLOOR_NUMBER) {
+                    if (EventType.ARRIVAL.equals(event.getEventType())) {
+                        moveCarTowardTurnTable();
+                    }
+                    if (EventType.DEPARTURE.equals(event.getEventType())) {
+                        moveCarOutOfCarPark();
+                    }
+                }
+                if (car.getBounds().intersects(turntable.getTurntableBounds())) {
+                    updateCarState(CarState.IDLE);
+                    userStationControl.requestUserDropOff();
+                }
             }
         }
         panel.draw();
     }
 
     /**
+     * Move the car diagonally from the waiting area towards the turntable.
+     */
+    private void moveCarTowardTurnTable() {
+        updateCarModel(turntable.getPoint(), -2, -2, panel.getSize());
+        updateCarState(CarState.MOVING);
+        panel.setCarModel(car);
+    }
+
+    /**
+     * Move the car southwards (Y) out of the car park exit.
+     */
+    private void moveCarOutOfCarPark() {
+        Point2D destinationPoint = new Point2D.Float((float) turntable.getPoint().getX(), 0);
+        updateCarModel(destinationPoint, 0, 10, panel.getSize());
+        panel.setCarModel(car);
+    }
+
+    /**
      * Update the car models coordinates.
+     *
      * @param destinationPoint - The point that the car will need to move to.
      * @param dx - The x direction in pixels that the car will need to move.
      * @param dy - The y direction in pixels that the car will need to move.
      * @param panelDimensions - The size of the panel the car will be drawn on.
-     */ 
+     */
     private void updateCarModel(Point2D destinationPoint, int dx, int dy, Dimension panelDimensions) {
         car.setDestinationPoint(destinationPoint);
         car.updateDxDy(dx, dy);
         car.updateDimension(panelDimensions);
         car.updateCoordinates();
     }
-    
+
     /**
      * Update the state of the car.
+     *
      * @param state - The new car state.
-     */ 
+     */
     private void updateCarState(CarState state) {
         car.updateCarState(state);
     }

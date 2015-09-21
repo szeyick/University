@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aps.floor;
 
 import aps.elevator.Elevator;
@@ -10,26 +5,41 @@ import aps.timer.IAPSTimerListener;
 import control.APSControl;
 
 /**
- *
+ * The {@link ParkingLevelFloorControl}
+ * <p>
+ * This class is responsible for creating and managing the components for
+ * the parking level floors. 
+ * <p>
  * @author szeyick
+ * StudentID - 1763652.
  */
 public class ParkingLevelFloorControl implements IAPSTimerListener {
 
     /**
      * An integer representing the current floor.
      */
-    private final int FLOOR_NUMBER = 1;
+    private final int FLOOR_NUMBER;
     
     /**
-     * The panel to draw.
+     * The panel to draw on.
      */ 
-    private ParkingLevelFloorPanel parkingPanel;
+    private final ParkingLevelFloorPanel parkingPanel;
     
     /**
      * Constructor.
+     * @param floorNum - The floor number associated to the
+     * current instance of the controller.
      */
-    public ParkingLevelFloorControl() {
-        parkingPanel =  new ParkingLevelFloorPanel();
+    public ParkingLevelFloorControl(int floorNum) {
+        FLOOR_NUMBER = floorNum;
+        parkingPanel =  new ParkingLevelFloorPanel(FLOOR_NUMBER);
+    }
+    
+    /**
+     * @return the number of the floor.
+     */ 
+    public int getFloorNumber() {
+        return FLOOR_NUMBER;
     }
     
     /**
@@ -40,15 +50,15 @@ public class ParkingLevelFloorControl implements IAPSTimerListener {
     }
     
     /**
-     * When the car has arrived on the floor, we can do something.
+     * When the elevator has arrived on the designated floor we
+     * need to perform a redraw to correctly display the elevator, shuttle
+     * trolley and cars on the floor.
      */ 
     @Override
     public void update(long dt) {
         Elevator elevator = APSControl.getControl().getElevator();
         if (elevator.getCurrentFloor() == FLOOR_NUMBER) {
-            // If we have arrived on the floor, we can draw things.
             parkingPanel.draw();
         }
-    }
-    
+    }  
 }

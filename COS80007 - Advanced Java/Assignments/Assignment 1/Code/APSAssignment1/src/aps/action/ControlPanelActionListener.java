@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
  * interaction.
  * <p>
  * @author szeyick
+ * StudentID - 1763652
  */
 public class ControlPanelActionListener implements ActionListener {
 
@@ -26,11 +27,11 @@ public class ControlPanelActionListener implements ActionListener {
         this.action = action;
     }
     /**
-     * {@inheritDoc  
+     * {@inheritDoc}
+     * @param e - The user invoked event.
      */ 
     @Override
     public void actionPerformed(ActionEvent e) {
         action.executeAction();
-    }
-    
+    }   
 }

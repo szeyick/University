@@ -1,9 +1,9 @@
-package utilities;
+package aps.utilities;
 
 import aps.config.Config;
 
 /**
- * The {@link APSUtilities}
+ * The APSUtilities
  * <p>
  * This class is responsible for providing convenience methods for calculations
  * that are used throughout the Automatic Parking Simulator.

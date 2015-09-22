@@ -1,7 +1,7 @@
 package aps.timer;
 
 /**
- * The {@link IAPSTimerListener}.
+ * The IAPSTimerListener.
  * <p>
  * This interface is responsible for providing an update method that will
  * be called whenever the timer triggers. Concrete classes that wish to 

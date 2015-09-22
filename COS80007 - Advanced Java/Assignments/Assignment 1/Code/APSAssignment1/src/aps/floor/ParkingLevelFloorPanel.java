@@ -5,7 +5,7 @@ import aps.car.CarModelManager;
 import aps.elevator.Elevator;
 import aps.shuttle.Shuttle;
 import aps.shuttle.Trolley;
-import control.APSControl;
+import aps.control.APSControl;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,7 +18,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 /**
- * The {@link ParkingLevelFloorPanel}.
+ * The ParkingLevelFloorPanel.
  * <p>
  * This class represents a floor in which a car can be parked for the Automatic
  * Parking Simulator. It provides the component that will be drawn and displayed

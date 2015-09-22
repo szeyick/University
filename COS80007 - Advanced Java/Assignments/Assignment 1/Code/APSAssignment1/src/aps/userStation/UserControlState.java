@@ -1,7 +1,7 @@
 package aps.userStation;
 
 /**
- * The {@link UserControlState}.
+ * The UserControlState.
  * <p>
  * This enumeration class represents the states that the user control
  * can be in.

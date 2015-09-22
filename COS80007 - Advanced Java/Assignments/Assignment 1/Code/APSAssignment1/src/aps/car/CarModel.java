@@ -6,10 +6,10 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- * The {@link CarModel}.
+ * The CarModel.
  * <p>
- This class represents the data structure for holding information about
- a single carShape instance.
+ * This class represents the data structure for holding information about
+ * a single carShape instance.
  <p>
  * @author szeyick 
  * StudentID - 1763652

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The {@link ParkingBayManager}.
+ * The ParkingBayManager.
  * <p>
  * This class represents the manager that manages all the parking bays. It is
  * used by the Automatic Parking Simulator to maintain a list of available bays

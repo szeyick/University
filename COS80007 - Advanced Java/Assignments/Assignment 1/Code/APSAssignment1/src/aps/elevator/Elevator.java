@@ -11,11 +11,11 @@ import aps.shuttle.Shuttle;
 import aps.shuttle.ShuttleState;
 import aps.timer.APSTimer;
 import aps.timer.IAPSTimerListener;
-import control.APSControl;
+import aps.control.APSControl;
 import java.awt.geom.Rectangle2D;
 
 /**
- * The {@link Elevator}.
+ * The Elevator.
  * <p>
  * This class represents the elevator. The elevator is a composite object that
  * is made up of a variety of components, including the elevator door. The

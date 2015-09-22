@@ -1,7 +1,7 @@
 package aps.events;
 
 /**
- * The {@link EventType}.
+ * The EventType.
  * <p>
  * This enumeration class provides the parking event types for the Automatic Parking
  * Simulator. Parking events consist of two types, arrival and departure. 

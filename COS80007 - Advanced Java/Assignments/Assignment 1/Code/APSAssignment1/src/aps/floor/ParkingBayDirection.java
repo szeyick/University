@@ -1,7 +1,7 @@
 package aps.floor;
 
 /**
- * The {@link ParkingBayDirection}.
+ * The ParkingBayDirection.
  * <p>
  * This enum represents the direction of the parking bay. It can either be a
  * north located parking bay, or south located parking bay.

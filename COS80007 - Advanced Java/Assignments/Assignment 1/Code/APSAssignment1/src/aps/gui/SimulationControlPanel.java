@@ -11,7 +11,7 @@ import aps.action.StartTimerAction;
 import aps.timer.APSClock;
 import aps.timer.APSTimer;
 import aps.timer.IAPSTimer;
-import control.APSControl;
+import aps.control.APSControl;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JButton;
@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * The {@link SimulationControlPanel}.
+ * The SimulationControlPanel.
  * <p>
  * This panel class is responsible for creating the button elements that make up
  * the controls for the Automatic Parking Simulator.

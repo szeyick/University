@@ -3,7 +3,7 @@ package aps.action;
 import aps.timer.APSTimer;
 
 /**
- * The {@link PauseTimerAction}.
+ * The PauseTimerAction.
  * <p>
  * This class is responsible for pausing the simulation timer.
  * <p>
@@ -12,7 +12,7 @@ import aps.timer.APSTimer;
 public class PauseTimerAction implements IAction {
     
     /**
-     * {@inheritDoc}
+     * Pause the timer if the action is executed.
      */
     @Override
     public void executeAction() {

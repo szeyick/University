@@ -12,18 +12,18 @@ import aps.floor.ParkingBayDirection;
 import aps.floor.ParkingBayManager;
 import aps.timer.APSTimer;
 import aps.timer.IAPSTimerListener;
-import control.APSControl;
+import aps.control.APSControl;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import utilities.APSUtilities;
+import aps.utilities.APSUtilities;
 
 /**
- * The {@link Shuttle}.
+ * The Shuttle.
  * <p>
  * This class represents the shuttle mechanism. In the simulation, the shuttle
  * carries the trolley. It moves sideways (left - right) when the trolley is
- * locked into it, with a car. The shuttle will move sidways to align its centre
+ * locked into it, with a car. The shuttle will move sideways to align its centre
  * X with either the centre of the elevator, or the parking bay in which it is
  * to deliver the car.
  * <p>
@@ -110,7 +110,7 @@ public class Shuttle implements IAPSTimerListener {
      * car. (On the ground floor, it lines up with the centre of the turntable
      * and on every other floor it lines up with the bay).
      *
-     * @param dt
+     * @param dt - The time lapsed.
      */
     @Override
     public void update(long dt) {
@@ -267,6 +267,9 @@ public class Shuttle implements IAPSTimerListener {
         return shuttleY;
     }
 
+    /**
+     * @return the x position of the shuttle.
+     */
     public float getX() {
         return shuttleX;
     }

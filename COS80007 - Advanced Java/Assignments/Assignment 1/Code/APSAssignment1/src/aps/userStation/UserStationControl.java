@@ -7,10 +7,10 @@ import aps.elevator.Elevator;
 import aps.floor.ParkingBay;
 import aps.floor.ParkingBayManager;
 import aps.timer.IAPSTimerListener;
-import control.APSControl;
+import aps.control.APSControl;
 
 /**
- * The {@link UserStationControl}.
+ * The UserStationControl.
  * <p>
  * This class is responsible for being the controller for the User Station in
  * the Automatic Parking Simulator. It manages the life cycle of the user
@@ -61,7 +61,6 @@ public class UserStationControl implements IAPSTimerListener {
      */
     public void requestUserPickup() {
         state = UserControlState.PICKUP;
-        // System.out.println("Requesting Pickup");
         resetTimer();
     }
 
@@ -87,10 +86,6 @@ public class UserStationControl implements IAPSTimerListener {
      */
     public void resetTimer() {
         currentTime = 0;
-    }
-
-    public void elevatorArrivedAtFloor() {
-
     }
 
     /**

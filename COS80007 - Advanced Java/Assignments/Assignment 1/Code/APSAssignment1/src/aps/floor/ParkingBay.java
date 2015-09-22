@@ -3,7 +3,7 @@ package aps.floor;
 import aps.car.CarModel;
 
 /**
- * The {@link ParkingBay}.
+ * The ParkingBay.
  * <p>
  * This class represents the parking bay. A parking bay holds information regarding
  * the car parked in it, whether it has a car parked in it, its direction, and bay

@@ -10,10 +10,10 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 /**
- * The {@link EventManager}.
+ * The EventManager}.
  * <p>
- * This class is responsible for creating {@link ParkingEvents} that will
- * be pushed into the simulation. It will listen to the {@link APSTimer}
+ * This class is responsible for creating ParkingEvents that will
+ * be pushed into the simulation. It will listen to the APSTimer
  * to create new parking events when sufficient time has lapsed.
  * <p>
  * <strong>Warning: </strong> As of the revised update to Assignment 1, the parking
@@ -136,14 +136,14 @@ public class EventManager implements IAPSTimerListener {
     }
 
     /**
-     * When the {@link APSTimer} triggers an update event, this manager will
-     * evaluate if sufficient time has passed so as to invoke another {@link ParkingEvent}.
+     * When the APSTimer triggers an update event, this manager will
+     * evaluate if sufficient time has passed so as to invoke another ParkingEvent.
      * <p>
-     * If sufficient time has lapsed, a {@link ParkingEvent} will be removed from the
+     * If sufficient time has lapsed, a ParkingEvent will be removed from the
      * managers priority queue and loaded into the simulation by notifying listeners
      * of this manager that a new parking event is ready to be invoked.
      * <p>
-     * {@link ParkingEvent} items that are still to occur in the future, are not
+     * ParkingEvent items that are still to occur in the future, are not
      * removed from the priority queue and will remain in the queue until sufficient
      * time has lapsed to render the event at the current time or in the past.
      */

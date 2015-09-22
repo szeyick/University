@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.swing.Timer;
 
 /**
- * The {@link APSTimer}.
+ * The APSTimer.
  * <p>
  * This class is responsible for functioning as the timer that will be used
  * to trigger components to be updated during the simulation. It is a singleton
@@ -49,7 +49,7 @@ public class APSTimer implements IAPSTimer {
     }
 
     /**
-     * {@inheritDoc
+     * Stop the timer.
      */
     @Override
     public void stopTimer() {
@@ -57,7 +57,7 @@ public class APSTimer implements IAPSTimer {
     }
 
     /**
-     * {@inheritDoc
+     * Start the timer.
      */
     @Override
     public void startTimer() {
@@ -65,7 +65,7 @@ public class APSTimer implements IAPSTimer {
     }
 
     /**
-     * {@inheritDoc
+     * Pause the timer.
      */
     @Override
     public void pauseTimer() {
@@ -73,7 +73,7 @@ public class APSTimer implements IAPSTimer {
     }
 
     /**
-     * {@inheritDoc
+     * Add a listener to the timer.
      */
     @Override
     public void addTimerListener(IAPSTimerListener listener) {
@@ -81,7 +81,7 @@ public class APSTimer implements IAPSTimer {
     }
 
     /**
-     * {@inheritDoc
+     * Remove a listener from the timer.
      */
     @Override
     public void removeTimerListener(IAPSTimerListener listener) {
@@ -99,7 +99,7 @@ public class APSTimer implements IAPSTimer {
     }
 
     /**
-     * {@inheritDoc} 
+     * Speed up the timer by 100 milliseconds.
      */ 
     @Override
     public void speedUpTimer() {
@@ -110,7 +110,7 @@ public class APSTimer implements IAPSTimer {
     }
 
     /**
-     * {@inheritDoc 
+     * Slow down the timer by 100 milliseconds.
      */
     @Override
     public void slowDownTimer() {
@@ -120,7 +120,7 @@ public class APSTimer implements IAPSTimer {
 
     /**
      * *
-     * The {@link TimerListener}.
+     * The TimerListener.
      * <p>
      * This class is responsible for notifying the system when a timer event is
      * triggered.

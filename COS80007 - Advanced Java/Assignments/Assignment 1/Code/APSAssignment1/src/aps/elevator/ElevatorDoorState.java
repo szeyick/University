@@ -1,7 +1,7 @@
 package aps.elevator;
 
 /**
- * The {@link ElevatorDoorState}.
+ * The ElevatorDoorState.
  * <p>
  * This enumerator class is responsible for providing the states for the
  * elevator door.

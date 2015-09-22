@@ -2,12 +2,11 @@ package aps.floor;
 
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
-import java.io.File;
 import java.io.FileReader;
 import java.io.LineNumberReader;
 
 /**
- * The {@link ParkingLevelFloorView}.
+ * The ParkingLevelFloorView.
  * <p>
  * This class is responsible for generating the ground floor for a parking level
  * in the Automatic Parking Simulator.
@@ -20,13 +19,11 @@ import java.io.LineNumberReader;
 public class GroundLevelFloorView {
 
     /**
-     * *
      * The shape object representing the ground floor.
      */
     private final GeneralPath groundFloorOutline;
 
     /**
-     * *
      * Default constructor.
      */
     public GroundLevelFloorView() {
@@ -35,7 +32,6 @@ public class GroundLevelFloorView {
     }
 
     /**
-     * *
      * Read the input from an external file and plot the shape.
      */
     private void initialiseFloorPlan() {
@@ -69,7 +65,6 @@ public class GroundLevelFloorView {
     }
 
     /**
-     * *
      * @return - The shape representing the ground floor.
      */
     public Shape getGroundFloorPlan() {

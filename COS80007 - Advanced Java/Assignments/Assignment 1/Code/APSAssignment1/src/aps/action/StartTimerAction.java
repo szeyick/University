@@ -3,7 +3,7 @@ package aps.action;
 import aps.timer.APSTimer;
 
 /**
- * The {@link StartTimerAction}.
+ * The StartTimerAction.
  * <p>
  * This class is responsible for starting the timer.
  * <p>
@@ -13,7 +13,7 @@ import aps.timer.APSTimer;
 public class StartTimerAction implements IAction {
     
     /**
-     * {@inheritDoc}
+     * Start the timer if the action has been executed.
      */ 
     @Override
     public void executeAction() {

@@ -5,7 +5,7 @@ import aps.timer.APSTimer;
 import aps.timer.IAPSTimerListener;
 
 /**
- * The {@link ElevatorDoor}.
+ * The ElevatorDoor.
  * <p>
  * This class is responsible for managing the state of the elevator door in the
  * parking simulation along with providing the graphical representation of the

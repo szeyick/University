@@ -1,10 +1,10 @@
 package aps.action;
 
 import aps.events.EventType;
-import control.APSControl;
+import aps.control.APSControl;
 
 /**
- * The {@link CreatingPickupEventAction}.
+ * The CreatingPickupEventAction.
  * <p>
  * This class is responsible for allowing a user to create a parking event that
  * allows them to pick up a car that has been parked in the car park.
@@ -14,7 +14,7 @@ import control.APSControl;
 public class CreatePickupEventAction implements IAction {
 
     /**
-     * {@inheritDoc
+     * Create a departure event if the action is executed.
      */
     @Override
     public void executeAction() {

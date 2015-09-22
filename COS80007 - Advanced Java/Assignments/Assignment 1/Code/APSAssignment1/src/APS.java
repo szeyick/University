@@ -1,9 +1,9 @@
 
 import aps.gui.MainFrame;
-import control.APSControl;
+import aps.control.APSControl;
 
 /**
- * The {@link APS}
+ * The APS
  * <p>
  * This class is responsible for running the Automatic Parking Simulator. It is
  * the entry point into the application and initialises all the components that

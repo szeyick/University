@@ -9,16 +9,16 @@ import aps.timer.IAPSTimer;
 import aps.timer.IAPSTimerListener;
 import aps.turntable.TurntableModel;
 import aps.userStation.UserStationControl;
-import control.APSControl;
+import aps.control.APSControl;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 
 /**
- * The {@link GroundLevelFloorControl}.
+ * The GroundLevelFloorControl.
  * <p>
  * This class represents the controller for the ground level of the Automatic
  * Parking Simulator. It will be responsible for creating the view and the
- * components that will be drawn by the {@link GroundLevelFloorView}.
+ * components that will be drawn by the GroundLevelFloorView.
  * <p>
  * @author szeyick StudentID - 1763652.
  */

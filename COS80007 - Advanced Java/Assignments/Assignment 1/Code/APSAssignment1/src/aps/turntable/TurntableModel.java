@@ -5,7 +5,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- * The {@link TurntableModel}.
+ * The TurntableModel.
  * <p>
  * This class represents the model for the turntable for the Automatic Parking
  * Simulator. The turntable is located on the ground floor and will be responsible

@@ -5,7 +5,7 @@ import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 
 /**
- * The {@link ParkingLevelFloorView}.
+ * The ParkingLevelFloorView.
  * <p>
  * This class is responsible for generating the floor for a parking level
  * in the Automatic Parking Simulator.
@@ -23,7 +23,7 @@ public class ParkingLevelFloorView {
      */ 
     private final GeneralPath parkingFloor;
     
-    /***
+    /**
      * Constructor. 
      */
     public ParkingLevelFloorView() {
@@ -31,7 +31,7 @@ public class ParkingLevelFloorView {
         initialiseFloorPlan();
     }
     
-    /***
+    /**
      * Draw out the floor plan onto the general path shape.
      */ 
     private void initialiseFloorPlan() {
@@ -42,7 +42,7 @@ public class ParkingLevelFloorView {
         drawSouthBay();
     }
     
-    /***
+    /**
      * Draw the external walls of the parking floor.
      */ 
     private void drawExternalWalls() {

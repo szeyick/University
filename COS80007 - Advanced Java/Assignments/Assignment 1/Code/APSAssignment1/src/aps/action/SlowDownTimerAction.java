@@ -3,7 +3,7 @@ package aps.action;
 import aps.timer.APSTimer;
 
 /**
- * The {@link SlowDownTimerAction}.
+ * The SlowDownTimerAction.
  * <p>
  * This class is responsible for allowing a user to slow down the simulation.
  * When this action is invoked, the controlling timer that triggers all the
@@ -16,7 +16,7 @@ import aps.timer.APSTimer;
 public class SlowDownTimerAction implements IAction {
 
     /**
-     * {@inheritDoc 
+     * Slow the timer down if the action has been executed. 
      */ 
     @Override
     public void executeAction() {

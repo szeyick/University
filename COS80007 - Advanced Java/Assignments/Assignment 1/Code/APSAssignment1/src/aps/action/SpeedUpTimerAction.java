@@ -3,7 +3,7 @@ package aps.action;
 import aps.timer.APSTimer;
 
 /**
- * The {@link SpeedUpTimerAction}.
+ * The SpeedUpTimerAction.
  * <p>
  * This class is responsible for providing the user the ability to 
  * increase the speed of the simulation. The simulation can be sped
@@ -17,7 +17,7 @@ import aps.timer.APSTimer;
 public class SpeedUpTimerAction implements IAction {
 
     /**
-     * {@inheritDoc}
+     * Speed up the timer if the action has been executed.
      */
     @Override
     public void executeAction() {

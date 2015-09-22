@@ -1,7 +1,7 @@
 package aps.action;
 
 /**
- * The {@link IAction}.
+ * The IAction.
  * <p>
  * This interface is responsible for providing a mechanism to allow an
  * action to be executed.

@@ -1,10 +1,10 @@
 package aps.action;
 
 import aps.events.EventType;
-import control.APSControl;
+import aps.control.APSControl;
 
 /**
- * The {@link CreateDropOffEventAction}.
+ * The CreateDropOffEventAction.
  * <p>
  * This class is responsible for allowing a user to create a pickup action. A
  * pickup event is the process of having a car wait in the forecourt of the
@@ -15,7 +15,7 @@ import control.APSControl;
 public class CreateDropOffEventAction implements IAction {
 
     /**
-     * {@inheritDoc
+     * Create an arrival event if the action is executed.
      */
     @Override
     public void executeAction() {

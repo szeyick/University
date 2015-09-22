@@ -1,7 +1,7 @@
 package aps.elevator;
 
 /**
- * The {@link ElevOperation}.
+ * The ElevOperation.
  * <p>
  * This enumerator is responsible for providing the current operation that the
  * elevator is conducting in relation to its sub components. A sub component of

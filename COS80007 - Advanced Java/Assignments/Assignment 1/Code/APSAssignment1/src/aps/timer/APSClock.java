@@ -3,7 +3,7 @@ package aps.timer;
 import javax.swing.JLabel;
 
 /**
- * The {@link APSClock}.
+ * The APSClock.
  * <p>
  * This class is responsible for providing the current time that has lapsed
  * since the start of the simulation. By default, the simulation is to start

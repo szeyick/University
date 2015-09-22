@@ -1,7 +1,7 @@
 package aps.shuttle;
 
 /**
- * The {@link TrolleyState}.
+ * The TrolleyState.
  * <p>
  * This enumerator is responsible for providing the states the the trolley
  * can be in.

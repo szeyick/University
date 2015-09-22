@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * The {@link ControlPanelActionListener}.
+ * The ControlPanelActionListener.
  * <p>
  * This class is responsible for responding to input events from user
  * interaction.
@@ -27,7 +27,7 @@ public class ControlPanelActionListener implements ActionListener {
         this.action = action;
     }
     /**
-     * {@inheritDoc}
+     * Perform an action when the event is triggered.
      * @param e - The user invoked event.
      */ 
     @Override

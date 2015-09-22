@@ -1,7 +1,7 @@
 package aps.events;
 
 /**
- * The {@link ParkingEvent}.
+ * The ParkingEvent.
  * <p>
  * This class represents a single parking event. A parking event is can be
  * either of two types, an arrival or departure event. This class

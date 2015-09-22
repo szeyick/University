@@ -1,7 +1,7 @@
 package aps.timer;
 
 /**
- * The {@link IAPSTimer}.
+ * The IAPSTimer.
  * <p>
  * This interface is responsible for providing the public accessible
  * methods for the timer.

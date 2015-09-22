@@ -6,13 +6,13 @@ import aps.floor.ParkingLevelFloorControl;
 import aps.timer.APSTimer;
 import aps.timer.IAPSTimer;
 import aps.timer.IAPSTimerListener;
-import control.APSControl;
+import aps.control.APSControl;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 /**
- * The {@link MainFrame}.
+ * The MainFrame.
  * <p>
  * This class is responsible for holding all the graphical components that are
  * to be displayed as part of the Automatic Parking Simulator.
@@ -96,8 +96,6 @@ public class MainFrame extends JFrame implements IAPSTimerListener {
 
     /**
      * Update the displayed view in the frame if the current floor has changed.
-     * <p>
-     * {@inheritDoc }.
      */
     @Override
     public void update(long dt) {

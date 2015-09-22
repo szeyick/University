@@ -1,10 +1,9 @@
-package control;
+package aps.control;
 
 import aps.car.CarModel;
 import aps.car.CarModelManager;
 import aps.car.CarState;
 import aps.elevator.Elevator;
-import aps.events.EventManager;
 import aps.events.EventType;
 import aps.events.ParkingEvent;
 import aps.timer.APSTimer;
@@ -14,10 +13,10 @@ import java.util.PriorityQueue;
 import javax.swing.JLabel;
 
 /**
- * The {@link APSControl}.
+ * The APSControl.
  * <p>
- * This class is responsible for managing the {@link ParkingEvents} in the
- * simulation. It responds to events received from the {@link EventManager} to
+ * This class is responsible for managing the ParkingEvents in the
+ * simulation. It responds to events received from the EventManager to
  * begin the event of adding or removing a car from the car park.
  * <p>
  * If multiple events are received, it is queued within this controller and
@@ -122,7 +121,6 @@ public class APSControl implements IAPSTimerListener {
      * @param event - The parking event to add.
      */
     private void processEvent(ParkingEvent event) {
-        // System.out.println("Adding Event " + event.getEventStartTime());
         parkingEventQueue.add(event);
         if (EventType.ARRIVAL.equals(event.getEventType())) {
             arrivalEventNum++;
@@ -165,7 +163,7 @@ public class APSControl implements IAPSTimerListener {
     }
 
     /**
-     * {@inheritDoc
+     * Update the parking events if it has been completed.
      */
     @Override
     public void update(long dt) {

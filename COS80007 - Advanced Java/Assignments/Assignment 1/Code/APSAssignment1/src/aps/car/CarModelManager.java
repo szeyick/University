@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JLabel;
 
 /**
- * The {@link CarModelManager}.
+ * The CarModelManager.
  * <p>
  * This class is responsible for managing all the car instances that are within
  * the Automatic Parking Simulator. It maintains a collection of

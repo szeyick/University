@@ -8,7 +8,7 @@ import aps.events.ParkingEvent;
 import aps.shuttle.Shuttle;
 import aps.shuttle.Trolley;
 import aps.turntable.TurntableModel;
-import control.APSControl;
+import aps.control.APSControl;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,7 +20,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 
 /**
- * The {@link GroundLevelFloorPanel}.
+ * The GroundLevelFloorPanel.
  * <p>
  * This class represents the ground floor in which a car enter/exit the
  * Automatic Parking Simulator. It provides the component that will be drawn and

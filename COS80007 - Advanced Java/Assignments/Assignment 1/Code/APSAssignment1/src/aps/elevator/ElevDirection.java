@@ -1,7 +1,7 @@
 package aps.elevator;
 
 /**
- * The {@link ElevDirection}.
+ * The ElevDirection.
  * <p>
  * This enumeration class is responsible for providing the movement state of the
  * elevator.

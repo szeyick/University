@@ -1,7 +1,7 @@
 package aps.car;
 
 /**
- * The {@link CarState}.
+ * The CarState.
  * <p>
  * This enumeration class represents the states that the car can be
  * in within the simulation. A car can either be in idle, where it is not

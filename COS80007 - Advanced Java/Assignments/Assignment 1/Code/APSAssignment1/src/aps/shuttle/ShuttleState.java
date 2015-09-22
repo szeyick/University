@@ -1,7 +1,7 @@
 package aps.shuttle;
 
 /**
- * The {@link ShuttleState}.
+ * The ShuttleState.
  * <p>
  * This enumerator is responsible for providing the states that the shuttle
  * can be in.

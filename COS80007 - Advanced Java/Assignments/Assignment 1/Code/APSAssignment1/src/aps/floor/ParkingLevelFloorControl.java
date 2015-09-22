@@ -2,10 +2,10 @@ package aps.floor;
 
 import aps.elevator.Elevator;
 import aps.timer.IAPSTimerListener;
-import control.APSControl;
+import aps.control.APSControl;
 
 /**
- * The {@link ParkingLevelFloorControl}
+ * The ParkingLevelFloorControl
  * <p>
  * This class is responsible for creating and managing the components for
  * the parking level floors. 

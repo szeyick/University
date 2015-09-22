@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * The {@link Config}.
+ * The Config.
  * <p>
  * This class is responsible for managing the offline defined configuration
  * parameters for the Automatic Parking Simulator (APS)

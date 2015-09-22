@@ -10,13 +10,13 @@ import aps.floor.ParkingBay;
 import aps.floor.ParkingBayDirection;
 import aps.floor.ParkingBayManager;
 import aps.timer.IAPSTimerListener;
-import control.APSControl;
+import aps.control.APSControl;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- * The {@link Trolley}.
+ * The Trolley.
  * <p>
  * This class represents the trolley mechanism in the Automatic Parking
  * Simulator. The purpose of the trolley is to load and unload the car from
@@ -45,7 +45,7 @@ public class Trolley implements IAPSTimerListener {
     /**
      * The time it takes to lock the trolley to the car.
      */
-    private int lockTime;
+    private final int lockTime;
 
     /**
      * The current time.
@@ -106,7 +106,7 @@ public class Trolley implements IAPSTimerListener {
     }
 
     /**
-     * {@inherit}
+     * Update the state of the trolley and redraw its coordinates.
      */
     @Override
     public void update(long dt) {

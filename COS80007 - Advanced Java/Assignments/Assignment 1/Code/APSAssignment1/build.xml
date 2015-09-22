@@ -37,10 +37,10 @@
 	</target>
 	
 	  <!-- Generate the JavaDoc from source in ${src.dir} into {$build.dir}/{$doc.dir} -->
-  	<target name="doc" depends="init" description="generate documentation">
+  	<target name="doc" depends="init" description="Generate JavaDoc">
     		<javadoc sourcepath="${src.dir}" destdir="${build.dir}/${doc.dir}"/>
   	</target>
   
 	<!-- To create a full clean, compile and generation of doc -->
-	<target name="build" depends="clean, compile, doc" />
+	<target name="build" depends="clean, compile, doc" description="Running Full Build"/>
 </project>

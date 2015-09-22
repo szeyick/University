@@ -1,56 +1,46 @@
 <project name="APSAssignment1" default="main" basedir=".">
 	<description>
-		Create a Java Project (JAR) with Ant build script
+		Compile, Clean and Generate JavaDoc with Ant Build Script.
+		Name: Sze Yick
+		StudentID - 1763652
 	</description>
 	<property name="projectName" value="APSAssignment1" />
 	
-        <!-- Resource Files -->
+        <!-- Resource File Directory -->
         <property name="resources.dir" location="resources"/>
         
-	<!-- Java sources -->
+	<!-- Java Source Directory -->
 	<property name="src.dir" location="src" />
 	
-	<!-- Java classes -->
+	<!-- Java Classes Output Directory -->
 	<property name="build.dir" location="bin" />
 	
-	<!-- Output, Jar -->
-	<property name="dist.dir" location="dist" />
-
+	<!-- JavaDoc Output File -->
+	<property name="doc.dir" location="doc"/>
+	
+	<!-- Create the build directory to store the output of the compilation -->
 	<target name="init">
-		<!-- Create the time stamp -->
-		<tstamp />
-		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${build.dir}" />
 	</target>
 
-	<target name="compile" depends="init" description="compile the source ">
-		<!-- Compile the java code from ${src.dir} into ${build.dir} -->
+	<!-- Compile the Java code from ${src.dir} into ${build.dir} and copy resources into {$build.dir}-->
+	<target name="compile" depends="init" description="Compiling Source ">
 		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${build.dir}" />
                 <copy todir="${build.dir}/resources">
                     <fileset dir="${resources.dir}"/>
                 </copy>
 	</target>
 
-	<target name="dist" depends="compile" description="package, output to JAR">
-
-		<!-- Create the distribution directory -->
-		<mkdir dir="${dist.dir}" />
-
-		<!-- Put everything in ${build} into the {$projectName}-${DSTAMP}.jar file -->
-		<jar jarfile="${dist.dir}/${projectName}-${DSTAMP}.jar" basedir="${build.dir}" >
-		    <manifest>
-			<!-- create an executable Jar -->
-			<attribute name="Main-Class" value="APS" />
-		    </manifest>
-		</jar>
-	</target>
-
-	<target name="clean" description="clean up">
+	<!-- Remove the contents of the build directory. -->
+	<target name="clean" description="Clean Up/Removing Directories">
 		<delete dir="${build.dir}" />
-		<delete dir="${dist.dir}" />
 	</target>
 	
-	<!-- Default, run this -->
-	<target name="main" depends="clean, compile, dist" />
-	
+	  <!-- Generate the JavaDoc from source in ${src.dir} into {$build.dir}/{$doc.dir} -->
+  	<target name="doc" depends="init" description="generate documentation">
+    		<javadoc sourcepath="${src.dir}" destdir="${build.dir}/${doc.dir}"/>
+  	</target>
+  
+	<!-- To create a full clean, compile and generation of doc -->
+	<target name="build" depends="clean, compile, doc" />
 </project>

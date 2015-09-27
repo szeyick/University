@@ -14,72 +14,93 @@ prompt --------------------------------------------------------------
 prompt Task 1.1 
 prompt ENGLISH STATEMENTS
 --XXXXXXXXXXXXXXXX (Replace this line with your ENGISGH sentences for 1.1. here)
-ONE CUSTOMER MAY create MANY SHOP ORDERS
-ONE SALESPERON MAY be allocated fulfill MANY SHOP ORDERS
-ONE SHOP ORDER MUST be created by ONE CUSTOMER
-ONE SHOP ORDER MUST be allocated to ONE SALES PERSON
-ONE SHOP ORDER MAY contain MANY ORDER LINES
-ONE PRODUCT MAY be for MANY ORDER LINES
-ONE ORDER LINE MUST have ONE SHOP ORDER
-ONE ORDER LINE MUST have ONE PRODUCT
+--ONE CUSTOMER MAY create MANY SHOP ORDERS
+--ONE SALESPERON MAY be allocated to fulfill MANY SHOP ORDERS
+--ONE SHOP ORDER MUST be created by ONE CUSTOMER
+--ONE SHOP ORDER MUST be allocated to ONE SALES PERSON
+--ONE SHOP ORDER MAY contain MANY ORDER LINES
+--ONE PRODUCT MAY be part of MANY ORDER LINES
+--ONE ORDER LINE MUST belong to ONE SHOP ORDER
+--ONE ORDER LINE MUST belong to ONE PRODUCT
 
 prompt --------------------------------------------------------------
 prompt Task 1.2 
 prompt DROP ALL TABLES
 --XXXXXXXXXXXXXXXX 
-
+DROP TABLE QUALITYCHECK;
+DROP TABLE ORDERLINE;
+DROP TABLE SHOPORDER;
+DROP TABLE ALLOCATION;
+DROP TABLE MANAGER;
+DROP TABLE PRODUCT;
+DROP TABLE SALESPERSON;
+DROP TABLE CUSTOMER;
 prompt --------------------------------------------------------------
 prompt Task 1.3 
 prompt CREATE ALL TABLES
 --XXXXXXXXXXXXXXXX 
 --Create Customer Table
 CREATE TABLE CUSTOMER (
-	custid NUMBER(4) PRIMARY KEY,
+	custid NUMBER(4),
 	cfirstname VARCHAR2(30),
 	csurname VARCHAR2(30),
 	billingaddr VARCHAR2(30),
-	cgender VARCHAR2(1),
-	CONSTRAINT CHK_CUSTOMER_GENDER CHECK (cgender IN ('M', 'F'))
+	cgender VARCHAR2(1) CONSTRAINT CHK_CUSTOMER_GENDER CHECK (cgender IN ('M', 'F')),
+	PRIMARY KEY (custid)
 );
 --Create Sales Person Table
 CREATE TABLE SALESPERSON (
-	spid NUMBER(4) PRIMARY KEY,
+	spid NUMBER(4),
 	spfirstname VARCHAR2(30),
 	spsurname VARCHAR2(30),
-	spgender VARCHAR2(1),
+	spgender VARCHAR2(1) CONSTRAINT SALESPERSON_GENDER CHECK (spgender IN ('M', 'F')),
+	PRIMARY KEY (spid)
 );
 --Create Product Table
 CREATE TABLE PRODUCT (
-	prodid NUMBER(4) PRIMARY KEY,
+	prodid NUMBER(4),
 	prodname VARCHAR2(30),
-	currentprice NUMBER(6,2)
-	CONSTRAINT CHK_PRODUCT_CURRENTPRICE CHECK (currentprice > 0),
-	CONSTRAINT CHK_PRODUCT_CURRENTPRICE CHECK (currentprice > 0 AND currentprice < 5000)
+	currentprice NUMBER(6,2) CONSTRAINT CHK_PRODUCT_CURRENTPRICE CHECK (currentprice >= 0 AND currentprice <= 5000),
+	PRIMARY KEY (prodid)
 );
 --Create Shop Order Table
 CREATE TABLE SHOPORDER(
-	ordid NUMBER(4) PRIMARY KEY,
+	ordid NUMBER(4),
 	deliveryaddress VARCHAR2(30),
 	custid NUMBER(4) REFERENCES CUSTOMER,
-	spid NUMBER(4) REFERENCES SALESPERSON
+	spid NUMBER(4) REFERENCES SALESPERSON,
+	PRIMARY KEY (ordid),
+	FOREIGN KEY (custid) REFERENCES CUSTOMER,
+	FOREIGN KEY (spid) REFERENCES SALESPERSON
+);
+--Create Order Line Table
+CREATE TABLE ORDERLINE (
+	ordid NUMBER(4),
+	prodid NUMBER(4),
+	qtysold NUMBER(4) CONSTRAINT CHK_SHOPORDER_QTYSOLD CHECK (qtysold >= 0),
+	qtydelivered NUMBER(4) CONSTRAINT CHK_SHOPORDER_QTYDELIVERED CHECK (qtydelivered >= 0),
+	saleprice NUMBER(6,2) CONSTRAINT CHK_SHOPORDER_SALESPRICE CHECK (saleprice >= 0 AND saleprice <= 5000),
+	PRIMARY KEY (ordid, prodid),
+	FOREIGN KEY (ordid) REFERENCES SHOPORDER,
+	FOREIGN KEY (prodid) REFERENCES PRODUCT
 );
 
 prompt --------------------------------------------------------------
 prompt Task 1.4 
 prompt INSERT CUSTOMER VALID DATA
 --XXXXXXXXXXXXXXXX 
-INSERT INTO CUSTOMER (custid, cfirstname, csurname, billingaddr, cgender) VALUES (1, 'Casey', 'Cartwright', 'F', '1 High St Kew');
-INSERT INTO CUSTOMER (custid, cfirstname, csurname, billingaddr, cgender) VALUES (2, 'Evan', 'Chambers', 'M', '8 Red St Rye');
-INSERT INTO CUSTOMER (custid, cfirstname, csurname, billingaddr, cgender) VALUES (3, 'Calvin', 'Owens', 'M', '7 Long Rd Lara');
-INSERT INTO CUSTOMER (custid, cfirstname, csurname, billingaddr, cgender) VALUES (4, 'Frannie', 'Morgan', 'F', '9 Down Pde Upwey');
-INSERT INTO CUSTOMER (custid, cfirstname, csurname, billingaddr, cgender) VALUES (5, 'Cappie', 'Jones', 'F', '6 Mist St Toorak');
-INSERT INTO CUSTOMER (custid, cfirstname, csurname, billingaddr, cgender) VALUES (6, 'Dana', 'Stockwell', 'F', '2 Tree St Epping');
-INSERT INTO CUSTOMER (custid, cfirstname, csurname, billingaddr, cgender) VALUES (7, 'Ash', 'Howard', 'F', '4 Elm Ave Elwood');
+INSERT INTO CUSTOMER (custid, cfirstname, csurname, cgender, billingaddr) VALUES (1, 'Casey', 'Cartwright', 'F', '1 High St Kew');
+INSERT INTO CUSTOMER (custid, cfirstname, csurname, cgender, billingaddr) VALUES (2, 'Evan', 'Chambers', 'M', '8 Red St Rye');
+INSERT INTO CUSTOMER (custid, cfirstname, csurname, cgender, billingaddr) VALUES (3, 'Calvin', 'Owens', 'M', '7 Long Rd Lara');
+INSERT INTO CUSTOMER (custid, cfirstname, csurname, cgender, billingaddr) VALUES (4, 'Frannie', 'Morgan', 'F', '9 Down Pde Upwey');
+INSERT INTO CUSTOMER (custid, cfirstname, csurname, cgender, billingaddr) VALUES (5, 'Cappie', 'Jones', 'F', '6 Mist St Toorak');
+INSERT INTO CUSTOMER (custid, cfirstname, csurname, cgender, billingaddr) VALUES (6, 'Dana', 'Stockwell', 'F', '2 Tree St Epping');
+INSERT INTO CUSTOMER (custid, cfirstname, csurname, cgender, billingaddr) VALUES (7, 'Ash', 'Howard', 'F', '4 Elm Ave Elwood');
 prompt --------------------------------------------------------------
 prompt Task 1.5 
 prompt ATTEMPT TO INSERT CUSTOMER ROWS WITH INVALID VALUES
 --XXXXXXXXXXXXXXXX 
-INSERT INTO CUSTOMER (custid, cfirstname, csurname, billingaddr, cgender) VALUES (8, 'Milton', 'Hastings', 'X', '3 Blue St, Kew');
+INSERT INTO CUSTOMER (custid, cfirstname, csurname, cgender, billingaddr) VALUES (8, 'Milton', 'Hastings', 'X', '3 Blue St, Kew');
 prompt --------------------------------------------------------------
 prompt Task 1.6 
 prompt INSERT PRODUCT VALID DATA
@@ -123,8 +144,7 @@ INSERT INTO SHOPORDER (ordid, deliveryaddress, custid, spid) VALUES (48, NULL, 3
 INSERT INTO SHOPORDER (ordid, deliveryaddress, custid, spid) VALUES (45, '1254 Dunstall Rd Coorparoo', 4, 22);
 INSERT INTO SHOPORDER (ordid, deliveryaddress, custid, spid) VALUES (47, '727 Hudson Rd Glenorchy', 4, 26);
 INSERT INTO SHOPORDER (ordid, deliveryaddress, custid, spid) VALUES (50, '517 Franklin St Dowerin', 4, 22);
-INSERT INTO SHOPORDER (ordid, deliveryaddress, custid, spid) VALUES (41, NULL, 6, 21);
-
+INSERT INTO SHOPORDER (ordid, deliveryaddress, custid, spid) VALUES (46, NULL, 6, 21);
 prompt --------------------------------------------------------------
 prompt Task 1.10 
 prompt ATTEMPT TO INSERT SHOP ORDERS ROWS WITH INVALID VALUES
@@ -135,35 +155,97 @@ prompt --------------------------------------------------------------
 prompt Task 1.11 
 prompt INSERT SHOP ORDER LINES VALID DATA
 --XXXXXXXXXXXXXXXX 
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (41, 31, 2, 0, 750);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (41, 36, 1, 0, 170);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (42, 33, 1, 1, 500);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (43, 35, 6, 5, 220);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (44, 31, 1, 0, 760);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (44, 34, 1, 0, 1100);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (45, 36, 2, 2, 175);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (46, 37, 2, 2, 380);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (46, 38, 2, 2, 90);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (47, 39, 1, 0, 600);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (47, 35, 1, 0, 200);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (47, 36, 2, 0, 175);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (47, 38, 1, 0, 85);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (48, 34, 1, 1, 1200);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (49, 38, 1, 1, 90);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (50, 31, 2, 0, 750);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (50, 36, 1, 0, 180);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (51, 35, 10, 10, 190);
 prompt --------------------------------------------------------------
 prompt Task 1.12 
 prompt ATTEMPT TO INSERT  ORDER LINES ROWS WITH INVALID VALUES
 --XXXXXXXXXXXXXXXX 
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (49, 40, 2, 2, 200);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (52, 36, 10, 10, 175);
 prompt --------------------------------------------------------------
 prompt Query 1.13
 prompt LIST ALL ROWS FROM ALL TABLES
 --XXXXXXXXXXXXXXXX 
-prompt --------------------------------------------------------------
+SELECT * FROM CUSTOMER
+ORDER BY custid ASC;
 
+SELECT * FROM SALESPERSON
+ORDER BY spid ASC;
+
+SELECT * FROM PRODUCT
+ORDER BY prodid ASC;
+
+SELECT * FROM SHOPORDER
+ORDER BY ordid ASC;
+
+--This needs to be checked
+SELECT * FROM ORDERLINE
+ORDER BY ordid ASC, prodid ASC;
+prompt --------------------------------------------------------------
 prompt Query 2.1
 prompt COUNT ALL SHOPORDERS
 --XXXXXXXXXXXXXXXX 
+SELECT COUNT(*) AS "TOTAL ORDERS"
+FROM SHOPORDER;
 prompt --------------------------------------------------------------
 prompt Query 2.2
 prompt COUNT ALL SHOPORDERS FOR FEMALES
 --XXXXXXXXXXXXXXXX 
+SELECT COUNT(c.custid) AS "TOTAL ORDERS"
+FROM SHOPORDER S
+INNER JOIN CUSTOMER C
+ON S.custid = C.custid
+WHERE C.cgender = 'F';
 prompt --------------------------------------------------------------
 prompt Query 2.3
 prompt COUNT ALL SHOPORDERS BY GENDER
 --XXXXXXXXXXXXXXXX 
+SELECT C.cgender AS "GENDER", COUNT(C.custid) AS "TOTAL ORDERS"
+FROM SHOPORDER S
+INNER JOIN CUSTOMER C
+ON S.custid = C.custid
+GROUP BY C.cgender
+ORDER BY C.cgender ASC;
 prompt --------------------------------------------------------------
 prompt Query 2.4
 prompt LIST ORDER and CUST DATA FOR FEMALES in Cust/Order SEQ
 --XXXXXXXXXXXXXXXX 
+SELECT S.ordid, C.custid, C.cfirstname, C.csurname
+FROM SHOPORDER S
+INNER JOIN CUSTOMER C
+ON S.custid = C.custid
+WHERE C.cgender = 'F'
+ORDER BY C.custid ASC;
 prompt --------------------------------------------------------------
 prompt Query 2.5
 prompt LIST ORDER , ORDER LINE and CUST DATA in Cust/Order/Prod SEQ
 --XXXXXXXXXXXXXXXX 
+SELECT C.custid, S.ordid, C.cfirstname, C.csurname, P.prodid, O.qtysold
+FROM ORDERLINE O
+INNER JOIN PRODUCT P
+ON O.prodid = P.prodid
+INNER JOIN SHOPORDER S
+ON O.ordid = S.ordid
+INNER JOIN CUSTOMER C
+ON S.custid = C.custid
+ORDER BY C.custid ASC, S.ordid ASC, P.prodid ASC;
 prompt --------------------------------------------------------------
 
 prompt Query 3.1
@@ -172,87 +254,259 @@ prompt --------------------------------------------------------------
 prompt Query 3.2
 prompt CREATE TABLE STATEMENTS. 
 --XXXXXXXXXXXXXXXX 
+--Create Manager Table.
+CREATE TABLE MANAGER (
+	mgrid NUMBER(4),
+	msurname VARCHAR2(30),
+	mfirstname VARCHAR2(30),
+	PRIMARY KEY (mgrid)
+);
+
+--Create Allocation Table
+CREATE TABLE ALLOCATION (
+	mgrid NUMBER(4),
+	prodid NUMBER(4),
+	PRIMARY KEY (mgrid, prodid),
+	FOREIGN KEY (mgrid) REFERENCES MANAGER,
+	FOREIGN KEY (prodid) REFERENCES PRODUCT
+);
+
+--Create Quality Check Table
+CREATE TABLE QUALITYCHECK (
+	weekno NUMBER(2) CONSTRAINT CHK_QUALITYCHECK_WEEKNO CHECK (weekno >= 1 AND weekno <= 52),
+	score NUMBER(4),
+	mgrid NUMBER(4),
+	prodid NUMBER(4),
+	PRIMARY KEY(weekno, mgrid, prodid),
+	FOREIGN KEY (mgrid, prodid) REFERENCES ALLOCATION
+);
 prompt --------------------------------------------------------------
 prompt Query 3.3
 prompt INSERT MANAGERS. 
 --XXXXXXXXXXXXXXXX 
+INSERT INTO MANAGER (mgrid, mfirstname, msurname) VALUES (101, 'Bob', 'Starkie');
+INSERT INTO MANAGER (mgrid, mfirstname, msurname) VALUES (102, 'Shirley', 'Strachan');
+INSERT INTO MANAGER (mgrid, mfirstname, msurname) VALUES (103, 'Greg', 'Macainch');
 prompt --------------------------------------------------------------
 prompt Query 3.4
 prompt INSERT ALLOCATIONS. 
 --XXXXXXXXXXXXXXXX 
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (31, 101);
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (32, 102);
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (32, 103);
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (33, 103);
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (34, 103);
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (35, 102);
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (36, 101);
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (37, 102);
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (38, 102);
+
 prompt --------------------------------------------------------------
 prompt Query 3.5
 prompt ALLOCATION PK ERRORS
 --XXXXXXXXXXXXXXXX 
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (35, 102);
+INSERT INTO ALLOCATION (prodid, mgrid) VALUES (36, 101);
 prompt --------------------------------------------------------------
 prompt Query 3.6
 prompt INSERT QUALITY CHECKS
 --XXXXXXXXXXXXXXXX 
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (31, 101, 1, 3);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (31, 101, 2, 2);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (31, 101, 3, 3);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (32, 102, 1, 1);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (32, 102, 2, 2);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (32, 102, 3, 1);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (32, 103, 1, 2);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (32, 103, 2, 1);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (32, 103, 3, 1);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (33, 103, 1, 1);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (33, 103, 2, 3);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (33, 103, 3, 3);
 prompt --------------------------------------------------------------
 prompt Query 3.7
 prompt QUALITYCHECK PK ERRORS
 --XXXXXXXXXXXXXXXX 
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (31, 101, 3, 3);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (32, 102, 1, 1);
 prompt --------------------------------------------------------------
 prompt Query 3.8
 prompt QUALITYCHECK FK ERRORS
 --XXXXXXXXXXXXXXXX 
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (31, 101, 1, 2);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (34, 101, 1, 3);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (36, 103, 2, 2);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (31, 102, 3, 3);
+INSERT INTO QUALITYCHECK (prodid, mgrid, weekno, score) VALUES (32, 101, 1, 1);
 prompt --------------------------------------------------------------
 prompt Query 3.9
 prompt LIST ALL ROWS FROM ALL ADDITIONAL TABLES
 --XXXXXXXXXXXXXXXX 
-prompt --------------------------------------------------------------
+SELECT * FROM MANAGER
+ORDER BY mgrid ASC;
 
+SELECT * FROM ALLOCATION
+ORDER BY mgrid, prodid;
+
+SELECT * FROM QUALITYCHECK
+ORDER BY weekno ASC, mgrid ASC, prodid ASC;
+prompt --------------------------------------------------------------
 prompt Task 4.1 
 prompt PRICE DIFF QUERY
 --XXXXXXXXXXXXXXXX 
+SELECT O.ordid, P.prodid, P.prodname, P.currentprice, O.saleprice, (P.currentprice - O.saleprice) AS "Price Difference"
+FROM ORDERLINE O
+INNER JOIN PRODUCT P
+ON O.prodid = P.prodid
+WHERE ((1 - (O.saleprice / P.currentprice)) > 0.1)
+ORDER BY 6 ASC;
 prompt --------------------------------------------------------------
 prompt Task 4.2 
 prompt UNION ROLE QUERY
 --XXXXXXXXXXXXXXXX 
+SELECT csurname AS "Surname", cfirstname AS "First Name", 'Customer' AS "Role"
+FROM CUSTOMER
+UNION
+SELECT msurname AS "Surname", mfirstname AS "First Name", 'Manager' AS "Role"
+FROM MANAGER
+UNION
+SELECT spsurname AS "Surname", spfirstname AS "First Name", 'Salesperson' AS "Role"
+FROM SALESPERSON
+ORDER BY 1 ASC, 2 ASC;
 prompt --------------------------------------------------------------
 prompt Task 4.3 
 prompt UNION ADDRESS QUERY
 --XXXXXXXXXXXXXXXX 
+SELECT ordid, deliveryaddress AS "Address"
+FROM SHOPORDER
+WHERE deliveryaddress IS NOT NULL
+UNION
+SELECT S.ordid, C.billingaddr AS "Address"
+FROM SHOPORDER S
+INNER JOIN CUSTOMER C
+ON S.custid = C.custid
+WHERE S.deliveryaddress IS NULL;
 prompt --------------------------------------------------------------
 prompt Task 4.4 
 prompt ORDERLINE QUERY
 --XXXXXXXXXXXXXXXX 
+SELECT C.custid, O.ordid, C.cfirstname, C.csurname, P.prodid, P.prodname
+FROM ORDERLINE O
+INNER JOIN PRODUCT P
+ON O.prodid = P.prodid
+INNER JOIN SHOPORDER S
+ON O.ordid = S.ordid
+INNER JOIN CUSTOMER C
+ON S.custid = C.custid
+ORDER BY C.custid ASC, S.ordid ASC, P.prodid ASC;
 prompt --------------------------------------------------------------
 prompt Task 4.5 
 prompt AVG PRICE QUERY
+SELECT prodid, prodname, currentprice
+FROM PRODUCT
+WHERE currentprice > (SELECT AVG(currentprice) FROM PRODUCT)
+ORDER BY 3 ASC;
 --XXXXXXXXXXXXXXXX 
 prompt --------------------------------------------------------------
 
 prompt Query 5.1 
 prompt LIST SHOPORDERS FOR CUSTOMERS (INCLUDE CUSTOMERS WITHOUT ORDERS)
 --XXXXXXXXXXXXXXXX 
+SELECT C.custid, C.csurname, S.ordid
+FROM SHOPORDER S
+RIGHT OUTER JOIN CUSTOMER C
+ON S.custid = C.custid
+ORDER BY C.custid ASC, S.ordid ASC;
 prompt --------------------------------------------------------------
 prompt Query 5.2
 prompt COUNT SHOPORDERS FOR CUSTOMERS
 --XXXXXXXXXXXXXXXX 
+SELECT C.custid, C.csurname, COUNT(S.custid) 
+FROM SHOPORDER S
+RIGHT OUTER JOIN CUSTOMER C
+ON S.custid = C.custid
+GROUP BY C.custid, C.csurname
+ORDER BY C.custid ASC;
 prompt --------------------------------------------------------------
 prompt Query 5.3
 prompt LIST ORDERLINES BY CUSTOMER
 --XXXXXXXXXXXXXXXX 
+
+SELECT C.custid, S.ordid, C.cfirstname, C.csurname, P.prodid, O.qtysold
+FROM ORDERLINE O
+INNER JOIN PRODUCT P
+ON O.prodid = P.prodid
+INNER JOIN SHOPORDER S
+ON O.ordid = S.ordid
+INNER JOIN CUSTOMER C
+ON S.custid = C.custid
+ORDER BY C.custid ASC, S.ordid ASC, P.prodid ASC;
 prompt --------------------------------------------------------------
 prompt Query 5.4
 prompt LIST ORDERLINES BY PRODUCT
 --XXXXXXXXXXXXXXXX 
+SELECT P.prodid, P.prodname, SUM(O.qtysold) AS "Total Sales"
+FROM PRODUCT P
+RIGHT OUTER JOIN ORDERLINE O
+ON P.prodid = O.prodid
+GROUP BY P.prodid, P.prodname
+ORDER BY 2 ASC, P.prodid ASC
 prompt --------------------------------------------------------------
 prompt Query 5.5
 prompt LIST ORDERLINES BY PRODUCT (RANGE 2-10)
 --XXXXXXXXXXXXXXXX 
+SELECT P.prodid, P.prodname, SUM(O.qtysold) AS "Total Sales"
+FROM PRODUCT P
+RIGHT OUTER JOIN ORDERLINE O
+ON P.prodid = O.prodid
+GROUP BY P.prodid, P.prodname
+HAVING (SUM(O.qtysold) >=2 AND SUM(O.qtysold) <=10)
+ORDER BY 2 ASC, P.prodid ASC
 prompt --------------------------------------------------------------
 prompt Query 5.6
 prompt LIST ORDERLINES BY PRODUCT.  ONLY LAMPS
 --XXXXXXXXXXXXXXXX 
+SELECT P.prodid, P.prodname, SUM(O.qtysold) AS "Total Sales"
+FROM PRODUCT P
+RIGHT OUTER JOIN ORDERLINE O
+ON P.prodid = O.prodid
+WHERE UPPER(P.prodname) LIKE 'LAMP%'
+OR
+UPPER(P.prodname) LIKE '%LAMP%'
+OR
+UPPER(P.prodname) LIKE '%TABLE%'
+OR
+UPPER(P.prodname) LIKE 'TABLE%'
+GROUP BY P.prodid, P.prodname
+HAVING (SUM(O.qtysold) >1)
+ORDER BY 2 ASC, P.prodid ASC
 prompt --------------------------------------------------------------
 prompt Query 5.7
 prompt AVG SCORE QUERY A
 --XXXXXXXXXXXXXXXX 
+SELECT P.prodid, P.prodname, ROUND(AVG(Q.score),2)
+FROM QUALITYCHECK Q
+INNER JOIN PRODUCT P
+ON Q.prodid = P.prodid
+GROUP BY P.prodid, P.prodname
+HAVING ROUND(AVG(Q.score),2) > 2.0;
 prompt --------------------------------------------------------------
 prompt Query 5.8
 prompt AVG SCORE QUERY B
 --XXXXXXXXXXXXXXXX 
+SELECT P.prodid, P.prodname, SUM(O.qtysold) AS "Total Sales"
+FROM PRODUCT P
+RIGHT OUTER JOIN ORDERLINE O
+ON P.prodid = O.prodid
+WHERE  P.prodid IN (SELECT Q.prodid
+FROM QUALITYCHECK Q
+INNER JOIN PRODUCT P
+ON Q.prodid = P.prodid
+WHERE Q.prodid = P.prodid
+HAVING ROUND(AVG(Q.score),2) > 2.0
+GROUP BY Q.prodid
+)
+GROUP BY P.prodid, P.prodname
+ORDER BY 2 ASC, P.prodid ASC;
 
 

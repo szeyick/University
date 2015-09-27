@@ -17,7 +17,7 @@ prompt ENGLISH STATEMENTS
 --ONE CUSTOMER MAY create MANY SHOP ORDERS
 --ONE SALESPERON MAY be allocated to fulfill MANY SHOP ORDERS
 --ONE SHOP ORDER MUST be created by ONE CUSTOMER
---ONE SHOP ORDER MUST be allocated to ONE SALES PERSON
+--ONE SHOP ORDER MUST be fulfilled by ONE SALES PERSON
 --ONE SHOP ORDER MAY contain MANY ORDER LINES
 --ONE PRODUCT MAY be part of MANY ORDER LINES
 --ONE ORDER LINE MUST belong to ONE SHOP ORDER
@@ -67,8 +67,8 @@ CREATE TABLE PRODUCT (
 CREATE TABLE SHOPORDER(
 	ordid NUMBER(4),
 	deliveryaddress VARCHAR2(30),
-	custid NUMBER(4) REFERENCES CUSTOMER,
-	spid NUMBER(4) REFERENCES SALESPERSON,
+	custid NUMBER(4),
+	spid NUMBER(4),
 	PRIMARY KEY (ordid),
 	FOREIGN KEY (custid) REFERENCES CUSTOMER,
 	FOREIGN KEY (spid) REFERENCES SALESPERSON
@@ -161,6 +161,7 @@ INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (
 INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (43, 35, 6, 5, 220);
 INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (44, 31, 1, 0, 760);
 INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (44, 34, 1, 0, 1100);
+INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (44, 36, 1, 0, 180);
 INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (45, 36, 2, 2, 175);
 INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (46, 37, 2, 2, 380);
 INSERT INTO ORDERLINE (ordid, prodid, qtysold, qtydelivered, saleprice) VALUES (46, 38, 2, 2, 90);
@@ -299,7 +300,6 @@ INSERT INTO ALLOCATION (prodid, mgrid) VALUES (34, 103);
 INSERT INTO ALLOCATION (prodid, mgrid) VALUES (35, 102);
 INSERT INTO ALLOCATION (prodid, mgrid) VALUES (36, 101);
 INSERT INTO ALLOCATION (prodid, mgrid) VALUES (37, 102);
-INSERT INTO ALLOCATION (prodid, mgrid) VALUES (38, 102);
 
 prompt --------------------------------------------------------------
 prompt Query 3.5
@@ -346,7 +346,7 @@ SELECT * FROM MANAGER
 ORDER BY mgrid ASC;
 
 SELECT * FROM ALLOCATION
-ORDER BY mgrid, prodid;
+ORDER BY mgrid ASC, prodid ASC;
 
 SELECT * FROM QUALITYCHECK
 ORDER BY weekno ASC, mgrid ASC, prodid ASC;
@@ -431,7 +431,6 @@ prompt --------------------------------------------------------------
 prompt Query 5.3
 prompt LIST ORDERLINES BY CUSTOMER
 --XXXXXXXXXXXXXXXX 
-
 SELECT C.custid, S.ordid, C.cfirstname, C.csurname, P.prodid, O.qtysold
 FROM ORDERLINE O
 INNER JOIN PRODUCT P
@@ -450,7 +449,7 @@ FROM PRODUCT P
 RIGHT OUTER JOIN ORDERLINE O
 ON P.prodid = O.prodid
 GROUP BY P.prodid, P.prodname
-ORDER BY 2 ASC, P.prodid ASC
+ORDER BY 3 ASC, P.prodid ASC;
 prompt --------------------------------------------------------------
 prompt Query 5.5
 prompt LIST ORDERLINES BY PRODUCT (RANGE 2-10)
@@ -461,7 +460,7 @@ RIGHT OUTER JOIN ORDERLINE O
 ON P.prodid = O.prodid
 GROUP BY P.prodid, P.prodname
 HAVING (SUM(O.qtysold) >=2 AND SUM(O.qtysold) <=10)
-ORDER BY 2 ASC, P.prodid ASC
+ORDER BY 3 ASC, P.prodid ASC;
 prompt --------------------------------------------------------------
 prompt Query 5.6
 prompt LIST ORDERLINES BY PRODUCT.  ONLY LAMPS
@@ -479,7 +478,7 @@ OR
 UPPER(P.prodname) LIKE 'TABLE%'
 GROUP BY P.prodid, P.prodname
 HAVING (SUM(O.qtysold) >1)
-ORDER BY 2 ASC, P.prodid ASC
+ORDER BY 3 ASC, P.prodid ASC;
 prompt --------------------------------------------------------------
 prompt Query 5.7
 prompt AVG SCORE QUERY A
@@ -489,7 +488,8 @@ FROM QUALITYCHECK Q
 INNER JOIN PRODUCT P
 ON Q.prodid = P.prodid
 GROUP BY P.prodid, P.prodname
-HAVING ROUND(AVG(Q.score),2) > 2.0;
+HAVING ROUND(AVG(Q.score),2) > 2.0
+ORDER BY 3 ASC;
 prompt --------------------------------------------------------------
 prompt Query 5.8
 prompt AVG SCORE QUERY B

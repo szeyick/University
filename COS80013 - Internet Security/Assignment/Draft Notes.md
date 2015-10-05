@@ -62,3 +62,33 @@ ZwMapViewOfSection, ZwCreationSection, ZwOpenFile, ZwClose, ZwQueryAttributesFil
 The patched API will trick ZwOpenFile to read from this .stub section like it is reading from the hard drive. 
 
 The patched files will make LoadLibraryA load a DLL file from a place in memory rather than a hard disk location. Presumebly it will allow the Stuxnet dll to be loaded in this way.
+
+It will call LoadLibraryA with the DLL name to then load the main stuxnet DLL file.
+
+### Main Stuxnet DLL
+
+Once the main DLL is loaded, it will **unupx itself (the dll is upxed)** and checks the environment it has been loaded in to see whether it should continue executing or not.
+
+If the configuration of the system it has been installed in is the correct type of environment, it will then check to see if it has admin rights. If it does not, then it'll use either of two zero day vulnerabilities to escalate the system priveledges to adminstrator level.
+
+### Admin Access Vulnerabilities
+
+**CVE-2010-2743 (MS-10-073) - Win32K.sys Keyboard Layout Vulnerability**
+
+**CVE-xxxx-xxxx (MS-xx-xxx) - Windows Task Scheduler Vulnerability
+
+The aforemtnioned vulernabilities will allow the worm to esclate priveledges and run in a new process or new task.
+
+It also checks whether the system is a 32 or 64 bit system.
+
+All the tasks up until now are for the **preperation** for the system to be infected with stuxnet. The next step will then for it to inject itself into another process to then begin the installation of stuxnet.
+
+### First Step
+
+When the system is primed and ready to install stuxnet, it will search for any anti-vuris applications that are installed on the machine. 
+
+Depending on the installed anti-virus (if there is any), stuxnet will choose the process to inject itself into. If there is none installed it will use the **lsass.exe** process.
+
+It doesn't use the task manager to find the process to inject itself into, but rather creates a new process from the target process and sets it to suspend.
+
+It will then inject itself but unloading the targeted process from memory and load its own process from the stuxnet DLL in its place. The newly loaded process will be of the same size of the one it has unloaded. Lastly it copies the stub section and the main DLL to the process to inject and writes it into the memory buffer.

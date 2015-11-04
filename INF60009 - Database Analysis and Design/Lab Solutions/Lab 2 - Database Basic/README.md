@@ -158,7 +158,7 @@ Displays nothing as values are case sensitive.
 
 **SELECT name FROM Worker WHERE gender <> 'f';** 
 
-Returns all the males. (name column)
+Returns everyone so long as their gender != f
 
 The <> symbol appears to mean, 'everything that is not'.
 

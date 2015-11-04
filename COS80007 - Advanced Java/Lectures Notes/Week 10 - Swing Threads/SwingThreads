@@ -1,0 +1,29 @@
+## Swing Threads
+
+### Event Dispatch Thread
+
+- Handles all the user events (ActionEvent, ChangeEvent, etc), including the Swing Timer events.
+
+- It also calls paint(), paintComponent(), validate()
+
+- It calls run() on the event queue by other threads.
+
+- The event dispatch thread should not be used for long tasks since it will be unresponsive.
+
+### Worker Threads
+
+Additional threads can be introduced to run background tasks that can take a long time. This way we can avoid using the EventDispatchThread to do complex calculations.
+
+We can still place something onto the event queue by calling **invokeLater** or **invokeAndWait**.
+
+### Swing Worker
+
+Provides a thread and machinery to interact with the AWT eent thread.
+
+We can extend this class and override the methods -
+
+- doInBackGround() - functions like run(), defines what to do.
+- done() - invoked on the event queue when doInBackGround() is finished.
+- process() - invoked on the event queue to receive data sent by publish().
+- get() - meant to be called by AWT to retrieve results from doItBackGround().
+

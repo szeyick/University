@@ -84,13 +84,21 @@ public class CenteredFrameTest {
 
 The things to take notice of here is that our **CenteredFrame** extends JFrame rather than the AWT frame. 
 
+### Lightweight Components vs Heavyweight Components
+
+With the exception of the top level components in Swing (i.e. JWindow, JFrame, JDialogue, JApplet), all the components that are added to these top level components are considered as "lightweight". The reason that they are considered lightweight is because they do not depend on their peers (native OS code) to manage their functionality.
+
+On the other hand, a "heavyweight" component can be seen as AWT, the top level components in Swing are considered heavyweight because they have portions of their functionality managed by the OS. It means that these are not platform independant as Java is supposed to be.
+
+However, should a heavyweight component be added to a component that contains both lightweight and heavyweight components, the heavyweight components will always cover over the lightweight ones. 
+
 ### JFrame Structure
 
 A JFrame is comprised of many different layers as illustrated below -
 
 ![alt text](https://github.com/szeyick/University/blob/master/COS80007%20-%20Advanced%20Java/Lectures%20Notes/Week%201%20-%20Introduction%20to%20Swing/images/JFrame.GIF "JFrames")
 
-Components (panels, buttons, etc) are added to the content pane rather than directly to the JFrame, JApplet or JRootPane. In other words, we do not add it to the top level component, we add **into** it.
+Components (panels, buttons, etc) are added to the content pane rather than directly to the JFrame, JApplet or JRootPane. In other words, we do not add it to the top level component, we add **into** it. This is part of the **lightweight** component structure for Swing.
 
 There are different ways to add a component to the content pane, the most common being the two listed in the example.
 
@@ -100,7 +108,7 @@ Container contentPane = frame.getContentPane(); // frame is a JFrame, JApplet, J
 Component c = ...; // A JComponent (button, panel, etc)
 contentPane.add(c);
 
-// Method 2 - Add directly to the frame (The frame class automatically adds to the content pane) (Java 5+)
+// Method 2 - Add directly to the frame (The frame class automatically adds to the content pane) (Java 1.5+)
 Component c = ...;
 frame.add(c);
 ```
@@ -111,7 +119,7 @@ frame.add(c);
  
 ### JComponent Inheritance Hierarchy
 
-All J-classes inherit from JComponent which in turn inherits from AWT Component Container. The JComponents themselves provide a large range of functionality and do not need to be extended, but can be **mixed and matched to create composite objects**.
+**All J-classes inherit from JComponent** which in turn inherits from AWT Component Container. The JComponents themselves provide a large range of functionality and do not need to be extended, but can be **mixed and matched to create composite objects**.
 
 The idea that all the J-classes are containers, meaning that other J-classes can be added into it to build complex components.
 
@@ -147,7 +155,7 @@ The code above takes a selection from some input event and updates the look and 
 The general principle is to use the Java layout managers to position components. Adding components without a layout manager can be a tedious process. The layout coordinates are in pixels relative to the container, meaning (0,0) is the top of the container that will store the component rather than any parent frame.
 
 ```
-aContainer.setLayout(new SomeLayoutManager());
+aContainer.setLayout(new SomeLayoutManager()); // such as BorderLayout, BoxLayoug, GridBagLayout, etc.
 aContainer.add(component);
 
 // rather than
@@ -158,9 +166,15 @@ aComponent.setBounds(250, 250, 250, 250);
 
 A JComponent provides 6 methods to return information about size (e.g. getMaximum, getMinimum, getPreferred...). **Preferred** is the most important of the lot. The size however is dependent on what is in them using the layout managers rather than their exact size.
 
-**Layout Managers** are preferred as they manage the resizing automatically and the JComponent does not have lots of setBounds(...) calls to lay out components making it easier.
+**Layout Managers** are preferred as they manage the resizing automatically and the JComponent does not have lots of setBounds(...) calls to lay out components making it easier. It also makes the code cleaner so you don't need to individually call the methods to align the components within other components.
 
 ### Layout Management
+
+The default layout managers are used for the following components unless specified otherwise - 
+
+- JPanel - **FlowLayout**
+- JFrame, JDialog, JApplet - **BorderLayout**
+- Box - **BoxLayout** (Similar functionality to a JPanel)
 
 There are two different layout managers, **LayoutManager** and **LayoutManager2**.
 
@@ -177,8 +191,18 @@ pane.add(leftButton);
 ...
 ```
 
-The constraint is the FlowLayout.LEFT that is added to the FlowLayout constructor. It basically describes where the components should be added to (left align). The default behaviour of a FlowLayout is that it centres the components on the following line if it overflows.
+### Flow Layout
 
+Flow layout organises the components within the container by adding them one next to the other. If there is not enough width specified in the parent container, then it will overflow and go onto the next line. It comes with three constructors -
+
+```
+FlowLayout(int align, int horizontalGap, int verticalGap)
+	// align can be FlowLayout.LEFT, CENTER or RIGHT which aligns the component on a line.
+	// horizontalGap defines the pixel gap on the horizontal (between components)
+	// verticalGap defines the pixel gap on the vertical (between lines of components)
+```
+
+The constraint is the FlowLayout.LEFT that is added to the FlowLayout constructor. It basically describes where the components should be added to (left align). The default behaviour of a FlowLayout is that it centres the components on the following line if it overflows.
 
 ### Grid Layout
 
@@ -191,6 +215,8 @@ GridLayout(int rows, int columns) // creates grid with specified row and columns
 component.add(c); // In grid layout will fill from left -> right, top -> bottom.
 ```
 
+If no value is specified for x,y (horizontal and verticla gap), there will be no gaps between components when added to the grid.
+
 ### Border Layout
 
 Creates a border layout where you can layout components in NORTH, EAST, WEST, SOUTH, CENTER.
@@ -202,8 +228,8 @@ BorderLayout() // Default horizontal and vertical pixel gaps are 0.
 component.add(c, "North"); // Add a component c to a particular quadrant of the border layout.
 ```
 
-- The height of the North and South quadrants is dependent on added components preferredSize.
-- The width of the East and West quadrants is dependend on the added components preferredSize.
+- The height of the North and South quadrants is dependent on the preferred size of the component that is added.
+- The width of the East and West quadrants is dependent on the preferred size of the component that is added.
 - **The size of the CENTER quadrant takes the remaining space after the N,E,W,S components are calculated.
 
 ### Event Handling
@@ -295,6 +321,14 @@ There a bunch of other events that we can listen and respond to -
 - KeyEvent - For keyboard events.
 - FocusEvent - For switching between text fields with Tab.
 - TextEvent (AWT) / DocumentEvent (Swing) - For changes in a text component before Enter is pressed.
+
+### Containers as Event Listeners
+
+You can add Event Listeners to almost any JComponent, but the idea is to find the best place to do it. This is really dependent on the purpose of the listener. If we add the EventListener to the top level container, the events triggered from that component will go directly to the top level and ignore all the panels that may be installed on it. It is a very centralised way of adding listeners.
+
+### Listening to Itself
+
+A Component can add itself as a listener so long as it implements the correct listener interface. It isn't a very common way of using the observer pattern but it can still be done.
 
 ### Inner Classes
 

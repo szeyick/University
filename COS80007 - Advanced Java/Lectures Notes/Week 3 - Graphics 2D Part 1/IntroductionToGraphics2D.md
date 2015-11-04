@@ -6,7 +6,11 @@ As we have learnt from previous lessons, whenever a panel is required to be draw
 
 ### AWT Rendering
 
-AWT functions a little different from Swing, when it needs to be drawn, the panels update() method is called. This update method then calls paint() that subsequently goes onto draw all the little components that make up the panel, including its children, grandchildren and so forth by looping through update() and paint() on its descendents.
+The AWT rendering pipeline is a little different to that of Swing.
+
+Swing renders components through paint() -> paintComponent() -> paintChildren() and continues through all the components.
+
+AWT renders components through update() -> paint() -> **call OS to render** -> update() -> etc (it thrn goes through its children.).
 
 ### Redrawing
 
@@ -31,7 +35,7 @@ Swing provides a more robust and complex class called **Graphics2D**. This is a 
 
 In the Graphics2D object, all the shapes we can draw require class objects of the shapes to be passed in and are not called through methods.
 
-For Swing components, we should override the **paintComponent()** method if we want to define any specific drawing behaviour. This should always be the case unless we are wanting to draw onto the **content pane of JApplet**, then in this instance we should override **paint()**.
+For any Swing component, if we want to change how it draws, we need to **override the paintComponent() method**. This should be the case for all times you want to apply specific drawing to a Swing component, with the exception of the **content pane for a JApplet**. In the case of a JApplet, we only need to override the **paint()**.
 
 However it is only in that case where we should override **paint()** rather than **paintComponent()**.
 
@@ -124,6 +128,8 @@ The Shapes interface and subsequent concrete classes, replace the methods that w
 
 The coordinate system used with those classes is in pixels, so it usually defines the location, width and height of the shapes to draw.
 
+The **coordinates of the shapes are drawn in user space**, and the **default transform assumes its moving in pixels**.
+
 ### Path2D
 
 Path2D is a special implementation of the Shape class that allows us to define a set of points in which it will draw the points. The object allows us to essentially define a dot to dot, that the Graphics2D object will eventually trace.
@@ -131,7 +137,9 @@ Path2D is a special implementation of the Shape class that allows us to define a
 ```
 Path2D.Float path = new Path2D.Float();
 path.moveTo(10,20);
+path.lineTo(10,20); // This is how to draw a line between 2 points.
 path.moveTo(20,40);
+path.lineTo(30,20); // This is how to draw a line between 2 points.
 path.moveTo(30,60);
 
 g2d.draw(path);

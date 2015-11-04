@@ -2,7 +2,7 @@
 
 ### Split Panes
 
-Are used to split a component into two parts with an adjustable boundary in between, meaning that you can resize the size of each component to take up more/less space.
+A split pane is a way to divide a component into two parts with a boundary that can be adjusted. This means that each part can be resized to take up more or less space.
 
 We can split the panes vertically and horizontally depending on the initialisation parameters and resize.
 
@@ -46,10 +46,26 @@ In addition to adding a component to a tab pane, you can also add an icon.
 
 Tabs can also provide the following behaviour -
 
-- tabbedPane.insertTab() - to position a tab anywhere within the existing tab.
+- tabbedPane.insertTab(...) - Add a component (i.e. JPanel) to any index within the JTabbedPane.
+- tabbedPane.addTab(...) - Add a component (i.e. JPanel) to the last index of the JTabbedPane.
 - tabbedPane.removeTabAt(index) - to remove a particular tab.
 - tabbedPane.setSelectedIndex(index) - to display a particular tab.
-- tabbedPane.addChangeListner(listener) - to register for changes in the tabbed pane selection.
+- tabbedPane.addChangeListener(listener) - to register for changes in the tabbed pane selection.
+
+**To respond to tab selection events, you can implement the ChangeListener class and the state changed method**
+
+```
+	private class MyChangeListener implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
+			int selectedIndex = tabbedPane.getSelectedIndex();
+			label.setText("Selected tab: " + selectedIndex);
+			
+		}
+	}
+```
 
 **Refer to TabbedPaneTest.java**
 
@@ -57,13 +73,11 @@ Tabs can also provide the following behaviour -
 
 Swing provides components for implementing MDI programs (Multiple Document Interface).
 
-Swing includes a desktop that is represented as a JDesktopPane where the internal frames to the desktop are represented by the JInternalFrame.
+It provides a desktop that is represented as a JDesktopPane, this functions as a main window, where internal frames are able to exist within the JDesktopPane as JInternalFrames. All the programs that we have written till this point have had a single frame, with a desktop, we can have multiple frames within the same application represented as a JInternalFrame. 
 
-The JInternalFrames sit inside the JDesktopPane and can be opened, closed, minimised and moved within the JDesktopPane.
+The JInternalFrame functions the same as a normal JFrame, as it still maintians the open, close, minimise and maximise icons, just that they exist within the deskop.
 
 Furthermore, we also have a DesktopManager that can change the look and feel.
-
-JInternalFrames are called as such as they duplicate the appearance of a frame and sit "internally" within another container (i.e. JDesktopPane).
 
 **Refer to SimpleInternalFrame.java**
 
@@ -73,7 +87,13 @@ You can add panels and such to JInternalFrames much like you would with a normal
 
 **Refer to InternalFrameTest.java**
 
-A JInternalFrame is the only Swing component that has **constrainted properties** called **Bound Properties**. It fires a property change event each time it has been modified. However these changes can be blocked by using a **vetoable change listener**.
+A JInternalFrame is the only Swing component that has **constrained properties** called **BoundProperties**. Whenever these properties change, it will fire a **propertyChangeEvent** which can be accessed when we implement a **VetoableChangeListener**.
+
+This event is usually triggered, whenever the maximise, close, icon, selected properties are selected. It allows for the change listener to do something before the property is fully changed. For example, if the close (x) was pressed, it would notify the change listeners first before closing, giving a change for a listener to do something before it closes (i.e. confirm exit, save, etc).
+
+If you want the listener to veto the selection, then it will through a PropertyVetoException.
+
+- **Calling pack() on a frame allows for it to take its size from the total of its child components rather than explicitly defining it.**
 
 **Refer to VetoingInternalFrame.java**
 
@@ -107,11 +127,40 @@ The position of the view can be changed so different regions of the view can app
 
 **Refer to AnjinAndMariko.java and AMChange.java**
 
-The viewport functions like a telescope providing you the view to a particular section of a view. This can be moved around giving you different sections of a view to look at. For example, looking at an image through a microscope, the microscope can be seen as the viewport and the thing you are looking at the view, moving the microscope changes what you see in the view.
+The Viewport functions like a window, providing you with a view of a particular section of whatever it is holding within it. 
+
+For example, an image might be placed inside the viewport, but the image is way larger than the viewport can display, so rather than scaling the image to fit, the viewport only gives you a section of the image to look at. You can move the viewport around to see other parts of the large image, but adjusting the viewports position with the following code -
+
+```
+	/**
+	 * Move the viewport around depending on the user selection.
+	 * @param event - The button event.
+	 */
+	private static void moveViewport(ActionEvent event) {
+		String buttonName = event.getActionCommand();
+		Point viewportPoint = viewport.getViewPosition();
+		switch (buttonName) {
+		
+		case "Down" :
+			viewportPoint.y += 10;
+			viewport.setViewPosition(viewportPoint);
+			break;
+		case "Up" :
+			viewportPoint.y -= 10;
+			viewport.setViewPosition(viewportPoint);
+		default :
+			break;
+		}
+	}
+```
+
+All we are doing is updating the position of the viewport so it looks at another part of whatever is within it. 
+
+Basically a Viewport is **another type of container**, meaning that you need to put components within it to make use of it, then update its view position to see other parts of the larger component within.
 
 ### JScrollPane
 
-Provides the ability to scroll through particular Swing components like a JTextArea, JList and JCombobox since the contents within them can be very long. A JPanel however cannot be set into a JScrollPane.
+Provides the ability to scroll through particular Swing components like a JTextArea, JList and JCombobox since the contents within them can be very long. A **JPanel however cannot be set into a JScrollPane**.
 
 The idea here would be add the component to the scroll pane, then add the scroll pane to the content pane.
 
@@ -121,9 +170,11 @@ JScrollPane scrollPane = new JScrollPane(textArea);
 getContentPane().add(scrollPane);
 ```
 
-When the scrollpane is instantiated, a JViewport instance is created where the JTextArea is added to the viewport.
+A JScrollPane can be thought of as a type of Viewport, but with scrolling bars. Thus when a JScrollPane is created, and a component is added to it, it will automatically create an instance of a JViewport. The scrollbars will appear when the view (component inside the scrollpane) is larger than the viewport.
 
 The JViewport within the scrollpane gives you a view of a section of the component the scroll pane contains (i.e. TextArea). The default behaviour of this is that the scrollbars will automatically appear if the view within the scrollbar is larger than the viewport.
+
+Like with the JViewport, when we add components to the JScrollbar, we need to specify the **setViewportView** so the scrollbar knows what it is looking at.
 
 The JScrollPane can also support row and column headers allowing you to put things within the scroll bar.
 
@@ -145,6 +196,8 @@ Is the size the component would want the viewport to be.
 
 Can control whether the scrollbars will be displayed for vertical or horizontal, you can set them to not be displayed.
 
+If you set the values to **true**, it will disable the scrollbars being displayed on that axis, no matter how small you make the viewport
+
 - getScrollableUnitIncrement(...)
 
 Controls how far you scroll for each mouse click on the arrow.
@@ -157,11 +210,10 @@ Controls how far you scroll for each mouse click on the scroll bar area.
 
 ### Zooming Viewport
 
-If you want to give the impression of zooming, usually you would need to rescale a component then change the viewport size. This would require the scaling and transform to be recomputed within the **paintComponent()** method. Thus the centre of the viewport may need to be adjusted.
+If we want to give the impression of zooming, we would usually rescale a component and change the size of the viewport. Doing this would require
+the scaling and transform to be done within the **paintComponent()** method. Doing so may also change the centre of the viewport.
 
-When the view parameters change (zoom or scroll), the JViewport object fires a ChangeEvent, we can add a listener to listen to these changes.
-
-When the listener is triggered, we would need to recalculate the viewport and possible force the scroll to change.
+Another method to handle zooming is to create custom scrollbars, and add a **AdjustmentListener()** to it. Each time the scrollbar is clicked, it will trigger this listener that will recompute the location and re-draw the content within the panel. It will update the viewport also.
 
 Care needs to be taken when doing this since we should only want the ChangeEvent to be called once so we do all the calculations and transforms in one go.
 

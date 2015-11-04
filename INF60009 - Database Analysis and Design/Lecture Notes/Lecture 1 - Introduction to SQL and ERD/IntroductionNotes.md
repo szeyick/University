@@ -2,7 +2,7 @@
 
 ### Database Overview
 
-A database is used to store **related data** about a number of different things (entities) that an organisation may find **intersting**. This can be things such as **student information**, **subject data**, **unit enrollment** and **unit results**.
+A database is used to store **related data** about a number of different things (entities) that an organisation may find **interesting**. This can be things such as **student information**, **subject data**, **unit enrollment** and **unit results**.
 
 These entities, are stored in a number of **related tables**, but what to store in those tables can be difficult to determine since we need to manually find out the relationship the data has with each other. One way that this can be achieved is through *Entity Relationship Models and Diagrams**.
 

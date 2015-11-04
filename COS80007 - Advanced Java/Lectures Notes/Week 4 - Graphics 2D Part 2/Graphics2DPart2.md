@@ -6,6 +6,22 @@ The Graphics class provides properties that allow us to control what is drawn an
 
 The child of the Graphics class, Graphics2D is a more complex version of the graphics class that provides additional features.
 
+### Paint Component
+
+These are the things that we can do within paintComponent(), in the Graphics2D object.
+
+- **setRenderingHints() - allows to choose between draw quality and speed**
+
+- **setStroke() - allows to set the thickness of the pen or the style of the pen.**
+
+- **setPaint() - allows to fill in a shape with solid, gradient or tiled patterns**
+
+- **setClip() - allows to set the clipping region, things outside will not be displayed**
+
+- **setTransform() - allows to scale, translate, rotate and sheet a shape**
+
+- **setComposite() - allows you to combine new pixels with old ones**
+
 ### Rendering Hints
 
 The rendering hints class allows you to make trade offs between speed and draw quality. The RenderingHints object is passed to the Graphics class to allow it to draw things with the predefined qualities, however we usually cannot really tell the difference in the quality without inspecting it closely.
@@ -32,11 +48,11 @@ The Java2D API allows various ways to render and support text drawing. It also a
 
 - **Glyphs** - 
 
-Are shapes that represent characters and usually have a one-to-one correspondence with text.
+A glyph is a shape that is used to represent a single character. The mapping between characters and glyphs is usually a one-to-one relationship.
 
 - **Font** - 
 
-Are a collection of glyphs, usually a subset of the Unicode character set of a defined language.
+A font is a collection of glyphs, usually is a subset of a Unicode character set for a defined language.
 
 - **Font Metrics**
 
@@ -54,7 +70,6 @@ For further customisation, you can use the **TextLayout** object to lay out the 
 
 The glyphs can be manipulated directly like other Graphics2D shapes.
 
-<<<<<<< HEAD
 ### Drawing Text
 
 There are two different methods for drawing text on a screen -
@@ -85,7 +100,7 @@ There are additional methods to draw Strings onto the screen using **AttributedS
 public void drawString(AttributedCharacterIterator iterator, int x, int y);
 ```
 
-This renders the string in whatever has been set into the Graphics2D context. The iterator specifies a font for each character again starting at the position x,y. The iterator functions like any other iterator in Java, meaning that you can step through each character in the String object and customise it. 
+This renders the string in whatever has been added to the Graphics2D context. The character iterator specifies the attributes that each character should be rendered with. The iterator functions like any other iterator in Java, meaning that you can step through each character in the String object and customise it. 
 
 Example -
 
@@ -103,9 +118,13 @@ public void paint(Graphics g) {
 	as.addAttribute(TextAttribute.FONT, serifFont);
 	as.addAttribute(TextAttribute.FONT, sansSerifFont, 2, 5); // Change characters at index 2,3,4 to use alternative font
 
-	g2.drawString(as, 100, 200);
+	g2.drawString(as.getIterator(), 100, 200);
 }
 ```
+
+The AttributedString holds the string to be rendered, and it you can add attributes to it with <key, value> pairs like you would with RenderingHints.
+
+The iterator of the AttributedString is passed to the drawString method so it can render each individual character.
 
 ### Font Family
 

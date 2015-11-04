@@ -6,14 +6,16 @@ In this lesson we will discuss more about Swing components and the MVC (Model, V
 
 In Swing, the basic label that we use is the JLabel. This label is a simple component in that it has no underlying data model that you can assign advanced properties to.
 
-The JLabel functions like a container and the label text can be aligned (like AWT label). By default, they are non-opaque meaning that they are essentially invisible so assigning a background colour without setting its opacity to true will display the label without the background colour.
+The JLabel functions like a container and the label text can be aligned (like AWT label). 
+
+By default, a JLabel has its opacity set to **false**. This means that it is invisible, so setting the background colour will not display it, we will need to set the opacity to **true** before we can see it. 
 
 In the example below we have a simple JLabel with the basic properties that we can assign to it.
 
 ```
 Container container = getContentPane(); // Retrieve the pane to set components to.
 
-JLabel label = new JLabel("LabelName", SwingConstants.CENTER); // The SwingContstants aligns the text only
+JLabel label = new JLabel("LabelName", SwingConstants.CENTER); // Default alignment for text only is left
 label.setOpaque(true); // Sets the opacity allowing background colours to be visible.
 label.setBackground(Color.white);
 
@@ -30,7 +32,7 @@ For a simple JLabel we can set some other basic properties such as -
 
 ```
 ImageIcon image = new ImageIcon("image.gif"); // Loads the image from file.
-JLabel label = new JLabel("JLabel", image, SwingConstants.RIGHT); // The SwingContstants aligns the text only.
+JLabel label = new JLabel("JLabel", image, SwingConstants.RIGHT); // Default alignment with text and image is centre.
 label.setVerticalTextPosition(SwingConstants.TOP);
 label.setOpaque(true);
 label.setBackground(Color.white);
@@ -80,11 +82,13 @@ The controller is responsible for the behaviour of a component. Its job is to de
 
 ### Buttons
 
-Buttons in Swing follow the MVC pattern. This means that their underlying state is managed by a **model**. In the instance for buttons, there is an interface called **ButtonModel** that defines the various states that the button can be in (i.e. selected, pressed, etc).
+Buttons in Swing follow the MVC pattern, meaning that the underlying state of the button is managed by a **model**. 
 
-The JButton contains a **DefaultButtonModel** which implements the **ButtonModel** interface. This model is used across all buttons that can be pushed, such as radio, checkboxes and menu buttons. It also contains all the features of a JLabel, in other words it can be seen as a JLabel that can be interacted with.
+By default this button model is the **DefaultButtonModel** that implements the **ButtonModel** interface. It has methods that can determine the state of the button (i.e. ButtonPressed, ButtonSelected, etc).
 
-The DefaultButtonModel is created whenever a JButton is created and can be retrieved -
+The **DefaultButtonModel** is used across all buttons that can be pushed such as radio, checkbox and menu buttons. It is essentially an extension of the JLabel, as it contains all of the JLabel methods as well.
+
+Whenever we create a new button, it will create a new DefaultButtonModel to assign to the button. 
 
 ```
 JButton button = new JButton("Button Name");
@@ -109,7 +113,7 @@ In our JButton example, as long as the new model extends DefaultButtonModel, we 
 
 ```
 // Our Custom Button Model.
-public class MyCustomButtonModel extends DefaultButtonModel {
+public class MyButtonModel extends DefaultButtonModel {
 	
 	// Counter to hold the number of times the button has been clicked.
 	protected int count = 0;
@@ -135,12 +139,12 @@ public class MyCustomButton extends JButton {
 	...
 	public MyCustomButton(String buttonText, Icon icon) {
 		super(buttonText, icon);
-		setModel(new MyCustonButtonModel());
+		setModel(new MyButtonModel());
 	}
 
 	// Return the number of times the button has been pressed.
 	public int getCount() {
-		return ((MyCustomButtonModel)model).getCount();
+		return ((MyButtonModel)model).getCount();
 	}
 }
 ```
@@ -167,7 +171,7 @@ This type of button can contain two states, **selected or deselected**, which is
 
 This allows for a group of JToggleButtons to function like a single button. This means that selecting of the buttons in the group, automatically selects the chosen button and deselects every other button. It ensures that only one button is ever selected at a time from the group. 
 
-It should be noted that only the selection triggers an ActionEvent and not the deselection of the other buttons.
+It should be noted that only a single ActionEvent is fired when a new button is selected. It does not fire a event for the de-selection of the button.
 
 To ensure that a group of buttons only triggers a single event, we add all the buttons to a ButtonGroup object.
 
@@ -239,7 +243,6 @@ italic.addActionListener(listener);
 ```
 
 In the example above, the use of += Font.BOLD and Font.ITALIC uses bit shifting to set the correct font to use. The pattern += when adding bits together is equivelant of using an OR statement (|=), which is the **preferred way** of adding bits.
-
 
 ### Borders 
 

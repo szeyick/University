@@ -48,7 +48,7 @@ Details of constraints are stored in the **Oracle Data Dictionary** table that i
 
 We are required to establish relationships when joining tables, we need to specify **foreign keys constraints** that link a foreign key to another tables primary key, and also specifying the inner joins to link tables together.
 
-We are required to do both because we can join tables that aren't related by their foreign key constraints and can come from different databases.
+**We are required to do both because we can join tables that aren't related by their foreign key constraints and can come from different databases.**
 
 ### Retrieving Data From Multiple Tables
 

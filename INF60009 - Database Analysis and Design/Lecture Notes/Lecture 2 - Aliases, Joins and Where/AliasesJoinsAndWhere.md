@@ -26,6 +26,8 @@ The constraint is where we can force the RDBMS to **validate** the input that is
 
 If a deletion is conducted that violates any of the above conditions, it will be invalided and an error will be raised.
 
+This is not only valid when deleting tables but also when deleting individual rows in a table.
+
 ### Null Foreign Keys
 
 NULL is an acceptable foreign key value. This just means that there is an unknown relationship between the row entry and the associated table. If we use our Lecturer - Subject database, having a NULL foreign key in the Subject table will mean that the Subject is not currently assigned a Lecturer.
@@ -407,3 +409,16 @@ SELECT DISTINCT country FROM student
 #### Unique
 
 Does the exact same as the DISTINCT keyword, but DISTINCT is preferred.
+
+### Mixing AND and OR operators
+
+Statements with a mixture of AND and OR can be confusing, following the steps below -
+
+- Decide if the statement has a mixture of AND and OR, if it doesn't then follow normal procedure, OTHERWISE
+- Find an AND clause
+- Find the expression to the LEFT of the AND clause
+- Insert an open bracket to the left of the left expression.
+- Find the expression to the RIGHT of the AND clause
+- Insert a close bracket to the right of the right clause.
+- Repeat for the next AND statements.
+- Treat all bracketed expressions as a single statement.

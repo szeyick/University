@@ -214,7 +214,7 @@ The set clip method allows you to define a clipping area that will be used. Obje
 
 **e) the Graphics2D	setComposite() method**
 
-The set composite method allows you to change what you do with the pixels?
+The set composite method allows you to change what you do when combining old pixels with new pixels.
 
 - **6. Graphics	2D**
 
@@ -222,7 +222,7 @@ The set composite method allows you to change what you do with the pixels?
 
 // Not sure whether we should add the moveTo(x,y) and lineTo(x,y)
 public void paintComponent(Graphics g) {
-	
+	super.paintComponent(g);
 	Graphics2D g2 = (Graphics2D) g;
 	g2.draw(generalPath);
 }

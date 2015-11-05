@@ -6,6 +6,8 @@
 - How setComposite() works for Graphics2D
 - How to translate and scale correctly.
 - State Transition Diagram
+- The content pane, menubar belong to the JLayeredPane
+- Pack() and LayoutManager will cause the preferredSizes() of the components inside the contentPane will comprise the new preferred size that will be used by the JFrame to resize to.
 
 ### Exam Topics
 

@@ -88,6 +88,33 @@
 
 - When drawing ERD's from business cases, identify if it requires an "OFFERING", is it offered multiple times, if it is then it will need one.
 
+- An attribute **functionally** determines another attribute if it is the **primary** key of the attribute.
+
+- The primary key in this instance is called the **determinant**. Meaning that 1 value of the primary key, there is one value for the attribute. Written as Determinant ? Attribute.
+
+- **Ternary Relationships** where you have a third entity that branches off between your photo existing entities** 
+
+ENTITY1 >----+----+ENTITY2
+		  ENTITY 3
+
+The diagrams are read as :
+	ONE ENTITY1 AND ONE ENTITY 2 MAY/MUST HAVE ONE/MANY ENTITY 3
+	ONE ENTITY3 AND ONE ENTITY 2 MAY/MUST INVOLVE ONE/MANY ENTITY1
+	ONE ENTITY3 AND ONE ENTITY 1 MAY/MUST HAVE ONE/MANY ENTITY2
+
+- **A surrogate key is a introduced key generally used by IT people to create a single attribute key for a table rather than a complex composite key. It can be seen as a way to replace creating composite primary keys since we just put in some arbirtrary key instead. For example with an enrollment you may just have an enrollment number as a attribute rather than making up the primary key from name, date, subject code etc**
+
+- **Network diagrams are just simple class diagrams where the arrows point to the parent (and the words between entities indicate FK)**
+
+- Recursive relationships are where entities reference themselves as they have a cyclic relationship, like an employee entity that references itself as there can be managers that are also employees. This is indicated on the relational schema as another column attribute that references the PK of the same entity.
+
+- For self referencing tables, use the Alias keyword to reference the same table twice.
+
+- When doing recursive relations, it is best to draw the table out that links the FK of the child table with the PK of the parent table. Then inner join on that, or outer join if you want to show all FK's that do not match a FK.
+
+- Recursive Relations - It is a FK in a table that references the PK of the same table
+
+- Need to practice ERD and Normalisation
 
 ### Steps to Convert a M:M into a 2 M:1
 
@@ -96,3 +123,5 @@
 - 3. Draw 2 new relationship lines where the weak entity is the Many side, underline the relationship since it needs to **borrow** attributes
 - 4. The new relationship must have a MAY and MANY o< on the weak side, and a MUST and ONE ++ on the parent side.
 - 4. Add any additional attributes if required.
+
+- 5. It seems that if you are stuck on thinking about what the links are, if you have test output, see if the weak entity has the additional attributes that you need for the output.

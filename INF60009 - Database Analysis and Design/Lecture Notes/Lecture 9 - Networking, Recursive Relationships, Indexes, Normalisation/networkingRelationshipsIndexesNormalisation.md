@@ -71,19 +71,19 @@ Rather than sequentially reading all rows from the beginning of a table until th
 
 It is used to speed up access to data, similar to that of searching for a book in a library through a catalogue or category.
 
+This is the equivelant of a **linear search** of an array.
+
 ### Inserting Data Into An Index
 
-When the **primary key** is specified, an **index** is created based on that primary key. As a row is added, the DMBS will automatically insert the **search key** and **row location** into the index file, where the search key is usually the **primary key**.
+This is the process when we insert data into an **index**. We have a secondary table called "Index", this index is composed of 2 attributes (columns), the first being the **PK** and the second being the **Row Number**. The PK is obviously for the PK of the row object that we are inserting, whereas the row number is the row that the PK is found on in the table it is inserted into.
 
-This sort of works like how a hash table would work.
-
-This is repeated for every row that is inserted, and the primary key index is **sorted** to maintain an order.
+It appears to be similar to that example of the SortedFilterModel in how it uses the index to keep track of where the data is in the real table. This Index table is also sorted by **PK** value order.
 
 ### Searching the Index
 
-Rather than searching the table data which can be cumbersome and time consuming, we can search the index table for the required row much faster. Additionally, because the index table is already in primary key order we can use things such as a **binary search** to quickly find the primary key and its corresponding row.
+Rather than searching the table data, as the PK's are not in any particular order, we can instead search the "Index" table. Because the table is sorted by key order, if we are looking for a particular key we can use techniques such as a  **binary search** to find the key which then returns the row value. 
 
-After this, we can use the row number to look up in the data table to return the requested information.
+We can then use this row value to look at a specific row in the actual table.
 
 The actual data in the index table **cannot** be viewed, and is usually stored as a binary or compressed.
 
@@ -99,31 +99,35 @@ An index can be created easily -
 CREATE INDEX empsname ON employee(surname);
 ```
 
-The above command will create an index that stores all the employee surnames in a sorted sequence. An index will allow duplicate values unless specified otherwise and can contain non primary key values.
+The above SQL command will create an index called **empsname** where the **PK** or key value will be **surname** in the employee table.
+
+It is possible to use non-primary key values as the key value for the Index, however it will return the first row that it finds that matches. This means that it is also possible to store duplicate values as keys in the Index.
 
 In the above example, using a search on the index will speed up the time to find the 1st row that matches a surname value.
 
 ### Index Cost
 
+Using the SELECT * TABLENAME statement will indivually search all the rows of the table to find the desired result. However with an Index because it is in sorted order, it is possible to reduce that time because of the binary search. In computational terms it would of O(log(n)) for the search rather than a linear O(n).
+
 Indexes are used to speed up the retrieval times of a row, so why not use them for all rows.
 
 The reason that we do not is that memory is expensive so holding indexes for all columns in a table can be very expensive.
 
-In addition, the update time of a table can be slow, since updating a table will cause the index to also be updated to especially if a new row is added. Therefore it will need to update every single index. Basically all operations that modify a table that contains an index will require the index to also be changed (insert, update, delete).
+Because the Index is in sorted order, any changes to the reference table will require changes to the Index. If we remove a row, we need to update the order of the Index which can be slow, also if we are adding it could also be slow as it needs to keep the Index in order. Updating could also change the order depending on the column that was selected as the key value.
 
-Indexes can be created and dropped (deleted) without affecting the table data.
+However Indexes are independent of the reference table meaning that they can be deleted without issue.
 
 ### DBMS Optimisers
 
 An optimiser is a method to decide the quickest and most efficient way to access data.
 
-It is possible to create multiple indexes, however the DMBS optimiser decides whether it is beneficial to use any of them. 
+It is possible to have multiple indexes for a database, however it is the optimiser that decides whether it should use it. With small databases, it might be faster to just read all the rows of the table than it would to load the index into memory then search it.
 
-Although with larger datasets, a index may be helpful however with small datasets with only a handful of entries it may not be neccessary to use one, this is where the optimiser will make the decision.
+It is also possible to create multi-level indexes, where you break up the problem into smaller pieces. It is somewhat similar to using multiple Maps to look for a particular item.
 
 ### Normalisation
 
-It is a database design technique used to generate relational schemas, usually used as an alternative to Entity Relationship Diagrams (ERD).
+Design technique to generate Relational Schemas, used as an alternative to an ERD, requiring no diagrams.
 
 The objective of normalisation is to achieve **3rd Normal Form (3NF)**.
 
@@ -135,34 +139,46 @@ This can be avoided by **normalising** the database. There are several stages of
 
 - **Stage 1 - Remove Repeating Groups**
 
-We begin with an unnormalised table where multiple values can exist in a single cell, this is otherwise called **repeating groups**.
+To begin, we have an unnormalised table, which appears to just be a normal table of data. However in this table, there can be columns where there are multiple values in a each cell. Multiple values in a cell are called **repeating groups** and this is **Unnormalised Form or 0NF**.
 
-To do this, we remove all repeating groups and add them as their own row in a new table. As a result, all the cells in the new table will only have a maximum of 1 value.
+To remove the repeating groups, we extract out the repeated values and put them into their own row in the table. The result expected from this state is that all rows will have a maximum of 1 value in each column.
 
-This First Normal Form is also called **The Universal Relation**.
+Once completed this is called the **First Normal Form or The Universal Relation**
 
-After this the **primary key** for this new table needs to be determined before further normalisation can continue.
+After this, we need to find the **primary key** for this First Normal Form table before we can continue. 
 
-From the 1NF columns we need to determine the primary key, once this has been identified it is called the **Universe Key**.
+To identify the primary key, we do the same thing as we would do with an ERD and its attributes, but this time we use the column names. Although the column names are in fact just attributes anyway. The objective to find the PK is to use the fewest columns possible, the PK is called the **Universal Key**
+
+Once we have created the **Universal Table** and found the **Universal Key**, we have achieved 1NF.
 
 - **Stage 2 - Remove Part Key Dependencies**
 
-To achieve this stage, we need to identify the **functional dependencies**. This is where one attribute can be **determined** by another attribute.
+This is the beginning of the 2NF, we need to identify the **functional dependencies**. This is where one attribute can be **determined** by another, this is to ensure that for the PK, there can only be one value for that PK. 
 
-For example - StudentID determines the StudentName
+The question should be - "Is there only ONE < column name > for that < primary key > (Is there only ONE student name for that studentID)"
 
-This is because there should only ever be 1 StudentName for the StudentID.
+If the answer is YES, then there is a functional dependency.
 
-**If in doubt, ask yourself** - Is there only ONE StudentName for that StudentID, if the answer is **YES** then there is a functional dependency.
-
-A **part key dependency** is where a column in the Universal Relation is dependent on **only a part** of the Universal Key.
+A **part key dependency** is where a column in the **Universal Table** is only partly dependent on the **Universal Key**. This may happen if we have multiple columns for our **Universal Key** and the answer to the above question is only YES to some of the columns in the key.
 
 In other words, if one of the columns only dependent on part of the Universal Key. So if a key had 2 columns, if any of the columns in the Universal Table only depend on one of the 2 keys, then it is seen as a **part key dependency**.
 
-To remove, we need to place the **determinant (StudentID)** in a new table, where it becomes the primary key of the new relation. Then we add the other functional dependencies into the new relation.
+From our Universal Key, we remove the column that is causing the **part key dependency**. The remaining key becomes the **determinant or PK** of a new table. 
+
+We define this table by giving it a name < TABLE NAME > (PK, < dependent column name >).
+
+We then add more < dependent column names > to the Table Name so long as they have a functional dependency on the **determinant**. You can see this is slowly forming a **Strong Entity** in a Relational Schema. This is also "removing the part key dependencies" from the Universal Table. In other words, all the columns that are dependent on the PK, are extracted out of the Universal Table, leaving the remaining data from the original table. We leave the **determinant** in there as it functions as the FK of the Univeral Table.
+
+Once we have removed the part key dependencies from the Univeral Table, and created a new table, we have essentially created a new relation. We then proceed to do the same thing with the other half of the original Univeral Key.
+
+Once we have done this, we only have the remaining data left in the Universal Table with other entities being created.
+
+We have now achieved 2NF.
 
 - **Stage 3 - Remove Non Key Dependencies**
 
-A **non key dependency** is where a column has a dependency on another column and that column is **NOT** part of the Universal Key. In this, we do the same as in Stage 2, and split off the non-key dependencies with the column that it is dependent on that is not part of the Universal Key.
+A non-key dependency is where a column is dependent on another column but the other column is not part of the universal key.
 
-Once this step is complete, the table is Normalised.
+You then do the same thing with those remaining columns to try and find a **determinant** that the columns are dependent on. This is a repeat of the 2NF step of finding a Primary Key to create a **determinant**.
+
+Once this is done with the rest of the data, and it has been split up so that only keys remain in the Univeral Table, we have achieved **normalisation and 3NF**. The non-key dependencies should not exist in the Universal Table.

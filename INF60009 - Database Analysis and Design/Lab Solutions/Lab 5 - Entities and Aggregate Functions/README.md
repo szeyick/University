@@ -54,7 +54,7 @@ The Min() aggregate function selects the rows that return the smallest value.
 SELECT MIN(BirthYear) from STUDENT
 ```
 
-There should be 3 rows returned as 1991.
+1, these aggregate functions if placed into the select should only return a single value.
 
 - **Write a single SQL statement that counts the total number of students**
 
@@ -72,14 +72,14 @@ WHERE Gender = 'F'
 - **Write a single SQL statement that counts the total number of students of each gender**
 
 ```
-SELECT Gender, COUNT(*) from STUDENT
+SELECT Gender, COUNT(Gender) from STUDENT
 GROUP BY Gender
 ```
 
 - **Write a single SQL statement that counts the total number of students of each degree**
 
 ```
-SELECT Degree, COUNT(*) from STUDENT
+SELECT Degree, COUNT(Degree) from STUDENT
 GROUP BY Degree
 ```
 
@@ -96,7 +96,7 @@ HAVING COUNT(*) > 2
 Ignore all males and do not list any values less than 3.
 
 ```
-SELECT Degree, COUNT(*) from STUDENT
+SELECT Degree, COUNT(SubjectsPassed) from STUDENT
 WHERE Gender = 'F'
 GROUP BY Degree
 HAVING COUNT(*) > 3
@@ -122,6 +122,9 @@ TASK(TaskNo, Description)
 The schema for the Allocation table will borrow the keys from the parents.
 
 ALLOCATION(EmpNo, TaskNo) // **The foreign key of the borrowed keys becomes the primary key, both underlined**
+	PK (EmpNo, TaskNo)
+	FK1 (EmpNo) REFERENCES EMPLOYEE
+	FK2 (TaskNo) REFERENCES TASK
 
 - **Write SQL statements to**
 
@@ -166,8 +169,14 @@ BUILDER - BuilderCode
 **Convert to a relational schema**
 
 SUBURB(Suburb, Population) // Where Suburb is underlined to represent the primary key
+	PK (Suburb)
 HOUSE (Suburb, BuilderCode, HouseNo, StreetName, DateBuilt) // Where SuburbName, BuilderCode are borrowed primary keys for the HOUSE entity.
-BUILDEr (BuilderCode, BuilderName) // Where BuilderCode is underlined to represent the primary key.
+	PK (HouseNo, StreetName, SuburbName, BuilderCode)
+	FK1 (SuburbName) REFERENCES SUBURB
+	FK2 (BuilderCode) REFERENCES BUILDER
+
+BUILDER (BuilderCode, BuilderName) // Where BuilderCode is underlined to represent the primary key.
+	PK (BuilderCode)
 
 - **Consider the following SQL statement**
 
@@ -232,7 +241,7 @@ ORDER BY RELYEAR ASC;
 - **Using the Count() function, display the number of movies made in 2005**
 
 ```
-SELECT COUNT(*) FROM MOVIE
+SELECT COUNT(RELYEAR) FROM MOVIE
 WHERE RELYEAR = 2005;
 ```
 
@@ -260,7 +269,7 @@ ORDER BY RELYEAR
 - **Using the Count() function, list the movies with a PG rating code**
 
 ```
-SELECT COUNT(*) FROM MOVIE
+SELECT COUNT(RATING_CODE) FROM MOVIE
 WHERE RATING_CODE = 'PG'; 
 ```
 
@@ -269,14 +278,14 @@ WHERE RATING_CODE = 'PG';
 - **Using the Count() function and the Group By clause, list the number of movies of each rating code**
 
 ```
-SELECT RATING_CODE, COUNT(*) FROM MOVIE
+SELECT RATING_CODE, COUNT(RATING_CODE) FROM MOVIE
 GROUP BY RATING_CODE
 ```
 
 - **Same as above but the list must appear in descending count sequence**
 
 ```
-SELECT RATING_CODE, COUNT(*) FROM MOVIE
+SELECT RATING_CODE, COUNT(RATING_CODE) FROM MOVIE
 GROUP BY RATING_CODE
 ORDER BY 2 DESC;
 ```

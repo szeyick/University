@@ -34,8 +34,12 @@ The idea of having more than 1 column in a table that is suitable for being the 
 
 **Write the create table statements once the ERD has been converted to a relational schema, ensure all primary and foreign key constraints are included.**
 
-WORKER (WID, WORKERNAME)
-TASK (TASKID, TASKDESCRIPT, WID)
+WORKER (wid, workername)
+  PK (wid)
+
+TASK (taskid, taskdescript, wid)
+  PK (taskid)
+  FK (wid) REFERENCES WORKER
 
 ```
 CREATE TABLE WORKER (
@@ -68,17 +72,18 @@ INSERT INTO TASK (TASKID, TASKDESCRIPT, WID) VALUES ('Y', 'Polishing', 1);
 **Write a single query that lists each task description and the workername who is to perform that task**
 
 ```
-SELECT T.TASKDESCRIPT, W.WORKERNAME
+SELECT T.TASKDESCRIPT W.WORKERNAME
 FROM TASK T
 INNER JOIN WORKER W
-WHERE T.WID = W.WID;
+ON T.WID = W.WID
 ```
 
 - Consider the simple ERD
 
 **Write the schema for the entity**
 
-LOCATION(AreaCode, Section) // Where AreaCode and Section are underlined
+LOCATION (AreaCode, Section, LocName)
+  PK (AreaCode, Section)
 
 **How many Primary Keys does this schema have?**
 
@@ -86,7 +91,7 @@ LOCATION(AreaCode, Section) // Where AreaCode and Section are underlined
 
 **What is the Primary Key of Location?**
 
-AreaCode or Section
+AreaCode AND Section
 
 **Write the CREATE TABLE statement**
 
@@ -100,6 +105,13 @@ CREATE TABLE LOCATION (
 ```
 
 - Consider this ERD
+
+LOCATION (AreaCode, Section, LocName)
+  PK (AreaCode, Section)
+
+EMPLOYEE (empid, empname, areaCode, Section)
+  PK (empid)
+  FK (AreaCode, Section) REFERENCES LOCATION
 
 **How many Primary Keys does EMPLOYEE have?**
 
@@ -255,15 +267,15 @@ Sue
 
 - How many primary keys does the Department Table have?
 
-If anything, it would be 1 since Manager Name is the only unique value in the table. However you could combine it with Location and DeptId to make a composite key.
+1 always 1, it can be made of many columns but always 1.
 
 - How many columns does the primary key have?
 
-1
+2
 
 - What is the primary key of the department table?
 
-It would be the Manager Name. 
+The primary key is the Location + DeptId
 
 - Write the create table statement for Department
 
@@ -272,7 +284,7 @@ CREATE TABLE Department(
   ManagerName VARCHAR2(20),
   Location VARCHAR2(20),
   DeptId NUMBER(2),
-  Primary Key (ManagerName)
+  Primary Key (DeptId, Location)
 );
 ```
 
@@ -344,7 +356,7 @@ SET salary = 80000, bonus = 8500
 WHERE Empid = 2;
 ```
 
-- List all of the rows in the mployee table to check your updates have worked
+- List all of the rows in the employee table to check your updates have worked
 
 ```
 SELECT * FROM employee;

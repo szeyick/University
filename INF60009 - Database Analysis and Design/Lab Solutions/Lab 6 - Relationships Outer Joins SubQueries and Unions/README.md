@@ -71,21 +71,21 @@ No this database cannot record this fact, the reason being is that when we UPDAT
 **Convert the ERD to a Relational Schema, indicate all PK's and FK's**
 
 ```
-PERSON (pid, PersonalName)
-	PK: pid
+PERSON (PID, PersonName)
+	PK (PID)
 
-LOAN (pid, ecode, LoanDate, ReturnDate)
-	PK: pid, ecode, LoanDate
-	FK1: pid REFERENCES PERSON
-	FK2: ecode REFERENCES EQUIPMENT
+EQUIPMENT (ECODE, Description)
+	PK (ECODE)
 
-EQUIPMENT (ecode, Description)
-	PK: ecode
+LOAN (LoanDate, LoanTime, PID, ECODE, ReturnDate, ReturnTime)
+	PK (LoanDate, LoanTime, PID, ECODE)
+	FK1 (PID) REFERENCES PERSON
+	FK2 (ECODE) REFERENCES EQUIPMENT
 ```
 
 **What is the PK of LOAN**
 
-The PK of loan will be pid, ecode, LoanDate. It has its own primary key but also borrows identifiers from PERSON and EQUIPMENT.
+The PK of LOAN will be the composite key, LoanDate, LoanTime, PID, ECODE. It takes the attributes from the underlined parents along with its own Primary Keys, it is a characteristic entity since it has its own attributes also.
 
 **Write the SQL statement to add a Person: P357 Sue Jones**
 
@@ -102,7 +102,7 @@ INSERT INTO EQUIPMENT (ecode, Description) VALUES ('DC100', 'Nikon Digital Camer
 **Write the SQL statement to record Loan information: Sue borrows the DC100 on June 1**
 
 ```
-INSERT INTO LOAN (pid, ecode, LoanDate, ReturnDate) VALUES ('P357', 'DC100', '1 June', NULL);
+INSERT INTO LOAN (LoanDate, LoanTime, PID, ECODE, ReturnDate, ReturnTime) VALUES ('June 1', 'P357', 'DC100', NULL, NULL);
 ```
 
 **Write the SQL statement to record more Loan Information: Sue returns the DC100 on 6 June**
@@ -116,7 +116,7 @@ WHERE pid = 'P357'
 **Write the SQL statement to recrod another Loan: Sue borrows the DC100 on July 20**
 
 ```
-INSERT INTO LOAN (pid, ecode, LoanDate, ReturnDate) VALUES ('P357', 'DC100', '20 June', NULL);
+INSERT INTO LOAN (LoanDate, LoanTime, PID, ECODE, ReturnDate, ReturnTime) VALUES ('P357', 'DC100', '20 June', NULL, NULL);
 ```
 
 - **The following ERD has been designed**
@@ -124,6 +124,9 @@ INSERT INTO LOAN (pid, ecode, LoanDate, ReturnDate) VALUES ('P357', 'DC100', '20
 **Insert Image**
 
 **Fully expand the M:M Relationships**
+
+STUDENT >-- VISITS >-- WORKPLACE
+STUDENT >-- ATTENDS >-- BRIEFING SESSION
 
 **Insert Image**
 
@@ -135,16 +138,19 @@ STUDENT (StuNo, Name)
 
 VISITS (StuNo, Organisation)
 	PK: StuNo, Organisation
-	FK1: StuNo REFERENCES STUDENT
-	FK2: Organisation REFERENCES WORKPLACE
+	FK1: (StuNo) REFERENCES STUDENT
+	FK2: (Organisation) REFERENCES WORKPLACE
 
 WORKPLACE (Organisation, Address)
 	PK: Organisation
 
-ATTENDS (StuNo, BDate)
-	PK: StuNo, BDate, BTime
-	FK1: StuNo REFERENCES STUDENT
-	FK2: BDate, BTime REFERENCES BRIEFING SESSION
+ATTENDS (StuNo, BDate, BTime)
+	PK: (StuNo, BDate, BTime)
+	FK1: (StuNo) REFERENCES STUDENT
+	FK2: (BDate, BTime) REFERENCES BRIEFING SESSION
+
+BRIEFING SESSION (BDate, BTime, RoomNo)
+	PK: (BDate, BTime)
 ```
 
 **What is an intersection entity**

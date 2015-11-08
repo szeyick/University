@@ -6,7 +6,7 @@
 
 - The wildcard % means '0 or more characters', where '%HELLO%' means 0 or more characters before and after HELLO. This needs to be in the format of WHERE <column name> LIKE '%HELLO%', where LIKE is the wildcard that goes with it.
 
-- The <> symbol appears to mean, 'everything that is not'.
+- The <> symbol appears to mean, 'everything that is not' or !=.
  
 - The type **char** can be used, however the parser will fill in the gaps to fill up the defined number of characters.
  

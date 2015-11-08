@@ -10,6 +10,8 @@
 
 - Create the statements propertly, don't forget commas.
 
+- When describing WEAK entities, make sure you only take the attributes from the underlined relationship.
+
 - If we are adding column numbers together, if one of the columns for the row is NULL, it is not included in the result set.
 
 - LIKE '%SOMETHING%' also will include 'SOMETHING', it appears that it is % is 0 or more instances.

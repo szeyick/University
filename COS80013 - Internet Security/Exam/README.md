@@ -26,13 +26,23 @@ HTTP Sessions - Stateful information is passed back by a server through POST or 
 
 Cookies - Can be found using packet sniffing to take over the current cookie so the server doesn't know and lets you in anyway. Setting cookies to expire or using HTTPS (encrypted data) can mitigate against this.
 
-
-
 - **2. Forensics**
 
 Obtain evidence by locking down the crime scene securing computers, logging all computer activity with time stamps making sure that it does not switch of or self destruct.
 
 Copy the hard drive contents and archive the old one as evidence.
+
+Ethics, what are your responsibilities and are they legal.
+
+Network Forensics - capture packet data and logs, record evidence whilst the crime is occuring.
+Disk Forensics - get everything that is on the disk.
+Memory Forensics - Retrieve the conents of the RAM, running processes and incoming and outgoing traffic and connections.
+
+Check for evidence, deletion, hidden files, encrypted containers, keywords, emails, etc.
+CHeck the hash to make sure it hasn't been modified (CHECKSUM)
+File carving - retrieve deleted files and sectors.
+
+Write everything that you found down along with dates and times, use wireshark to confirm timeline.
 
 - **3. DDOS**
 
@@ -149,13 +159,13 @@ SSH - MAC added to plain text then encrypted.
 
 Telnet - used to communicate and connect to servers (unencrypted, unsecure). Can be used to connect to any port, can be used to send anonymous email. It also can be used to scrape website headers with HEAD/GET to return information about the web server if you telnet into the server.
 
-
-
 - **9. Attacks and Mitigation Strategies**
 
 DNS (Domain Name System) has an inbuilt cache of IP to Domain Names. DNS cache poisoning is overwriting the DNS entry so it points to another IP address. You could also override the computers HOSTS file to redirect to a website, because the entries in the HOST file always takes precedence over the DNS server.
 
 Mitigate it withn DNSSec, where queries, replies are digitally signed to prevent spoofing.
+
+TearDrop, DDOS, Network Attacks.
 
 - **10. Physical Attacks**
 
@@ -246,6 +256,20 @@ SSL - conatin pre shared key and RSA hash. The first time you go, you are prompt
 
 - **14. Security Models**
 
+Policies, procedures and models.
+
+Policies - what must be done.
+DAC - Discrentionary Access Control - You set your own permissions
+MAC - Mandatory Access Control - You get them set for you.
+
+Trust Management -
+
+Vulnerbaility assessments - black box, white box.
+
+Kerberos - Ticket granting ticket, service ticket, KDC (key distribution centre)
+
+SPAM - Sender Policy Framework - Is a field in a DNS record to authenticate a mail server, easy to spoof and does not check for email integrity or encryption.
+
 - **15. Network Tools and their Outputs (Netstat, Ping, NSLookup, etc)**
 
 Ping - Sends an internet request to a specified IP address or domain that returns the replies (domain names are returned)
@@ -263,3 +287,18 @@ Tracert - Used to trace the route between yourself and the destination server.
 // Read output of these logs...seriously
 
 - **16. Cloud**
+
+Web Services - distributed web applications that send XML commands to each other without human interaction.
+IaaS - Get EC2 instance to install whatever
+PaaS - Develop software, websites and applications without having to worry about the hardware
+SaaS - Provide software as it was sitting on the desktop, but through a browser (website) like Microsoft Word, google Docs.
+
+CIA risk with cloud - confidentiality, integrity, availability.
+
+Encrypt, backup and protect against DDOS.
+
+3-2-1 rule, 3 backups, 2 types of media, 1 offsite.
+
+### TODO:
+
+Go through Labs, Exam and answer the questions...with the lecture notes...

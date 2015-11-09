@@ -96,6 +96,14 @@
 
 - **Ternary Relationships** where you have a third entity that branches off between your photo existing entities** 
 
+- OrderLine (Multiple Items Within Order), Offering (Same thing repeated), Allocation (Ternary)
+
+- Dimension Table, Fact Table
+
+- TPS bad for running aggregate queries, too many tables and joins for large scale aggregate functions.
+
+- Dimension Table data is not normalised, contains redundant data, seems to be just the raw data that the Fact Table aggregates into its own.
+
 ENTITY1 >----+----+ENTITY2
 		  ENTITY 3
 

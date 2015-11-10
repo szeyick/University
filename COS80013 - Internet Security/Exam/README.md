@@ -270,21 +270,18 @@ Kerberos - Ticket granting ticket, service ticket, KDC (key distribution centre)
 
 SPAM - Sender Policy Framework - Is a field in a DNS record to authenticate a mail server, easy to spoof and does not check for email integrity or encryption.
 
+A black hole is basically a place where incoming or outgoing traffic is silently dropped without informing the source that the message did not reach its target.
+
+A black hole e-mail address is an e-mail address which is valid (messages sent to it will not generate errors), but to which all messages sent are automatically deleted, and never stored or seen by humans. These addresses are often used as return addresses for automated e-mails. (THink of an automated email, the response goes nowhere)
+
 - **15. Network Tools and their Outputs (Netstat, Ping, NSLookup, etc)**
 
 Ping - Sends an internet request to a specified IP address or domain that returns the replies (domain names are returned)
-
 NSLookup - Used to query a DNS to find an IP address. (Enter domain name (not host), get IP back along with the DNS server details)
-
 Reverse NSLookup - nslookup -type=ptr < reverse IP > .in.addr.arpa (Find the domain name given an IP address)
-
 WhoIs - returns server into + system admin details (whois -h < registar name > < domain name >) whois -h whois.aunic.net swin.edu.au
-
 Netstat - displays the incoming and outgoing TCP connections to the current computer. Shows the ports that are listening.
-
 Tracert - Used to trace the route between yourself and the destination server.
-
-// Read output of these logs...seriously
 
 - **16. Cloud**
 
@@ -301,4 +298,10 @@ Encrypt, backup and protect against DDOS.
 
 ### TODO:
 
-Go through Labs, Exam and answer the questions...with the lecture notes...
+- Port Scanning - NMap
+- Encryption Techniques
+- Certificate Exchange for Email.
+- SQL Injection
+- Mitigation against attacks
+- Network Recon
+

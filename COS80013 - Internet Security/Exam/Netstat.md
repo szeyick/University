@@ -29,5 +29,5 @@ State -
 
 The state of the sockets, LISTEN (means a socket is waiting for someone to connect), ESTABLISHED (ready for communication)
 
-In the above, it seems that someone is connected to the mail server (SMTP), the netBIOS appears to be allowing machines to communicate with each other over a LAN.
+In the above, it seems that someone is connected to the mail server (SMTP), the netBIOS appears to be allowing machines to communicate with each other over a LAN (Windows Share).
 

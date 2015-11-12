@@ -2,6 +2,8 @@
 
 NSLookup is a set of tools for looking at DNS records.
 
+Using the -type=any command will return everthing on the DNS
+
 ```
 - nslookup swin.edu.au
 Server:		192.168.0.1
@@ -90,3 +92,16 @@ Refresh - The number of seconds the secondary DNS will probe the primary DNS to 
 Retry - The interval to reconnect with the primary DNS
 Expire - The time the secondary DNS will keep the cached zone file
 Minimum - The time the secondary DNS should cache the zone file.
+
+### Reverse DNS
+
+You can reverse a DNS lookup by providing an IP address.
+
+```
+nslookup 136.186.1.12
+Server:		136.186.1.111
+Address:	136.186.1.111#53
+
+12.1.186.136.in-addr.arpa	name = gpo.swin.edu.au.
+```
+

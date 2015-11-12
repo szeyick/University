@@ -33,3 +33,8 @@ telstra.com.		33419	IN	NS	sec3.apnic.net.
 ;; MSG SIZE  rcvd: 142
 ```
 
+The opening section just tells you about the version fo Dig and the global options that are set. The second line with the flags tells us the answers received from the DNS server.
+
+QUESTION SECTION - The query that we made, with the type (A)
+ANSWER SECTION - The answer, with the IP for the domain name.
+AUTHORITY SECTION - Which DNS servers can provide the authoratitive answer.

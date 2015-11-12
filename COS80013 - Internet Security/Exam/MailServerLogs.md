@@ -14,3 +14,13 @@ We have the following fields
 Date and Time - The date and time that the mail was received by this server (mail agent)
 LocalHost Dovecot - The hostname of the machine receiving
 Pop3-login - The method called to login (string, string) for username and password. Aborted means unsuccessful login attempt.
+
+It appears to be someone using a dictionary to attempt to log into the mail server.
+
+```
+Aug 10 10:29:14 tuan postfix/smtpd[11005]: reject: RCPT from unknown[210.110.151.124]: 554 Service unavailable; [210.110.151.124]
+blocked using bl.spamcop.net, reason: Blocked – see
+http://www.spamcop.net/bl.shtml?210.110.151.124; from=jones@yahoo.com to=damian@dlk.com.au 
+```
+
+
